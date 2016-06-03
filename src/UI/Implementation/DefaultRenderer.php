@@ -24,7 +24,7 @@ class DefaultRenderer implements Renderer {
 	 */
 	protected $tpl_factory;
 
-	public function __construct(TemplateFactory $tpl_factory) {
+	public function __construct(Render\TemplateFactory $tpl_factory) {
 		$this->tpl_factory = $tpl_factory;
 	}
 

@@ -13,7 +13,7 @@ interface Renderer {
 	/**
 	 * Render given component.
 	 *
-	 * @param	$component			Component
+	 * @param	Component\Component $component
 	 * @throws	\LogicException		if renderer is called with a component it can't render
 	 * @return	string
 	 */

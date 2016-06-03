@@ -52,7 +52,7 @@ abstract class AbstractComponentRenderer implements ComponentRenderer {
 		$interface = $this->getComponentInterfaceName();
 		if(!($component instanceof $interface)) {
 			throw new \LogicException(
-				"Expected $cmp, found '".get_class($component)."' when rendering.");
+				"Expected $interface, found '".get_class($component)."' when rendering.");
 		}
 	}
 
