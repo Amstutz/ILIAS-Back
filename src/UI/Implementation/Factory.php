@@ -82,4 +82,12 @@ class Factory implements \ILIAS\UI\Factory {
 		return new Component\Panel\Factory();
 
 	}
+
+	/**
+	 * @return AbstractComponent\Generic\Generic
+	 */
+	public function generic($html)
+	{
+		return new Component\Generic\Generic($html);
+	}
 }

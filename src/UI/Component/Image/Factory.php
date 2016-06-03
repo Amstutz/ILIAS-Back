@@ -11,14 +11,14 @@ namespace ILIAS\UI\Component\Image;
 interface Factory {
 	/**
 	 * ---
-	 * title: Standard Image
+	 * title: Standard
 	 * ----
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */
 	public function standard($src,$alt);
 	/**
 	 * ---
-	 * title: Responsive Image
+	 * title: Responsive
 	 * ----
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */
@@ -26,7 +26,7 @@ interface Factory {
 
 	/**
 	 * ---
-	 * title: Circle Image
+	 * title: Circle
 	 * ----
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */
@@ -34,7 +34,7 @@ interface Factory {
 
 	/**
 	 * ---
-	 * title: Rounded Image
+	 * title: Rounded
 	 * ----
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */
@@ -42,7 +42,7 @@ interface Factory {
 
 	/**
 	 * ---
-	 * title: Thumbnail Image
+	 * title: Thumbnail
 	 * ----
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */

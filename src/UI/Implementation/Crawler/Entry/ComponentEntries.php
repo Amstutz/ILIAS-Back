@@ -110,12 +110,36 @@ class ComponentEntries extends AbstractEntryPart implements \Iterator, \Countabl
      * @param $id
      * @return string[]
      */
+    public function getParentsOfEntryTitles($id){
+        $titles = array();
+        foreach ($this->getParentsOfEntry($id) as $parent_id) {
+            $titles[$parent_id] = $this->getEntryById($parent_id)->getTitle();
+        }
+        return $titles;
+    }
+
+    /**
+     * @param $id
+     * @return string[]
+     */
     public function getDescendantsOfEntry($id){
         $children = $this->getEntryById($id)->getChildren();
         foreach($this->getEntryById($id)->getChildren() as $child){
             $children = array_merge($children,$this->getDescendantsOfEntry($child));
         }
         return $children;
+    }
+
+    /**
+     * @param $id
+     * @return string[]
+     */
+    public function getDescendantsOfEntryTitles($id){
+        $titles = array();
+        foreach ($this->getDescendantsOfEntry($id) as $parent_id) {
+            $titles[$parent_id] = $this->getEntryById($parent_id)->getTitle();
+        }
+        return $titles;
     }
 
     public function expose() {

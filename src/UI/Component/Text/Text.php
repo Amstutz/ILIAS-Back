@@ -10,7 +10,7 @@ interface Text extends \ILIAS\UI\Component\Component {
     // Types:
     const STANDARD = "standard";
     const HEADING = "heading";
-
+    const CODE = "code";
 
     public function getType();
 

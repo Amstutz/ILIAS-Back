@@ -15,15 +15,28 @@ class Renderer extends AbstractComponentRenderer {
 	 * @inheritdocs
 	 */
 	public function render(Component $component, RendererInterface $default_renderer) {
+		global $DIC;
+
 		$this->checkComponent($component);
 
 		$tpl = $this->getTemplate("tpl.descriptive_list.html", true, true);
 
-		foreach($component->getItems() as $item){
-			$tpl->setCurrentBlock("item");
-			$tpl->setVariable("DESCRIPTION",$default_renderer->render($item[0],$default_renderer));
-			$tpl->setVariable("CONTENT",$default_renderer->render($item[1],$default_renderer));
-			$tpl->parseCurrentBlock();
+		$f = $DIC->ui()->factory();
+
+		foreach($component->getItems() as $key => $item){
+
+			$key = $f->text()->standard($key);
+			if(is_string($item)){
+				$item = $f->text()->standard($item);
+			}
+			$content = $default_renderer->render($item,$default_renderer);
+
+			if(trim($content) != ""){
+				$tpl->setCurrentBlock("item");
+				$tpl->setVariable("DESCRIPTION",$default_renderer->render($key,$default_renderer));
+				$tpl->setVariable("CONTENT",$content);
+				$tpl->parseCurrentBlock();
+			}
 		}
 
 		return $tpl->get();

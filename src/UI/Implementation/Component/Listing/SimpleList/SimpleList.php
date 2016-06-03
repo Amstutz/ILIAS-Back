@@ -19,14 +19,11 @@ class SimpleList implements C\Listing\SimpleList {
 
 
     public function __construct($type, $items) {
-        assert('self::is_valid_type($type)');
-
         $this->type = $type;
         $this->items = $items;
     }
 
     public function withType($type){
-        assert('self::is_valid_type($type)');
         $clone = clone $this;
         $clone->type = $type;
         return $clone;
@@ -41,7 +38,6 @@ class SimpleList implements C\Listing\SimpleList {
 
 
     public function withItems($items){
-        assert('self::is_valid_type($type)');
         $clone = clone $this;
         $clone->items = $items;
         return $clone;

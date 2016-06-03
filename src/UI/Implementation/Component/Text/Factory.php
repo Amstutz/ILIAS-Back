@@ -20,6 +20,11 @@ class Factory implements \ILIAS\UI\Component\Text\Factory {
 	public function heading($text) {
 		return new Text(T::HEADING,$text);
 	}
-
+	/**
+	 * @inheritdoc
+	 */
+	public function code($text) {
+		return new Text(T::CODE,$text);
+	}
 
 }

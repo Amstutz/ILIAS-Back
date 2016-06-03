@@ -25,4 +25,12 @@ interface Factory {
      * @return \ILIAS\UI\Component\Text
      */
     public function heading($text);
+
+    /**
+     * ---
+     * title: Code Block
+     * ----
+     * @return \ILIAS\UI\Component\Text
+     */
+    public function code($text);
 }

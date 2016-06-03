@@ -69,6 +69,15 @@ class ComponentEntryDescription extends AbstractEntryPart
     }
 
     /**
+     * @param $key
+     */
+    public function getProperty($key){
+        $this->assert()->isIndex($key, $this->description);
+
+        return $this->description[$key];
+    }
+
+    /**
      * @return array
      */
     public function getDescription(){

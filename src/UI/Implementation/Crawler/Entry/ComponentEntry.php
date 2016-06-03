@@ -93,6 +93,11 @@ class ComponentEntry extends AbstractEntryPart
 
 
     /**
+     * @var array
+     */
+    protected $examples = null;
+
+    /**
      * ComponentEntry constructor.
      * @param $entry_data
      */
@@ -106,19 +111,21 @@ class ComponentEntry extends AbstractEntryPart
         $this->setIsAbstract($entry_data['abstract']);
         //$this->setStatusEntry($json->statusEntry);
         //$this->setStatusImplementation($json->statusImplementation);
-        if(array_key_exists('description',$entry_data)){
-            $this->setDescription(new ComponentEntryDescription($entry_data['description']));
-        }
-        if(array_key_exists('rules',$entry_data)){
-            $this->setRules(new ComponentEntryRules($entry_data['rules']));
-        }
+        $this->setDescription(new ComponentEntryDescription($entry_data['description']));
+        $this->setRules(new ComponentEntryRules($entry_data['rules']));
+
         $this->assert()->isIndex('path',$entry_data);
         $this->setPath($entry_data['path']);
+
         if(array_key_exists('background',$entry_data)){
             $this->setBackground($entry_data['background']);
         }
         if(array_key_exists('featurewiki',$entry_data)){
             $this->setFeatureWikiReferences($entry_data['featurewiki']);
+        }
+
+        if(!$this->isAbstract()){
+            $this->readExamples();
         }
         //$this->setLessVariables($json->lessVariables);
     }
@@ -219,6 +226,13 @@ class ComponentEntry extends AbstractEntryPart
     {
         return $this->description;
     }
+    /**
+     * @return array
+     */
+    public function getDescriptionAsArray()
+    {
+        return $this->description->getDescription();
+    }
 
     /**
      * @param ComponentEntryDescription $description
@@ -271,6 +285,14 @@ class ComponentEntry extends AbstractEntryPart
     public function getRules()
     {
         return $this->rules;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRulesAsArray()
+    {
+        return $this->rules->getRules();
     }
 
     /**
@@ -381,6 +403,35 @@ class ComponentEntry extends AbstractEntryPart
     {
         $this->setChildren(array_merge($this->children,$children));
     }
+
+    /**
+     * @return array
+     */
+    public function getExamples()
+    {
+        return $this->examples;
+    }
+
+    /**
+     */
+    public function readExamples()
+    {
+        $examples_path = dirname(str_replace("Component","examples",$this->path))."/".$this->getTitle();
+        $this->examples = array();
+        if(is_dir($examples_path)){
+            foreach (scandir($examples_path) as $file_name) {
+                $example_path = $examples_path."/".$file_name;
+                if(is_file($example_path)){
+                    $example_name = str_replace(".php","",$file_name);
+                    $this->examples[$example_name] = $example_path;
+                }
+            }
+        }
+
+    }
+
+
+
 
 }
 ?>

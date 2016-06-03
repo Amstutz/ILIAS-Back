@@ -243,4 +243,18 @@ interface Factory {
 	 * @return \ILIAS\UI\Component\Panel\Factory
 	 */
 	public function panel();
+
+	/**
+	 * ---
+	 * title: Generic
+	 * description:
+	 *   purpose: Can hold any content.
+	 *
+	 * rules:
+	 *   usage:
+	 *      1: Do only this component to solve legacy issues.
+	 * ---
+	 * @return \ILIAS\UI\Component\Generic\Generic
+	 */
+	public function generic($html);
 }

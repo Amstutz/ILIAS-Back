@@ -59,7 +59,8 @@ class Text implements C\Text\Text {
     static protected function is_valid_type($type) {
         static $types = array
         (   self::STANDARD,
-            self::HEADING
+            self::HEADING,
+            self::CODE
         );
         return in_array($type, $types);
     }

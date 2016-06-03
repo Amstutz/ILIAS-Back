@@ -29,6 +29,9 @@ class Panel implements C\Panel\Panel {
 
         $this->type = $type;
         $this->heading = $heading;//$this->getFactory()->text()->heading($heading);
+        if(!is_array($body)){
+            $body = array($body);
+        }
         $this->body = $body;
 
     }
