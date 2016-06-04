@@ -29,6 +29,13 @@ interface Factory {
     /**
      * ---
      * title: Code Block
+     * description:
+     *   purpose: >
+     *       Use if formated code needs to be represented in a readable manner including syntax highlighting.
+     *   composition: >
+     *       Contains formatted code.
+     *   effect: >
+     *       Renders the given code and highlights it syntax.
      * ----
      * @return \ILIAS\UI\Component\Text
      */

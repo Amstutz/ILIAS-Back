@@ -18,6 +18,8 @@ class Panel implements C\Panel\Panel {
 
     private  $body;
 
+    private $card = null;
+
     /**
      * @var \ILIAS\UI\Factory
      */
@@ -29,10 +31,8 @@ class Panel implements C\Panel\Panel {
 
         $this->type = $type;
         $this->heading = $heading;//$this->getFactory()->text()->heading($heading);
-        if(!is_array($body)){
-            $body = array($body);
-        }
-        $this->body = $body;
+        $this->body = $this->formatBody($body);
+
 
     }
     public function withType($type){
@@ -64,9 +64,8 @@ class Panel implements C\Panel\Panel {
     }
 
     public function withBody($body){
-        assert('self::is_valid_type($type)');
         $clone = clone $this;
-        $clone->body = $body;
+        $clone->body = $this->formatBody($body);
         return $clone;
     }
 
@@ -76,6 +75,25 @@ class Panel implements C\Panel\Panel {
     public function getBody() {
         return $this->body;
     }
+
+    /**
+     * Todo: Discuss this pattern with Richard, Bullets do not have cards. How to procceed? Share a lot of functionality, but not all
+     * @param $body
+     * @return Panel
+     */
+    public function withCard($card){
+        $clone = clone $this;
+        $clone->card = $card;
+        return $clone;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCard() {
+        return $this->card;
+    }
+
 
     // Helper
     static protected function is_valid_type($type) {
@@ -109,6 +127,24 @@ class Panel implements C\Panel\Panel {
         $this->factory = $factory;
     }
 
+    /**
+     * Todo: Discuss this pattern with Richard
+     * @param $body
+     * @return C\Component[]
+     */
+    protected function formatBody($body){
+        global $DIC;
+        $f = $DIC->ui()->factory();
+
+        if(is_string($body)){
+            $body = $f->text()->standard($body);
+        }
+        if(!is_array($body)){
+            $body = array($body);
+        }
+        return $body;
+
+    }
 
 }
 ?>

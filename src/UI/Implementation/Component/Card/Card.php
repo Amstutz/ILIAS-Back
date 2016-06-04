@@ -34,13 +34,21 @@ class Card implements C\Card {
      * @param string $content
      * @param \ILIAS\UI\Component\Image\Image $image
      */
-    public function __construct($title, $content,\ILIAS\UI\Component\Image\Image $image) {
+    public function __construct($title, $content,\ILIAS\UI\Component\Image\Image $image = null) {
         global $DIC;
 
         $this->f = $DIC->ui()->factory();
 
-        $this->title = $this->f->text()->heading($title);
-        $this->content = $this->f->text()->standard($content);
+        if(is_string($title)){
+            $this->title = $this->f->text()->heading($title);
+        }else{
+            $this->title = $title;
+        }
+        if(is_string($content)){
+            $this->content = $this->f->text()->standard($content);
+        }else{
+            $this->content = $content;
+        }
         $this->image = $image;
     }
 
@@ -48,10 +56,12 @@ class Card implements C\Card {
      * @inheritdoc
      */
     public function withTitle($title){
-        global $DIC;
-
         $clone = clone $this;
-        $clone->title = $this->f->text()->heading($title);
+        if(is_string($title)){
+            $this->title = $this->f->text()->heading($title);
+        }else{
+            $this->title = $title;
+        }
         return $clone;
     }
 
@@ -67,10 +77,12 @@ class Card implements C\Card {
      * @inheritdoc
      */
     public function withContent($content){
-        global $DIC;
-
         $clone = clone $this;
-        $clone->content =  $this->f->text()->standard($content);
+        if(is_string($content)){
+            $this->content = $this->f->text()->standard($content);
+        }else{
+            $this->content = $content;
+        }
         return $clone;
     }
 

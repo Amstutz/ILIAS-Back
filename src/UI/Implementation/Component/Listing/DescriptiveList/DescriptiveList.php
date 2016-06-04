@@ -19,7 +19,6 @@ class DescriptiveList implements C\Listing\DescriptiveList {
     }
 
     public function withItems($items){
-        assert('self::is_valid_type($type)');
         $clone = clone $this;
         $clone->items = $items;
         return $clone;
@@ -31,5 +30,7 @@ class DescriptiveList implements C\Listing\DescriptiveList {
     public function getItems() {
         return $this->items;
     }
+
+
 }
 ?>

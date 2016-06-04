@@ -2,7 +2,7 @@
 
 /* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 
-function base() {
+function block() {
     global $DIC;
     $f = $DIC->ui()->factory();
     $renderer = $DIC->ui()->renderer();
@@ -18,12 +18,7 @@ function base() {
         $f->image()->responsive("./templates/default/images/logo/ilias_logo_114x114.png", "Card Example")
     );
 
-    $row = $f->grid()->row(
-        array(
-            $f->grid()->column(array($orderedList),10),
-            $f->grid()->column(array($card),2),
-        )
-    );
+
 
 
     $blockPanel1 = $f->panel()->block("Title of Block 1",

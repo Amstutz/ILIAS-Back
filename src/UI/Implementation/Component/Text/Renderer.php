@@ -18,7 +18,6 @@ class Renderer extends AbstractComponentRenderer {
 
 		$tpl = $this->getTemplate("tpl.text.html", true, true);
 
-
 		$tpl->setCurrentBlock($component->getType());
 		$tpl->setVariable("TEXT",$component->getText());
 		$tpl->parseCurrentBlock($component->getType());

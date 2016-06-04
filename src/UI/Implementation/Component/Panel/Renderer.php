@@ -17,6 +17,8 @@ class Renderer extends AbstractComponentRenderer {
 		$this->checkComponent($component);
 		$tpl = $this->getTemplate("tpl.panel.html", true, true);
 
+		global $DIC;
+		$f = $DIC->ui()->factory();
 
 		$tpl->setVariable("TYPE",$component->getType());
 		$tpl->setVariable("HEADING_CLASS",$component->getHeadingClass());
@@ -25,9 +27,21 @@ class Renderer extends AbstractComponentRenderer {
 
 		$body = "";
 
-		foreach($component->getBody() as $item){
-			$body .= $default_renderer->render($item,$default_renderer);
+
+		if($component->getCard()){
+			$row = $f->grid()->row(
+					array(
+							$f->grid()->column($component->getBody(),8),
+							$f->grid()->column(array($component->getCard()),4),
+					)
+			);
+			$body = $default_renderer->render($row);
+		}else{
+			foreach($component->getBody() as $item){
+				$body .= $default_renderer->render($item,$default_renderer);
+			}
 		}
+
 		$tpl->setVariable("BODY",$body);
 
 		return $tpl->get();

@@ -19,9 +19,9 @@ class Link implements C\Link\Link {
     private  $caption;
 
 
-    public function __construct($href, $caption) {
+    public function __construct($href, $caption = "") {
         $this->href = $href;
-        $this->caption = $caption;
+        $this->caption = $this->formatCaption($caption);
     }
     public function withHref($href){
         $clone = clone $this;
@@ -39,7 +39,7 @@ class Link implements C\Link\Link {
 
     public function withCaption($caption){
         $clone = clone $this;
-        $clone->caption = $caption;
+        $clone->caption = $this->foramtCaption($caption);
         return $clone;
     }
 
@@ -47,6 +47,27 @@ class Link implements C\Link\Link {
      * @inheritdoc
      */
     public function getCaption() {
+        return $this->caption;
+    }
+
+    /**
+     * Todo: Discuss this with Richard
+     * @param $caption
+     * @return C\Component
+     */
+    protected function formatCaption($caption){
+        global $DIC;
+        $f = $DIC->ui()->factory();
+
+        if($caption){
+            if(is_string($caption)){
+                $this->caption = $f->text()->standard($caption);
+            }else{
+                $this->caption = $caption;
+            }
+        }else{
+            $this->caption = $f->text()->standard($this->href);
+        }
         return $this->caption;
     }
 }

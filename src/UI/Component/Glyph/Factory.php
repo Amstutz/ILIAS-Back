@@ -10,7 +10,7 @@ namespace ILIAS\UI\Component\Glyph;
 interface Factory {
 	/**
 	 * ---
-	 * title: Up Glyph
+	 * title: Up
 	 * description:
 	 *   purpose: >
 	 *       The glyphed up-button allow for manually arranging rows in tables
@@ -45,7 +45,7 @@ interface Factory {
 
 	/**
 	 * ---
-	 * title: Down Glyph
+	 * title: Down
 	 * description:
 	 *   purpose: >
 	 *       The glyphed down-button allow for manually arranging rows in tables
@@ -80,7 +80,7 @@ interface Factory {
 
 	/**
 	 * ---
-	 * title: Add Glyph
+	 * title: Add
 	 * description:
 	 *   purpose: >
 	 *       The glyphed add-button serves as stand-in for the respective textual
@@ -157,7 +157,7 @@ interface Factory {
 	 *   effect: >
 	 *       The click on a previous-glyph leads back to a previous view.
 	 *   rivals:
-	 *       - The caret handles opening and closing hidden aspects of a view such as a dropdown or content of an accordion.
+	 *       Caret: The caret handles opening and closing hidden aspects of a view such as a dropdown or content of an accordion.
 	 *
 	 * context: Show Member View in courses.
 	 *
@@ -177,7 +177,7 @@ interface Factory {
 	 *   effect: >
 	 *       The click on a next-glyph opens a new view of an object.
 	 *   rivals:
-	 *       - The caret handles opening and closing hidden aspects of a view such as a dropdown or content of an accordion.
+	 *       Caret: The caret handles opening and closing hidden aspects of a view such as a dropdown or content of an accordion.
 	 *
 	 * context: Show Member View in courses.
 	 *
@@ -213,6 +213,18 @@ interface Factory {
 	/**
 	 * ---
 	 * title: Caret
+	 * description:
+	 *   purpose: >
+	 *       The Caret Glyph is used to trigger the the display of some neighbouring Container Collection such as a the content of a Dropdown or an Accordion.
+	 *   composition: >
+	 *       Carets indicating an underlying Overlay such as a Dropdown the default Caret class may be used.
+	 *       In most cases the glyphicon-triangle should be chosen in the correct orientation to indicate whether to content is currently displayed or not.
+	 *       Triangle-right indicates that underlying content is hidden Triangle-bottom indicates that the underlying content is currently shown.
+	 *   effect: >
+	 *       Clicking the caret toggles the display of some Container Collection.
+	 *   rivals:
+	 *       Previous/Next Glyph: The Previous/Next Glyph opens a completely new view. It serves a navigational purpose.
+	 *
 	 * ---
 	 * @return \ILIAS\UI\Component\Glyph\Glyph
 	 */
@@ -229,6 +241,13 @@ interface Factory {
 	/**
 	 * ---
 	 * title: Search
+	 * description:
+	 *   purpose: >
+	 *       The Search Glyph is used whenever content is to be searched. E.g. The Search Glyph triggers the Top Search Popover. This is the only access to the global search.
+	 *   composition: >
+	 *       The Search Glyph uses the glyphicon-search.
+	 *   effect: >
+	 *       Clicking the Search Glyph triggers the display of the Top Search Popover. This is the only access to the search.
 	 * ---
 	 * @return \ILIAS\UI\Component\Glyph\Glyph
 	 */

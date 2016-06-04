@@ -54,4 +54,26 @@ class ilTemplateWrapper implements Template {
 		}
 		return $this->tpl->get($block);
 	}
+
+	/**
+	 * @param $string
+	 */
+	public function addJavaScript($string){
+		$this->tpl->addJavaScript("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/libs/highlight/highlight.pack.js");
+
+	}
+
+	/**
+	 * @param $string
+	 */
+	public function addOnLoadCode($string){
+		$this->tpl->addOnLoadCode("hljs.initHighlightingOnLoad();");
+	}
+
+	/**
+	 * @param $string
+	 */
+	public function addCss($string){
+		$this->tpl->addCss("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/libs/highlight/styles/default.css");
+	}
 }

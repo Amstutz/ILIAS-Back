@@ -29,12 +29,12 @@ class ComponentEntry extends AbstractEntryPart
     /**
      * @var array
      */
-    //protected $status_list_entry = array("accepted","proposed","to be revised");
+    protected $status_list_entry = array("Accepted","Proposed","To be revised");
 
     /**
      * @var array
      */
-    //protected $status_list_implementation = array("implemented","partly implemented","to be implemented");
+    protected $status_list_implementation = array("Implemented","Partly implemented","To be implemented");
 
     /**
      * @var string
@@ -109,8 +109,8 @@ class ComponentEntry extends AbstractEntryPart
         $this->setTitle($entry_data['title']);
         $this->assert()->isIndex('abstract',$entry_data);
         $this->setIsAbstract($entry_data['abstract']);
-        //$this->setStatusEntry($json->statusEntry);
-        //$this->setStatusImplementation($json->statusImplementation);
+        $this->setStatusEntry("Proposed");
+        $this->setStatusImplementation("Partly implemented");
         $this->setDescription(new ComponentEntryDescription($entry_data['description']));
         $this->setRules(new ComponentEntryRules($entry_data['rules']));
 
@@ -194,7 +194,7 @@ class ComponentEntry extends AbstractEntryPart
     public function setStatusEntry($status_entry)
     {
         $this->assert()->isString($status_entry);
-        $this->assert()->isIndex($status_entry,$this->status_list_entry);
+        //$this->assert()->isIndex($status_entry,$this->status_list_entry);
 
         $this->status_entry = $status_entry;
     }
@@ -212,8 +212,8 @@ class ComponentEntry extends AbstractEntryPart
      */
     public function setStatusImplementation($status_implementation)
     {
-        $this->assert()->isIndex($status_implementation);
-        $this->assert()->isIndex($status_implementation,$this->status_list_implementation);
+        $this->assert()->isString($status_implementation);
+        //$this->assert()->isIndex($status_implementation,$this->status_list_implementation);
 
         $this->status_implementation = $status_implementation;
 
@@ -416,7 +416,12 @@ class ComponentEntry extends AbstractEntryPart
      */
     public function readExamples()
     {
-        $examples_path = dirname(str_replace("Component","examples",$this->path))."/".$this->getTitle();
+        $examples_path = implode("/",
+                array_unique(
+                    explode ("/",
+                        str_replace("Component","examples",$this->path))))
+            ."/".$this->getTitle();
+
         $this->examples = array();
         if(is_dir($examples_path)){
             foreach (scandir($examples_path) as $file_name) {
@@ -427,7 +432,6 @@ class ComponentEntry extends AbstractEntryPart
                 }
             }
         }
-
     }
 
 

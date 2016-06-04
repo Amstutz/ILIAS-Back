@@ -50,4 +50,5 @@ interface Template {
 	 * @return	string
 	 */
 	public function get($block = null);
+
 }

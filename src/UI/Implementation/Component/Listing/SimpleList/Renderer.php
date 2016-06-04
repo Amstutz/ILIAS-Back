@@ -15,6 +15,7 @@ class Renderer extends AbstractComponentRenderer {
 	 */
 	public function render(Component $component, RendererInterface $default_renderer) {
 		global $DIC;
+		$f = $DIC->ui()->factory();
 
 		$this->checkComponent($component);
 
@@ -23,7 +24,7 @@ class Renderer extends AbstractComponentRenderer {
 		if(count($component->getItems())>0){
 			$tpl->setVariable("TYPE",$component->getType());
 
-			$f = $DIC->ui()->factory();
+
 
 			foreach($component->getItems() as $item){
 				if(is_string($item)){

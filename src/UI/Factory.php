@@ -138,7 +138,7 @@ interface Factory {
 	 * @param \ILIAS\UI\Component\Image\Image $image
 	 * @return \ILIAS\UI\Component\Card\Card
 	 */
-	public function card($title, $content,\ILIAS\UI\Component\Image\Image $image);
+	public function card($title, $content,\ILIAS\UI\Component\Image\Image $image = null);
 
 	/**
 	 * ---
@@ -203,7 +203,7 @@ interface Factory {
 	 * @param string $caption
 	 * @return \ILIAS\UI\Component\Link\Link
 	 */
-	public function link($href,$caption);
+	public function link($href,$caption="");
 
 	/**
 	 * ---

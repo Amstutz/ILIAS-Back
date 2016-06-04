@@ -27,7 +27,7 @@ class Factory implements \ILIAS\UI\Factory {
 	 * @param string $caption
 	 * @return AbstractComponent\Link\Link
 	 */
-	public function link($href,$caption)
+	public function link($href,$caption="")
 	{
 		return new Component\Link\Link($href,$caption);
 	}
@@ -39,7 +39,7 @@ class Factory implements \ILIAS\UI\Factory {
 	 * @param AbstractComponent\Image\Image $image
 	 * @return AbstractComponent\Card\Card
 	 */
-	public function card($title, $content,AbstractComponent\Image\Image $image) {
+	public function card($title, $content,AbstractComponent\Image\Image $image = null) {
 		return new Component\Card\Card($title, $content,$image);
 	}
 

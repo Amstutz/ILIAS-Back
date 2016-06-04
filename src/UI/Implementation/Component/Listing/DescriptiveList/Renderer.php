@@ -26,9 +26,11 @@ class Renderer extends AbstractComponentRenderer {
 		foreach($component->getItems() as $key => $item){
 
 			$key = $f->text()->standard($key);
+
 			if(is_string($item)){
 				$item = $f->text()->standard($item);
 			}
+
 			$content = $default_renderer->render($item,$default_renderer);
 
 			if(trim($content) != ""){
