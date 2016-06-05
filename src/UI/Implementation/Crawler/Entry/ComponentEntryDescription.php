@@ -8,7 +8,7 @@ namespace ILIAS\UI\Implementation\Crawler\Entry;
  * @version           $Id$
  *
  */
-class ComponentEntryDescription extends AbstractEntryPart
+class ComponentEntryDescription extends AbstractEntryPart implements \JsonSerializable
 {
     /**
      * @var array
@@ -82,6 +82,13 @@ class ComponentEntryDescription extends AbstractEntryPart
      */
     public function getDescription(){
         return $this->description;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize() {
+        return $this->getDescription();
     }
 }
 ?>

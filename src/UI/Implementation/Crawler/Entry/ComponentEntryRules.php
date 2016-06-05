@@ -8,7 +8,7 @@ namespace ILIAS\UI\Implementation\Crawler\Entry;
  * @version           $Id$
  *
  */
-class ComponentEntryRules extends AbstractEntryPart
+class ComponentEntryRules extends AbstractEntryPart implements \JsonSerializable
 {
     /**
      * @var array
@@ -71,6 +71,14 @@ class ComponentEntryRules extends AbstractEntryPart
      */
     public function getRules(){
         return $this->rules;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize() {
+        return $this->getRules();
     }
 }
 ?>

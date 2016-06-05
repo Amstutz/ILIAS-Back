@@ -11,7 +11,7 @@ namespace ILIAS\UI\Component\Counter;
 interface Factory {
 	/**
 	 * ---
-	 * title: Status Counter
+	 * title: Status
 	 * description:
 	 *   purpose: >
 	 *       The Status counter is used to display information about the
@@ -37,7 +37,7 @@ interface Factory {
 
 	/**
 	 * ---
-	 * title: Novelty Counter
+	 * title: Novelty
 	 * description:
 	 *   purpose: >
 	 *       Novelty Counters inform users about the arrival or creation of new

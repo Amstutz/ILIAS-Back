@@ -12,6 +12,8 @@ interface Factory {
 	/**
 	 * ---
 	 * title: Standard
+     * description:
+     *   purpose: The standard image is used if there is no specific reason to use another specialized one.
 	 * ----
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */

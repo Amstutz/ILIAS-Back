@@ -27,7 +27,6 @@ class Renderer extends AbstractComponentRenderer {
 
 		$body = "";
 
-
 		if($component->getCard()){
 			$row = $f->grid()->row(
 					array(
@@ -41,7 +40,6 @@ class Renderer extends AbstractComponentRenderer {
 				$body .= $default_renderer->render($item,$default_renderer);
 			}
 		}
-
 		$tpl->setVariable("BODY",$body);
 
 		return $tpl->get();

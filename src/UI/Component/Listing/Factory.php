@@ -7,7 +7,7 @@ interface Factory {
 
     /**
      * ---
-     * title: Unordered List
+     * title: Unordered
      * ----
      * @return  \ILIAS\UI\Component\Listing\SimpleList
      */
@@ -15,7 +15,7 @@ interface Factory {
 
     /**
      * ---
-     * title: Ordered List
+     * title: Ordered
      * ----
      * @return  \ILIAS\UI\Component\Listing\SimpleList
      */
@@ -23,7 +23,13 @@ interface Factory {
 
     /**
      * ---
-     * title: Descriptive List
+     * title: Descriptive
+     * description:
+     *   purpose: >
+     *     Descriptive Lists are used to display key-value doubles of textual-information.
+     *   composition: >
+     *     Descriptive Lists are composed of a key acting as title describing the type of
+     *     information being displayed underneath.
      * ----
      * @return  \ILIAS\UI\Component\Listing\DescriptiveList
      */

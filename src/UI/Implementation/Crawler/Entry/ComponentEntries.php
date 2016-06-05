@@ -8,7 +8,7 @@ use ILIAS\UI\Implementation\Crawler as Crawler;
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>*
  */
-class ComponentEntries extends AbstractEntryPart implements \Iterator, \Countable
+class ComponentEntries extends AbstractEntryPart implements \Iterator, \Countable, \JsonSerializable
 {
 
     /**
@@ -40,6 +40,7 @@ class ComponentEntries extends AbstractEntryPart implements \Iterator, \Countabl
             $this->setRootEntryId($entry->getId());
         }
         $this->id_to_entry_map[$entry->getId()] = $entry;
+
     }
 
     /**
@@ -183,6 +184,15 @@ class ComponentEntries extends AbstractEntryPart implements \Iterator, \Countabl
      */
     public function count(){
         return count($this->id_to_entry_map);
+    }
+
+
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize() {
+        return $this->id_to_entry_map;
     }
 }
 ?>

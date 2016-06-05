@@ -9,7 +9,7 @@ namespace ILIAS\UI\Implementation\Crawler\Entry;
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>*
  */
-class ComponentEntry extends AbstractEntryPart
+class ComponentEntry extends AbstractEntryPart implements \JsonSerializable
 {
     /**
      * @var string
@@ -122,6 +122,12 @@ class ComponentEntry extends AbstractEntryPart
         }
         if(array_key_exists('featurewiki',$entry_data)){
             $this->setFeatureWikiReferences($entry_data['featurewiki']);
+        }
+        if(array_key_exists('parent',$entry_data)){
+            $this->setParent($entry_data['parent']);
+        }
+        if(array_key_exists('children',$entry_data)){
+            $this->setChildren($entry_data['children']);
         }
 
         if(!$this->isAbstract()){
@@ -368,7 +374,6 @@ class ComponentEntry extends AbstractEntryPart
      */
     public function setParent($parent)
     {
-        $this->assert()->isString($parent);
         $this->parent = $parent;
     }
 
@@ -434,8 +439,26 @@ class ComponentEntry extends AbstractEntryPart
         }
     }
 
-
-
-
+    /**
+     * @return array
+     */
+    public function jsonSerialize() {
+        return array(
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'abstract' => $this->isAbstract(),
+            'status_entry' => $this->getStatusEntry(),
+            'status_implementation' => $this->getStatusImplementation(),
+            'description' => $this->getDescription(),
+            'background ' => $this->getBackground(),
+            'selector' => $this->getSelector(),
+            'feature_wiki_references ' => $this->getFeatureWikiReferences(),
+            'rules' => $this->getRules(),
+            'parent' => $this->getParent(),
+            'children' => $this->getChildren(),
+            'less_variables' => $this->getLessVariables(),
+            'path' => $this->getPath()
+        );
+    }
 }
 ?>

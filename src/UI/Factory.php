@@ -143,7 +143,8 @@ interface Factory {
 	/**
 	 * ---
 	 * title: Image
-	 * description:
+     * description:
+     *   purpose: Images are used for previous of downloads or view of user images.
 	 * ---
 	 * Todo: Description in Incomplete!
 	 * Todo: Do we allow this shortcut for families with only one member?
@@ -220,6 +221,9 @@ interface Factory {
 	/**
 	 * ---
 	 * title: Listing
+     * description:
+     *   purpose: >
+     *     Listings are used to structure textual information.
 	 * ---
 	 * Todo: Description in Incomplete!
 	 * @return \ILIAS\UI\Component\Listing\Factory
