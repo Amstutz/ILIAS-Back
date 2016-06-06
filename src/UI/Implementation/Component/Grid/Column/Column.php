@@ -12,14 +12,13 @@ class Column implements \ILIAS\UI\Component\Grid\Column {
 
 
     public function __construct($content, $width = 12) {
-
-        $this->content = $content;
+        $this->content = $this->formatContent($content);
         $this->width = $width;
     }
 
     public function widthContent($content){
         $clone = clone $this;
-        $clone->content = $content;
+        $this->content = $this->formatContent($content);
         return $clone;
     }
 
@@ -36,6 +35,16 @@ class Column implements \ILIAS\UI\Component\Grid\Column {
 
     public function getWidth(){
         return $this->width;
+    }
+
+    /**
+     * Todo Discuss this with richard
+     */
+    protected function formatContent($content){
+        if(!is_array($content)){
+            $content = array($content);
+        }
+        return $content;
     }
 }
 ?>

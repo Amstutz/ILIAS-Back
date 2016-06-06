@@ -1,6 +1,6 @@
 <?php
 
-function base() {
+function base_2() {
     //Init Factory and Renderer
     global $DIC;
     $f = $DIC->ui()->factory();
@@ -8,7 +8,11 @@ function base() {
 
     //Generate List
     $unordered = $f->listing()->unordered(
-        array("Point 1","Point 2","Point 3")
+        array(
+            $f->text()->standard("Point 1"),
+            $f->text()->standard("Point 2"),
+            $f->text()->standard("Point 3")
+        )
     );
 
     //Render

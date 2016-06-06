@@ -1,17 +1,20 @@
 <?php
 
 function base() {
+    //Init Factory and Renderer
     global $DIC;
     $f = $DIC->ui()->factory();
     $renderer = $DIC->ui()->renderer();
 
+    //Generate List
     $descriptive = $f->listing()->descriptive(
         array(
-            "Description 1"=>$f->text()->standard("Point 1"),
-            "Description 2"=>$f->text()->standard("Point 2"),
-            "Description 3"=>$f->text()->standard("Point 3")
+            "Title 1"=>"Description 1",
+            "Title 2"=>"Description 2",
+            "Title 3"=>"Description 3"
         )
     );
 
+    //Render
     return $renderer->render($descriptive);
 }

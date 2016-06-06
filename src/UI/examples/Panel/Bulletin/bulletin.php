@@ -1,12 +1,14 @@
 <?php
 
-function block() {
+function bulletin() {
+    //Init Factory and Renderer
     global $DIC;
     $f = $DIC->ui()->factory();
     $renderer = $DIC->ui()->renderer();
 
+    //Generate Bulletin
     $ordered_list = $f->listing()->ordered(array(
-            $f->text()->standard("Point 1"),$f->text()->standard("Point 2"),$f->text()->standard("Point 3")
+            "Point 1","Point 2","Point 3"
         )
     );
 
@@ -22,9 +24,9 @@ function block() {
         array(
             $f->listing()->descriptive(
                 array(
-                    "Description 1"=>$f->text()->standard("Point 1"),
-                    "Description 2"=>$f->text()->standard("Point 2"),
-                    "Description 3"=>$f->text()->standard("Point 3")
+                    "Description 1"=>"Point 1",
+                    "Description 2"=>"Point 2",
+                    "Description 3"=>"Point 3"
                 )
             )
         )

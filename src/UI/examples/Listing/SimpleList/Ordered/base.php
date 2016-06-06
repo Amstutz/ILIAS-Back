@@ -1,17 +1,16 @@
 <?php
 
 function base() {
+    //Init Factory and Renderer
     global $DIC;
     $f = $DIC->ui()->factory();
     $renderer = $DIC->ui()->renderer();
 
+    //Generate List
     $ordered = $f->listing()->ordered(
-        array(
-            $f->text()->standard("Point 1"),
-            $f->text()->standard("Point 2"),
-            $f->text()->standard("Point 3")
-        )
+        array("Point 1","Point 2","Point 3")
     );
 
+    //Render
     return $renderer->render($ordered);
 }

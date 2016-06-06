@@ -24,6 +24,7 @@ class Renderer extends AbstractComponentRenderer {
 		foreach($component->getContent() as $content){
 			$column .= $default_renderer->render($content,$default_renderer);
 		}
+
 		$tpl->setVariable("CONTENT",$column);
 
 

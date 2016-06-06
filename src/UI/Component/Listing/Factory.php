@@ -8,6 +8,11 @@ interface Factory {
     /**
      * ---
      * title: Unordered
+     * description:
+     *   purpose: >
+     *     Unordered Lists are used to display a unordered set of textual elements.
+     *   composition: >
+     *     Unordered Lists are composed of a set of bullets labeling the listed items.
      * ----
      * @return  \ILIAS\UI\Component\Listing\SimpleList
      */
@@ -16,6 +21,12 @@ interface Factory {
     /**
      * ---
      * title: Ordered
+     * description:
+     *   purpose: >
+     *     Ordered Lists are used to displayed a numbered set of textual elements. They are used if the order of the
+     *     elements is relevant.
+     *   composition: >
+     *     Ordered Lists are composed of a set of numbers labeling the items enumerated.
      * ----
      * @return  \ILIAS\UI\Component\Listing\SimpleList
      */
