@@ -15733,3 +15733,9 @@ grp#:#grp_admission_link_failure_invalid_code#:#Can't register: Link is invalid.
 crs#:#crs_admission_link_failure_invalid_code#:#Can't register: Link is invalid.
 form#:#form_date_duration_start#:#Start
 form#:#form_date_duration_end#:#End
+rbac#:#sty_write_content#:#Edit Content Styles
+rbac#:#stys_sty_write_custom#:#Edit Content Styles
+rbac#:#sty_write_system#:#Edit System Styles
+rbac#:#stys_sty_write_system#:#Edit System Styles
+rbac#:#sty_write_page_layout#:#Edit Page Layouts
+rbac#:#stys_sty_write_page_layout#:#Edit Page Layouts
