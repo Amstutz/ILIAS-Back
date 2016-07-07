@@ -8,6 +8,9 @@
  * @author Alex Killing <alex.killing@gmx.de>
  * @version $Id$
  * @ingroup ServicesStyle
+ *
+ *
+ * @ilCtrl_Calls ilSystemStyleSettingsGUI: ilSystemStyleGUI
  */
 class ilSystemStyleSettingsGUI
 {
@@ -77,16 +80,26 @@ class ilSystemStyleSettingsGUI
 	function executeCommand()
 	{
 		$next_class = $this->ctrl->getNextClass($this);
-		$cmd = $this->ctrl->getCmd("edit");
+		$cmd = $this->ctrl->getCmd();
 
-		switch ($next_class)
+		switch ($cmd)
 		{
+			case "addSystemStyle":
+				include_once("class.ilSystemStyleGUI.php");
+				$system_styles = new ilSystemStyleGUI();
+				$this->ctrl->forwardCommand($system_styles);
+				break;
+			case "edit":
+			case "moveUserStyles":
+			case "saveStyleSettings":
+			case "assignStylesToCats":
+			case "addStyleCatAssignment":
+			case "saveStyleCatAssignment":
+			case "deleteSysStyleCatAssignments":
+				$this->$cmd();
+				break;
 			default:
-				if (in_array($cmd, array("edit", "moveUserStyles", "saveStyleSettings",
-					"assignStylesToCats", "addStyleCatAssignment", "saveStyleCatAssignment", "deleteSysStyleCatAssignments")))
-				{
-					$this->$cmd();
-				}
+				$this->edit();
 		}
 	}
 
@@ -130,6 +143,17 @@ class ilSystemStyleSettingsGUI
 
 			// from styles selector
 			$si = new ilSelectInputGUI($this->lng->txt("sty_move_user_styles").": ".$this->lng->txt("sty_from"), "from_style");
+
+			// Add Button for adding System Styles
+
+			$reload_btn = ilLinkButton::getInstance();
+			$reload_btn->setCaption($this->lng->txt("add_system_stlye"),false);
+			$reload_btn->setUrl($this->ctrl->getLinkTarget($this, 'addSystemStyle'));
+			$this->toolbar->addButtonInstance($reload_btn);
+
+			$this->toolbar->addSeparator();
+
+
 			$si->setOptions($options + array("other" => $this->lng->txt("other")));
 			$this->toolbar->addInputItem($si, true);
 
@@ -138,6 +162,8 @@ class ilSystemStyleSettingsGUI
 			$si->setOptions($options);
 			$this->toolbar->addInputItem($si, true);
 			$this->toolbar->addFormButton($this->lng->txt("sty_move_style"), "moveUserStyles");
+
+
 
 			$this->toolbar->setFormAction($this->ctrl->getFormAction($this));
 		}

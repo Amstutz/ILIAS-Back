@@ -8,6 +8,7 @@
  * @author Alex Killing <alex.killing@gmx.de>
  * @version $Id$
  * @ingroup ServicesStyle
+ *
  */
 class ilSystemStyleSettings
 {

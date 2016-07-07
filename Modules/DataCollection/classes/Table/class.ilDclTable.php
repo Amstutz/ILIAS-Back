@@ -153,8 +153,7 @@ class ilDclTable {
 	 * Read table
 	 */
 	public function doRead() {
-		global $DIC;
-		$ilDB = $DIC['ilDB'];
+		global $ilDB;
 
 		$query = "SELECT * FROM il_dcl_table WHERE id = " . $ilDB->quote($this->getId(), "integer");
 		$set = $ilDB->query($query);
@@ -191,8 +190,8 @@ class ilDclTable {
 	 * @param boolean $delete_main_table true to delete table anyway
 	 */
 	public function doDelete($delete_main_table = false) {
-		global $DIC;
-		$ilDB = $DIC['ilDB'];
+		global $ilDB;
+
 
 		/** @var $ilDB ilDB */
 		foreach ($this->getRecords() as $record) {
@@ -224,8 +223,8 @@ class ilDclTable {
 	 * @param bool $create_views
 	 */
 	public function doCreate($create_tablefield_setting = true, $create_standardview = true) {
-		global $DIC;
-		$ilDB = $DIC['ilDB'];
+		global $ilDB;
+
 
 		$id = $ilDB->nextId("il_dcl_table");
 		$this->setId($id);
@@ -260,8 +259,8 @@ class ilDclTable {
 	 * doUpdate
 	 */
 	public function doUpdate() {
-		global $DIC;
-		$ilDB = $DIC['ilDB'];
+		global $ilDB;
+
 
 		$ilDB->update("il_dcl_table", array(
 			"obj_id" => array( "integer", $this->getObjId() ),
