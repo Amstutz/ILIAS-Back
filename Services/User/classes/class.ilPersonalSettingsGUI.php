@@ -800,6 +800,9 @@ class ilPersonalSettingsGUI
 	*/
 	public function initGeneralSettingsForm()
 	{
+		/**
+		 * @var ilStyleDefinition $styleDefinition
+		 */
 		global $lng, $ilUser, $styleDefinition, $ilSetting;
 		
 		
@@ -834,21 +837,15 @@ class ilPersonalSettingsGUI
 				$options = array();
 				foreach($templates as $template)
 				{
-					// get styles information of template
-					$styleDef = new ilStyleDefinition($template["id"]);
-					$styleDef->startParsing();
-					$styles = $styleDef->getStyles();
-
-					foreach($styles as $style)
+					foreach($template->getStyles() as $style)
 					{
 						include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
-						if (!ilSystemStyleSettings::_lookupActivatedStyle($template["id"],$style["id"]))
+						if (!ilSystemStyleSettings::_lookupActivatedStyle($template->getId(),$style->getId()))
 						{
 							continue;
 						}
 
-						$options[$template["id"].":".$style["id"]] =
-							$styleDef->getTemplateName()." / ".$style["name"];
+						$options[$template->getId().":".$style->getId()] = $template->getName()." / ".$style->getName();
 					}
 				}
 				$si->setOptions($options);

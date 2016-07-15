@@ -70,7 +70,10 @@ class ilUtil
 	*/
 	public static function getImagePath($img, $module_path = "", $mode = "output", $offline = false)
 	{
-		global $ilias, $styleDefinition, $ilCtrl, $ilUser;
+		/**
+		 * @var ilStyleDefinition $styleDefinition
+		 */
+		global $styleDefinition;
 
 		if (is_int(strpos($_SERVER["PHP_SELF"], "setup.php")))
 		{
@@ -88,12 +91,10 @@ class ilUtil
 		require_once("./Services/Style/System/classes/class.ilStyleDefinition.php");
 		$current_skin = ilStyleDefinition::getCurrentSkin();
 		$current_style = ilStyleDefinition::getCurrentStyle();
-		
+
 		if (is_object($styleDefinition))
 		{
-			$image_dir = $styleDefinition->getImageDirectory(
-				ilStyleDefinition::getCurrentMasterStyle(),
-				$current_style);
+			$image_dir = $styleDefinition->getImageDirectory($current_style);
 		}
 		if ($current_skin == "default")
 		{

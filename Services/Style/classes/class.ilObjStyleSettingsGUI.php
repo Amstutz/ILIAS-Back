@@ -10,7 +10,7 @@ include_once("./Services/COPage/Layout/classes/class.ilPageLayout.php");
  * @author Alex Killing <alex.killing@gmx.de>
  * @version $Id$
  * 
- * @ilCtrl_Calls ilObjStyleSettingsGUI: ilPermissionGUI, ilSystemStyleSettingsGUI, ilContentStyleSettingsGUI
+ * @ilCtrl_Calls ilObjStyleSettingsGUI: ilPermissionGUI, ilSystemStyleMainGUI, ilContentStyleSettingsGUI
  * @ilCtrl_Calls ilObjStyleSettingsGUI: ilPageLayoutAdministrationGUI
  * 
  * @ingroup	ServicesStyle
@@ -58,9 +58,6 @@ class ilObjStyleSettingsGUI extends ilObjectGUI
 		$this->ctrl = $DIC->ctrl();
 		$this->lng = $DIC->language();
 		$this->tabs = $DIC->tabs();
-
-		$cmd = $this->ctrl->getCmd();
-		
 		parent::__construct($a_data,$a_id,$a_call_by_reference,$a_prepare_output);
 		
 		$this->lng->loadLanguageModule("style");
@@ -76,7 +73,7 @@ class ilObjStyleSettingsGUI extends ilObjectGUI
 
 		if ($next_class == "" && in_array($cmd, array("view", "")))
 		{
-			$this->ctrl->redirectByClass("ilsystemstylesettingsgui", "");
+			$this->ctrl->redirectByClass("ilSystemStyleMainGUI", "");
 		}
 
 		switch($next_class)
@@ -89,11 +86,11 @@ class ilObjStyleSettingsGUI extends ilObjectGUI
 				$ret = $this->ctrl->forwardCommand($perm_gui);
 				break;
 
-			case 'ilsystemstylesettingsgui':
+			case 'ilsystemstylemaingui':
 				$this->prepareOutput();
 				$this->tabs->activateTab("system_styles");
-				include_once("./Services/Style/System/classes/class.ilSystemStyleSettingsGUI.php");
-				$gui = new ilSystemStyleSettingsGUI();
+				include_once("./Services/Style/System/classes/class.ilSystemStyleMainGUI.php");
+				$gui = new ilSystemStyleMainGUI();
 				$this->ctrl->forwardCommand($gui);
 				break;
 
@@ -124,26 +121,7 @@ class ilObjStyleSettingsGUI extends ilObjectGUI
 		}
 		return true;
 	}
-	
-	/**
-	 * ???
-	 * Save object
-	 */
-/*	function saveObject()
-	{
-		global $rbacadmin;
 
-		// create and insert forum in objecttree
-		$newObj = parent::saveObject();
-
-		// put here object specific stuff
-			
-		// always send a message
-		ilUtil::sendInfo($this->lng->txt("object_added"),true);
-		
-		ilUtil::redirect($this->getReturnLocation("save",$this->ctrl->getLinkTarget($this,"","",false,false)));
-	}*/
-	
 	
 	function getAdminTabs()
 	{
@@ -162,7 +140,7 @@ class ilObjStyleSettingsGUI extends ilObjectGUI
 		if ($rbacsystem->checkAccess("visible,read",$this->object->getRefId()))
 		{			
 			$this->tabs_gui->addTab("system_styles", $this->lng->txt("system_styles"),
-				$this->ctrl->getLinkTargetByClass("ilsystemstylesettingsgui", "edit"));
+				$this->ctrl->getLinkTargetByClass("ilsystemstylemaingui", "edit"));
 				
 			$this->tabs_gui->addTab("content_styles", $this->lng->txt("content_styles"),
 				$this->ctrl->getLinkTargetByClass("ilcontentstylesettingsgui", "edit"));

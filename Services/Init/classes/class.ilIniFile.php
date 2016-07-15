@@ -228,7 +228,7 @@ class ilIniFile
 			}
 		}
 		
-		
+
 		fclose($fp);
 
 		return true;

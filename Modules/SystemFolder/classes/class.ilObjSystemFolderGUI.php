@@ -366,8 +366,6 @@ class ilObjSystemFolderGUI extends ilObjectGUI
 	*/
 	function changeHeaderTitleObject()
 	{
-		global $rbacsystem, $styleDefinition;
-
 		$this->tpl->addBlockFile("ADM_CONTENT", "adm_content", "tpl.header_title_edit.html",
 			"Modules/SystemFolder");
 

@@ -534,8 +534,6 @@ class ilInitialisation
 			$gui_class = $ui_plugin->getUIClassInstance();
 			$gui_class->modifyGUI("Services/Init", "init_style", array("styleDefinition" => $styleDefinition));
 		}
-
-		$styleDefinition->startParsing();
 	}
 
 	/**
