@@ -41,7 +41,7 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 //		$this->setTitle($lng->txt(""));
 
 		$this->setLimit(9999);
-		
+		$this->addColumn($this->lng->txt(""));
 		$this->addColumn($this->lng->txt("title"));
 		$this->addColumn($this->lng->txt("default"));
 		$this->addColumn($this->lng->txt("users"));
@@ -55,6 +55,7 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 		if ($rbacsystem->checkAccess("sty_write_system", (int) $_GET["ref_id"]))
 		{
 			$this->addCommandButton("saveStyleSettings", $lng->txt("save"));
+			$this->addMultiCommand("deleteStyles",$this->lng->txt("delete"));
 		}
 	}
 	
@@ -88,7 +89,7 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 					"title" => $this->lng->txt("other"),
 					"id" => "other",
 					"template_id" => "",
-					"skin_id" => "",
+					"skin_id" => "other",
 					"style_id" => "",
 					"template_name" => "",
 					"style_name" => "",
@@ -145,7 +146,7 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 			$this->tpl->setVariable("TXT_CMD", $lng->txt("sty_assign_categories"));
 			$this->tpl->parseCurrentBlock();
 		}
-
+		$this->tpl->setVariable("TITLE", $a_set["title"]);
 		$this->tpl->setVariable("TITLE", $a_set["title"]);
 		$this->tpl->setVariable("ID", $a_set["id"]);
 		
@@ -164,15 +165,42 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 		{
 			$this->tpl->setVariable("CHECKED_DEFAULT", ' checked="checked" ');
 		}
-		$this->tpl->setCurrentBlock("actions");
 
 
-		$this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$a_set["skin_id"]);
-		$this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$a_set["style_id"]);
 
-		$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleSettingsGUI'));
-		$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('edit'));
-		$this->tpl->parseCurrentBlock();
+
+
+
+		if($a_set["skin_id"]!="default" && $a_set["skin_id"]!="other"){
+			$this->tpl->setCurrentBlock("multi_actions");
+			$this->tpl->setVariable("MULTI_ACTIONS_ID", $a_set["id"]);
+
+			$this->tpl->parseCurrentBlock();
+
+			$this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$a_set["skin_id"]);
+			$this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$a_set["style_id"]);
+
+			$this->tpl->setCurrentBlock("actions");
+			$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleSettingsGUI'));
+			$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('edit'));
+			$this->tpl->parseCurrentBlock();
+
+			$this->ctrl->setParameterByClass('ilSystemStyleOverviewGUI','skin_id',$a_set["skin_id"]);
+			$this->ctrl->setParameterByClass('ilSystemStyleOverviewGUI','style_id',$a_set["style_id"]);
+
+			$this->tpl->setCurrentBlock("actions");
+			$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','delete'));
+			$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('delete'));
+			$this->tpl->parseCurrentBlock();
+
+			$this->tpl->setCurrentBlock("actions");
+			$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','export'));
+			$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('export'));
+			$this->tpl->parseCurrentBlock();
+		}
+
+
+
 
 
 	}

@@ -1897,7 +1897,7 @@ class ilUtil
 			}
 		}
 
-		$zipcmd = "-r ".ilUtil::escapeShellArg($a_file)." ".$source;
+		$zipcmd = " -r ".ilUtil::escapeShellArg($a_file)." ".$source;
 		ilUtil::execQuoted($zip, $zipcmd);
 		chdir($cdir);
 		return true;

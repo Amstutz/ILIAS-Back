@@ -1,5 +1,8 @@
 <?php
-require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/Less/class.KitchenSinkLessItem.php");
+require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessItem.php");
+require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessCategory.php");
+require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessComment.php");
+require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessVariable.php");
 
 
 /***
@@ -7,7 +10,7 @@ require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @version           $Id$
  *
  */
-class KitchenSinkLessFile
+class ilSystemStyleLessFile
 {
     /**
      * @var KitchenSinkLessVariable[]
@@ -41,10 +44,11 @@ class KitchenSinkLessFile
     public function __construct($less_variables_file)
     {
         $this->less_variables_file = $less_variables_file;
+        $this->read();
     }
 
     /**
-     * @throws ilKitchenSinkException
+     * @throws ilSystemStyleException
      */
     public function read(){
         $last_variable_comment = null;
@@ -54,7 +58,7 @@ class KitchenSinkLessFile
         try{
             $handle = fopen($this->getLessVariablesFile(), "r");
         }catch(Exception $e){
-            throw new ilKitchenSinkException(ilKitchenSinkException::FILE_OPENING_FAILED, $this->getLessVariablesFile());
+            throw new ilSystemStyleException(ilSystemStyleException::FILE_OPENING_FAILED, $this->getLessVariablesFile());
         }
 
 
@@ -64,7 +68,7 @@ class KitchenSinkLessFile
 
                 if(preg_match('/\/\/==\s(.*)/', $line, $out)){
                     //Check Category
-                    $last_category_id = $this->addItem(new KitchenSinkLessCategory($out[1]));
+                    $last_category_id = $this->addItem(new ilSystemStyleLessCategory($out[1]));
                     $last_category_name = $out[1];
                 } else if(preg_match('/\/\/##\s(.*)/', $line, $out)){
                     //Check Comment Category
@@ -85,10 +89,15 @@ class KitchenSinkLessFile
                         $temp_value = str_replace($reference,"",$temp_value);
                     }
 
-                    $this->addItem(new KitchenSinkLessVariable($variable[1],ltrim ( $value[1] ," \t\n\r\0\x0B" ),$last_variable_comment,$last_category_name, $references));
+                    $this->addItem(new ilSystemStyleLessVariable(
+                        $variable[1],
+                        ltrim ( $value[1] ," \t\n\r\0\x0B" ),
+                        $last_variable_comment,
+                        $last_category_name,
+                        $references));
                     $last_variable_comment = 0;
                 }else{
-                    $this->addItem(new KitchenSinkLessComment($line));
+                    $this->addItem(new ilSystemStyleLessComment($line));
                 }
 
 
@@ -96,11 +105,15 @@ class KitchenSinkLessFile
             }
             fclose($handle);
         } else {
-            throw new ilKitchenSinkException(ilKitchenSinkException::FILE_OPENING_FAILED);
+            throw new ilSystemStyleLessException(ilSystemStyleException::FILE_OPENING_FAILED);
         }
     }
 
     public function write(){
+        file_put_contents($this->getLessVariablesFile(),$this->getContent());
+    }
+
+    public function getContent(){
         $output = "";
 
         foreach($this->items as $item){
@@ -110,18 +123,18 @@ class KitchenSinkLessFile
     }
 
     /**
-     * @param KitchenSinkLessItem $item
+     * @param ilSystemStyleLessItem $item
      * @return int
      */
-    public function addItem(KitchenSinkLessItem $item){
+    public function addItem(ilSystemStyleLessItem $item){
         $id = array_push($this->items,$item)-1;
 
 
-        if(get_class($item)=="KitchenSinkLessComment"){
+        if(get_class($item)=="ilSystemStyleLessComment"){
             $this->comments_ids[] = $id;
-        }else if(get_class($item)=="KitchenSinkLessCategory"){
+        }else if(get_class($item)=="ilSystemStyleLessCategory"){
             $this->categories_ids[] = $id;
-        }else if(get_class($item)=="KitchenSinkLessVariable"){
+        }else if(get_class($item)=="ilSystemStyleLessVariable"){
             $this->variables_ids[] = $id;
         }
 
@@ -129,7 +142,7 @@ class KitchenSinkLessFile
     }
 
     /**
-     * @return KitchenSinkLessCategory[]
+     * @return ilSystemStyleLessCategory[]
      */
     public function getCategories(){
         $categories = array();
@@ -144,7 +157,7 @@ class KitchenSinkLessFile
 
     /**
      * @param string $category
-     * @return KitchenSinkLessVariable|null
+     * @return ilSystemStyleLessVariable[]|null
      */
     public function getVariablesPerCategory($category = ""){
         $variables = array();
@@ -164,7 +177,7 @@ class KitchenSinkLessFile
 
     /**
      * @param string $name
-     * @return KitchenSinkLessVariable|null
+     * @return ilSystemStyleLessVariable|null
      */
     public function getVariableByName($name = ""){
         foreach($this->variables_ids as $variables_id){

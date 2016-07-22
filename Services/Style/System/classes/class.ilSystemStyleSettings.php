@@ -131,6 +131,39 @@ class ilSystemStyleSettings
 				" AND category_ref_id = ".$ilDB->quote($a_ref_id, "integer"));
 	}
 
+	/**
+	 * @param $skin_id
+	 * @param $style_id
+	 */
+	static function setCurrentUserPrefStyle($skin_id, $style_id){
+		global $DIC;
+
+		$DIC->user()->setPref("skin",$skin_id);
+		$DIC->user()->setPref("style",$style_id);
+		$DIC->user()->update();
+	}
+
+	/**
+	 * @param $skin_id
+	 * @param $style_id
+	 */
+	static function setCurrentDefaultStyle($skin_id, $style_id){
+		global $DIC;
+
+		$DIC['ilias']->ini->setVariable("layout","skin", $skin_id);
+		$DIC['ilias']->ini->setVariable("layout","style",$style_id);
+		$DIC['ilias']->ini->write();
+	}
+
+	static function getCurrentDefaultSkin(){
+		global $DIC;
+		return $DIC['ilias']->ini->readVariable("layout","skin");
+	}
+
+	static function getCurrentDefaultStyle(){
+		global $DIC;
+		return $DIC['ilias']->ini->readVariable("layout","style");
+	}
 }
 
 ?>

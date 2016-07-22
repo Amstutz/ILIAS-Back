@@ -23,6 +23,7 @@ class ilSystemStyleException extends ilException
     const INVALID_ID   = 1005;
     const INVALID_FILE_PATH = 1006;
     const INVALID_RULES_ENTRY = 1007;
+    const INVALID_CHARACTERS_IN_ID = 1008;
 
     const FILE_CREATION_FAILED   = 2001;
     const FOLDER_CREATION_FAILED = 2002;
@@ -37,6 +38,7 @@ class ilSystemStyleException extends ilException
     const NO_STYLE_ID = 5001;
     const NO_SKIN_ID = 5002;
 
+    const SKIN_ALREADY_EXISTS = 6001;
     /**
      * @var string
      */
@@ -91,6 +93,9 @@ class ilSystemStyleException extends ilException
             case self::INVALID_ID:
                 $this->message = "No such ID in tree: " . $this->add_info;
                 break;
+            case self::INVALID_CHARACTERS_IN_ID:
+                $this->message = "The ID given contains invalid characters: " . $this->add_info;
+                break;
             case self::INVALID_FILE_PATH:
                 $this->message = "Invalid file path or file not readable: " . $this->add_info;
                 break;
@@ -127,6 +132,9 @@ class ilSystemStyleException extends ilException
             case self::NO_SKIN_ID:
                 $this->message = "No Skin ID is given. " . $this->add_info;
                 break;
+            case self::SKIN_ALREADY_EXISTS:
+                $this->message = "Skin already exists: ".$this->add_info;
+                breaK;
             default:
                 $this->message = "Unknonw Exception " . $this->add_info;
                 break;

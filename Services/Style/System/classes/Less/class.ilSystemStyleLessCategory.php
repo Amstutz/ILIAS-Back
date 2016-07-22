@@ -1,5 +1,5 @@
 <?php
-require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/Less/class.KitchenSinkLessItem.php");
+require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessItem.php");
 
 /**
  * Class to display Kitchen Sink Entries
@@ -8,7 +8,7 @@ require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @version           $Id$
  *
  */
-class KitchenSinkLessCategory extends KitchenSinkLessItem
+class ilSystemStyleLessCategory extends ilSystemStyleLessItem
 {
     /**
      * @var string
@@ -65,7 +65,7 @@ class KitchenSinkLessCategory extends KitchenSinkLessItem
 
     public function __toString()
     {
-        return "//== ".$this->getName()."\n//\n//##".$this->getComment()."\n\n";
+        return "//== ".$this->getName()."\n//\n//## ".$this->getComment()."\n";
     }
 }
 ?>

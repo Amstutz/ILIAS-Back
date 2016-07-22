@@ -6,7 +6,7 @@ require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @version           $Id$
  *
  */
-class KitchenSinkLessVariable extends KitchenSinkLessItem
+class ilSystemStyleLessVariable extends ilSystemStyleLessItem
 {
     const TYPE_STRING = 1;
     const TYPE_NUMERIC = 2;
@@ -131,7 +131,12 @@ class KitchenSinkLessVariable extends KitchenSinkLessItem
 
     public function __toString()
     {
-       return "@".$this->getName().":\t\t". $this->getValue().";\n";
+        $content = "";
+        if($this->getComment()){
+            $content .= "//** ".$this->getComment()."\n";
+        }
+        $content .= "@".$this->getName().":\t\t". $this->getValue().";\n";
+       return $content;
     }
 
     /**

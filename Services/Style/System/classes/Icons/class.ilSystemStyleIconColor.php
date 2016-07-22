@@ -6,7 +6,7 @@ require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @version           $Id$
  *
  */
-class KitchenSinkIconColor extends KitchenSinkLessItem
+class ilSystemStyleIconColor
 {
     /**
      * @var string

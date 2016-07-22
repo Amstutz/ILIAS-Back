@@ -1,4 +1,11 @@
 <tr class="{CSS_ROW}">
+
+<td class="std">
+    <!-- BEGIN multi_actions -->
+    <input type="checkbox" name="id[]" value="{MULTI_ACTIONS_ID}" />
+    <!-- END multi_actions -->
+</td>
+
 <td class="std">
 {TITLE}
 </td>
@@ -22,7 +29,6 @@
 </td>
 <td class="std">
 <!-- BEGIN cmd --><a href="{HREF_CMD}">{TXT_CMD}</a><!-- END cmd -->
-<!-- BEGIN actions --><a href="{ACTION_TARGET}">{TXT_ACTION}</a><!-- END actions -->
-
+<!-- BEGIN actions --><a href="{ACTION_TARGET}">{TXT_ACTION}</a></br><!-- END actions -->
 </td>
 </tr>

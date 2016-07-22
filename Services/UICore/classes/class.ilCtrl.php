@@ -1407,6 +1407,7 @@ class ilCtrl
 		{
 			$script = $script."#".$a_anchor;
 		}
+
 		ilUtil::redirect($script);
 	}
 	
@@ -1472,6 +1473,7 @@ class ilCtrl
 
 //echo "<br>getLinkTargetByClass";
 		$script = $this->getTargetScript();
+
 		$script = $this->getUrlParameters($a_class, $script, $a_cmd, $xml_style);
 
 		if ($a_asynch)
@@ -1618,7 +1620,8 @@ class ilCtrl
 	{
 		// note: $a_class may be an array!
 		//$a_class = strtolower($a_class);
- 
+
+
 		$params = $this->getParameterArrayByClass($a_class, $a_cmd);
 
 		foreach ($params as $par => $value)
@@ -1662,8 +1665,10 @@ class ilCtrl
 		}
 
 		$nr = $this->current_node;
+
 		foreach ($a_class as $class)
 		{
+
 			$class = strtolower($class);
 			$nr = $this->getNodeIdForTargetClass($nr, $class);
 			if ($nr["base_class"] != "")
@@ -1706,6 +1711,7 @@ class ilCtrl
 				}
 			}
 		}
+
 
 		if ($a_cmd != "")
 		{

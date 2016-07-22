@@ -1,5 +1,5 @@
 <?php
-require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/Icon/class.KitchenSinkIcon.php");
+require_once("./Services/Style/System/classes/Icons/class.ilSystemStyleIcon.php");
 
 
 /***
@@ -7,10 +7,10 @@ require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @version           $Id$
  *
  */
-class KitchenSinkIconFolder
+class ilSystemStyleIconFolder
 {
     /**
-     * @var KitchenSinkIcon[]
+     * @var ilSystemStyleIcon[]
      */
     protected $icons = array();
 
@@ -25,7 +25,7 @@ class KitchenSinkIconFolder
     protected $default_path = "";
 
     /**
-     * KitchenSinkIconFolder constructor.
+     * ilSystemStyleIconFolder constructor.
      * @param $default_path
      * @param $skin_path
      */
@@ -33,6 +33,8 @@ class KitchenSinkIconFolder
     {
         $this->skin_path = $skin_path;
         $this->default_path = $default_path;
+
+        $this->read();
     }
 
     public function read($default = false){
@@ -48,7 +50,7 @@ class KitchenSinkIconFolder
      *
      */
     public function sortIcons(){
-        usort($this->icons, function(KitchenSinkIcon $a, KitchenSinkIcon $b){
+        usort($this->icons, function(ilSystemStyleIcon $a, ilSystemStyleIcon $b){
             if($a->getType() == $b->getType()){
                 return strcmp($a->getName(),$b->getName());
             }
@@ -67,14 +69,14 @@ class KitchenSinkIconFolder
     /**
      * @param string $src
      * @param string $rel_path
-     * @throws ilKitchenSinkException
+     * @throws ilSystemStyleException
      */
     protected function xRead($src = "",$rel_path=""){
         foreach (scandir($src) as $file) {
 
             $src_file = rtrim($src, '/') . '/' . $file;
             if (!is_readable($src_file)) {
-                throw new ilKitchenSinkException(ilKitchenSinkException::FILE_OPENING_FAILED, $src_file);
+                throw new ilSystemStyleException(ilSystemStyleException::FILE_OPENING_FAILED, $src_file);
             }
             if (substr($file, 0, 1) != ".") {
                 if (is_dir($src_file)) {
@@ -82,7 +84,7 @@ class KitchenSinkIconFolder
                 } else {
 
                     $info = new SplFileInfo($src_file);
-                    $this->addIcon(new KitchenSinkIcon($this->getDefaultPath().$rel_path,$this->getSkinPath().$rel_path,$file,$info->getExtension()));
+                    $this->addIcon(new ilSystemStyleIcon($this->getDefaultPath().$rel_path,$this->getSkinPath().$rel_path,$file,$info->getExtension()));
                 }
 
             }
@@ -90,30 +92,32 @@ class KitchenSinkIconFolder
     }
 
     /**
-     * @param KitchenSinkIconColorSet $color_set
+     * @param ilSystemStyleIconColorSet $color_set
      */
-    public function changeIconColors(KitchenSinkIconColorSet $color_set){
+    public function changeIconColors(ilSystemStyleIconColorSet $color_set){
         foreach($this->getIcons() as $icon){
             $icon->changeColor($color_set);
         }
     }
 
     /**
-     * @param KitchenSinkIconColorSet $color_set
+     * @param ilSystemStyleIconColorSet $color_set
      */
-    public function findIconColorUsages(KitchenSinkIconColorSet $color_set){
+    public function findIconColorUsages(ilSystemStyleIconColorSet $color_set){
         foreach($this->getIcons() as $icon){
             $icon->findUsage($color_set);
         }
     }
 
-
-    public function addIcon(KitchenSinkIcon $icon){
+    /**
+     * @param ilSystemStyleIcon $icon
+     */
+    public function addIcon(ilSystemStyleIcon $icon){
         $this->icons[] = $icon;
     }
 
     /**
-     * @return KitchenSinkIcon[]
+     * @return ilSystemStyleIcon[]
      */
     public function getIcons()
     {
@@ -121,7 +125,7 @@ class KitchenSinkIconFolder
     }
 
     /**
-     * @param KitchenSinkIcon[] $icons
+     * @param ilSystemStyleIcon[] $icons
      */
     public function setIcons($icons)
     {

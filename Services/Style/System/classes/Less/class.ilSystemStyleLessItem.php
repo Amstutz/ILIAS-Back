@@ -6,7 +6,7 @@
  * @version           $Id$
  *
  */
-abstract class KitchenSinkLessItem
+abstract class ilSystemStyleLessItem
 {
     abstract function __toString();
 }

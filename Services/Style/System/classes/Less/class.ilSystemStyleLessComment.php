@@ -1,12 +1,12 @@
 <?php
-require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/Less/class.KitchenSinkLessItem.php");
+require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessItem.php");
 /**
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$
  *
  */
-class KitchenSinkLessComment extends KitchenSinkLessItem
+class ilSystemStyleLessComment extends ilSystemStyleLessItem
 {
 
     /**

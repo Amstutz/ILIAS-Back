@@ -1,6 +1,5 @@
 <?php
-require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/Less/class.KitchenSinkLessItem.php");
-require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/Icon/class.KitchenSinkIconColorSet.php");
+include_once("Services/Style/System/classes/Icons/class.ilSystemStyleIconColorSet.php");
 
 
 /***
@@ -8,7 +7,7 @@ require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @version           $Id$
  *
  */
-class KitchenSinkIcon extends KitchenSinkLessItem
+class ilSystemStyleIcon
 {
     /**
      * @var string
@@ -37,12 +36,11 @@ class KitchenSinkIcon extends KitchenSinkLessItem
     protected $color_set;
 
     /**
-     * KitchenSinkIcon constructor.
-     * @param string $default_directory
-     * @param string $skin_directory
-     * @param string $name
-     * @param string $type
-     * @param KitchenSinkIconColorSet $color_set
+     * ilSystemStyleIcon constructor.
+     * @param $default_directory
+     * @param $skin_directory
+     * @param $name
+     * @param $type
      */
     public function __construct($default_directory, $skin_directory, $name, $type)
     {
@@ -53,7 +51,10 @@ class KitchenSinkIcon extends KitchenSinkLessItem
     }
 
 
-    public function changeColor(KitchenSinkIconColorSet $color_set){
+    /**
+     * @param ilSystemStyleIconColorSet $color_set
+     */
+    public function changeColor(ilSystemStyleIconColorSet $color_set){
         if($this->getType() == "svg"){
             $icon = file_get_contents($this->getDefaultPath());
             foreach($color_set::getDefaultColors() as $default_color){
@@ -65,7 +66,10 @@ class KitchenSinkIcon extends KitchenSinkLessItem
         }
     }
 
-    public function findUsage(KitchenSinkIconColorSet $color_set){
+    /**
+     * @param ilSystemStyleIconColorSet $color_set
+     */
+    public function findUsage(ilSystemStyleIconColorSet $color_set){
         if($this->getType() == "svg"){
             $icon = file_get_contents($this->getDefaultPath());
             foreach($color_set::getDefaultColors() as $default_color){

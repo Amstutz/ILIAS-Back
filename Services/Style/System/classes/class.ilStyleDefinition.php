@@ -19,6 +19,42 @@ class ilStyleDefinition
 	 */
 	const DEFAULT_TEMPLATE_PATH = "./templates/default/template.xml";
 
+
+	/**
+	 * @var string
+	 */
+	const DELOS_PATH = "./templates/default/delos";
+
+	/**
+	 * @var string
+	 */
+	const DEFAULT_SKIN_ID = "default";
+
+	/**
+	 * @var string
+	 */
+	const DEFAULT_STYLE_ID = "delos";
+	/**
+	 * @var string
+	 */
+	const DEFAULT_VARIABLES_PATH = "./templates/default/less/variables.less";
+
+
+	/**
+	 * @var string
+	 */
+	const DEFAULT_IMAGES_PATH = "./templates/default/images/";
+
+	/**
+	 * @var string
+	 */
+	const DEFAULT_FONTS_PATH = "./templates/default/fonts/";
+
+	/**
+	 * @var string
+	 */
+	const DEFAULT_SOUNDS_PATH = "???";
+
 	/**
 	 * string
 	 */
@@ -55,7 +91,7 @@ class ilStyleDefinition
 			$skin_id = self::getCurrentSkin();
 		}
 
-		if ($skin_id != "default")
+		if ($skin_id != self::DEFAULT_SKIN_ID)
 		{
 			$this->setSkin(ilSkinXML::parseFromXML(self::CUSTOMIZING_SKINS_PATH.$skin_id."/template.xml"));
 
@@ -201,6 +237,7 @@ class ilStyleDefinition
 		{
 			return null;
 		}
+
 
 		$current_style = $ilias->account->prefs['style'];
 		if (is_object($styleDefinition))

@@ -29,8 +29,8 @@ class ilSkinXML implements \Iterator, \Countable{
      */
     public function __construct($id, $name)
     {
-        $this->id = $id;
-        $this->name = $name;
+        $this->setId($id);
+        $this->setName($name);
     }
 
     /**
@@ -38,7 +38,11 @@ class ilSkinXML implements \Iterator, \Countable{
      * @return ilSkinXML
      */
     public static function parseFromXML($path = ""){
-        $xml = new SimpleXMLElement(file_get_contents($path));
+        try{
+            $xml = new SimpleXMLElement(file_get_contents($path));
+        }catch(Exception $e){
+            throw new ilSystemStyleException(ilSystemStyleException::FILE_OPENING_FAILED, $path);
+        }
 
         $id = basename (dirname($path));
         $skin = new self($id,(string)$xml->attributes()["name"]);
@@ -56,19 +60,29 @@ class ilSkinXML implements \Iterator, \Countable{
         $xml->addAttribute("name",$this->getName());
 
         foreach($this->getStyles() as $style){
-            $xml_style = $xml->addChild("style");
-            $xml_style->addAttribute("id", $style->getId());
-            $xml_style->addAttribute("name", $style->getName());
-            $xml_style->addAttribute("image_directory", $style->getImageDirectory());
-            $xml_style->addAttribute("css_file", $style->getCssFile());
-            $xml_style->addAttribute("sound_directory", $style->getSoundDirectory());
-            $xml_style->addAttribute("font_directory", $style->getFontDirectory());
+            if(!$style->isSubstyle()){
+                $this->addChildToXML($xml, $style);
+
+                foreach($this->getSubstylesOfStyle($style->getId()) as $substyle){
+                    $this->addChildToXML($xml, $substyle);
+                }
+            }
         }
 
         $dom = new DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = true;
         $dom->loadXML($xml->asXML());
         return $dom->saveXML();
+    }
+
+    protected function addChildToXML(SimpleXMLElement $xml,ilSkinStyleXML $style){
+        $xml_style = $xml->addChild("style");
+        $xml_style->addAttribute("id", $style->getId());
+        $xml_style->addAttribute("name", $style->getName());
+        $xml_style->addAttribute("image_directory", $style->getImageDirectory());
+        $xml_style->addAttribute("css_file", $style->getCssFile());
+        $xml_style->addAttribute("sound_directory", $style->getSoundDirectory());
+        $xml_style->addAttribute("font_directory", $style->getFontDirectory());
     }
 
     public function writeToXMLFile($path){
@@ -98,6 +112,15 @@ class ilSkinXML implements \Iterator, \Countable{
      */
     public function getStyle($id){
         return $this->styles[$id];
+    }
+
+    /**
+     * @param $id
+     * @return ilSkinStyleXML
+     */
+    public function getDefaultStyle(){
+        //Todo there might be a better option than this to select the default style
+        return array_values($this->styles)[0];
     }
 
     /**
@@ -146,11 +169,15 @@ class ilSkinXML implements \Iterator, \Countable{
     }
 
     /**
-     * @param string $id
+     * @param $id
+     * @throws ilSystemStyleException
      */
     public function setId($id)
     {
-        $this->id = $id;
+        if (strpos($id, ' ') !== false) {
+            throw new ilSystemStyleException(ilSystemStyleException::INVALID_CHARACTERS_IN_ID, $id);
+        }
+        $this->id = str_replace(" ","_",$id);
     }
 
 
@@ -184,5 +211,25 @@ class ilSkinXML implements \Iterator, \Countable{
     public function setStyles($styles)
     {
         $this->styles = $styles;
+    }
+
+    /**
+     * @param $style_id
+     * @return array
+     */
+    public function getSubstylesOfStyle($style_id){
+        $substyles = array();
+
+        if($this->getStyle($style_id)){
+            foreach($this->getStyles() as $style){
+                if($style->getId() != $style_id && $style->isSubstyle()){
+                    if($style->getSubstyleOf() == $style_id){
+                        $substyles[$style->getId()] = $style;
+                    }
+                }
+            }
+        }
+        return $substyles;
+
     }
 }

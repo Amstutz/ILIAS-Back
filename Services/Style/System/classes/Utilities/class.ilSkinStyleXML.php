@@ -36,8 +36,6 @@ class ilSkinStyleXML
      */
     protected $css_file = "";
 
-
-
     /**
      * @var string
      */
@@ -100,11 +98,15 @@ class ilSkinStyleXML
     }
 
     /**
-     * @param string $id
+     * @param $id
+     * @throws ilSystemStyleException
      */
     public function setId($id)
     {
-        $this->id = $id;
+        if (strpos($id, ' ') !== false) {
+            throw new ilSystemStyleException(ilSystemStyleException::INVALID_CHARACTERS_IN_ID, $id);
+        }
+        $this->id = str_replace(" ","_",$id);
     }
 
     /**
@@ -187,5 +189,23 @@ class ilSkinStyleXML
         $this->font_directory = $font_directory;
     }
 
+    /**
+     * @return string
+     */
+    public function getSubstyleOf()
+    {
+        return $this->substyle_of;
+    }
 
+    /**
+     * @param string $substyle_of
+     */
+    public function setSubstyleOf($substyle_of)
+    {
+        $this->substyle_of = $substyle_of;
+    }
+
+    public function isSubstyle(){
+        return $this->getSubstyleOf() != "";
+    }
 }
