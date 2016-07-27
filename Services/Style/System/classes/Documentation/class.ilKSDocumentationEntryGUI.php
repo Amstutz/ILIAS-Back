@@ -50,7 +50,7 @@ class ilKSDocumentationEntryGUI
      * @param Entry\ComponentEntry $entry
      * @param Entry\ComponentEntries $entries
      */
-    public function __construct(ilKSDocumentationGUI $parent, Entry\ComponentEntry $entry, Entry\ComponentEntries $entries) {
+    public function __construct(ilSystemStyleDocumentationGUI $parent, Entry\ComponentEntry $entry, Entry\ComponentEntries $entries) {
         global $ilCtrl,$DIC;
 
         $this->f = $DIC->ui()->factory();

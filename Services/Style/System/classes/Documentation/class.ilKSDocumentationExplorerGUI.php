@@ -37,12 +37,12 @@ class ilKSDocumentationExplorerGUI extends ilExplorerBaseGUI
 
     /**
      * ilKSDocumentationExplorerGUI constructor.
-     * @param ilKitchenSinkMainGUI $a_parent_obj
+     * @param ilSystemStyleDocumentationGUI $a_parent_obj
      * @param $a_parent_cmd
      * @param Entry\ComponentEntries $entries
      * @param $current_opened_node_id
      */
-    public function __construct(ilKitchenSinkMainGUI $a_parent_obj, $a_parent_cmd, Entry\ComponentEntries $entries, $current_opened_node_id)
+    public function __construct(ilSystemStyleDocumentationGUI $a_parent_obj, $a_parent_cmd, Entry\ComponentEntries $entries, $current_opened_node_id)
     {
 
         global $ilCtrl;
