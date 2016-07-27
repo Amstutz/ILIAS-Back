@@ -1,20 +1,14 @@
 .glyph {
-	.badge {
-		font-size: 9px;
-		padding: 4px;
-		margin-left: -4px;
-		position: absolute;
+	color: @il-glyph-color;
+
+	&.highlighted{
+		color: @il-glyph-highlighted-color;
+		&:hover{
+			color: @il-glyph-highlighted-hover-color;
+		}
 	}
-	.il-counter-novelty {
-		padding-top: 2px;
-		padding-down: 2px;
-		margin-top: -6px;
-		background-color: @badge-bg;
-	}
-	.il-counter-status {
-  		padding-top: 2px;
-  		padding-down: 2px;
-  		margin-top: 10px;
-		background-color: lighten(@mid-gray, 40%);
+
+	&:hover{
+		color: @il-glyph-hover-color;
 	}
 }

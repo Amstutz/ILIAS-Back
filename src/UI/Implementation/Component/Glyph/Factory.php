@@ -10,105 +10,127 @@ class Factory implements G\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function up($action) {
-		return new Glyph(G\Glyph::UP, $action);
+	public function settings($action = null) {
+		return new Glyph(G\Glyph::SETTINGS, "settings", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function down($action) {
-		return new Glyph(G\Glyph::DOWN, $action);
+	public function collapse($action = null) {
+		return new Glyph(G\Glyph::COLLAPSE, "collapse_content", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function add($action) {
-		return new Glyph(G\Glyph::ADD, $action);
-	}
-	
-	/**
-	 * @inheritdoc
-	 */
-	public function remove($action) {
-		return new Glyph(G\Glyph::REMOVE, $action);
+	public function expand($action = null) {
+		return new Glyph(G\Glyph::EXPAND, "expand_content", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function previous($action) {
-		return new Glyph(G\Glyph::PREVIOUS, $action);
+	public function add($action = null) {
+		return new Glyph(G\Glyph::ADD, "add", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function next($action) {
-		return new Glyph(G\Glyph::NEXT, $action);
+	public function remove($action = null) {
+		return new Glyph(G\Glyph::REMOVE, "remove", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function calendar($action) {
-		return new Glyph(G\Glyph::CALENDAR, $action);
+	public function up($action = null) {
+		return new Glyph(G\Glyph::UP, "up", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function close($action) {
-		return new Glyph(G\Glyph::CLOSE, $action);
+	public function down($action = null) {
+		return new Glyph(G\Glyph::DOWN, "down", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function attachment($action) {
-		return new Glyph(G\Glyph::ATTACHMENT, $action);
+	public function back($action = null) {
+		return new Glyph(G\Glyph::BACK, "back", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function caret($action) {
-		return new Glyph(G\Glyph::CARET, $action);
+	public function next($action = null) {
+		return new Glyph(G\Glyph::NEXT, "next", $action);
+	}
+
+
+	/**
+	 * @inheritdoc
+	 */
+	public function sortAscending($action = null) {
+		return new Glyph(G\Glyph::SORT_ASCENDING, "sort_ascending", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function drag($action) {
-		return new Glyph(G\Glyph::DRAG, $action);
+	public function sortDescending($action = null) {
+		return new Glyph(G\Glyph::SORT_DESCENDING, "sort_descending", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function search($action) {
-		return new Glyph(G\Glyph::SEARCH, $action);
+	public function sort($action = null) {
+		return new Glyph(G\Glyph::SORT, "sort", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function filter($action) {
-		return new Glyph(G\Glyph::FILTER, $action);
+	public function user($action = null) {
+		return new Glyph(G\Glyph::USER, "show_who_is_online", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function info($action) {
-		return new Glyph(G\Glyph::INFO, $action);
+	public function mail($action = null) {
+		return new Glyph(G\Glyph::MAIL, "mail", $action);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function envelope($action) {
-		return new Glyph(G\Glyph::ENVELOPE, $action);
+	public function notification($action = null) {
+		return new Glyph(G\Glyph::NOTIFICATION, "notifications", $action);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function tag($action = null) {
+		return new Glyph(G\Glyph::TAG, "tags", $action);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function note($action = null) {
+		return new Glyph(G\Glyph::NOTE, "notes", $action);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function comment($action = null) {
+		return new Glyph(G\Glyph::COMMENT, "comments", $action);
 	}
 }

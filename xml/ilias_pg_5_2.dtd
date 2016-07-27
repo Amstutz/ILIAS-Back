@@ -308,11 +308,13 @@ col or row span. -->
 
 <!-- Section -->
 <!-- il_Block, il_Example, il_Special, il_Additional, il_Excursus -->
-<!ELEMENT Section (PageContent*)>
+<!ELEMENT Section (PageContent*, (ExtLink | IntLink)?)>
 <!ATTLIST Section
 	Characteristic CDATA #IMPLIED
 	ActiveFrom CDATA #IMPLIED
 	ActiveTo CDATA #IMPLIED
+	Permission CDATA #IMPLIED
+	PermissionRefId CDATA #IMPLIED
 	PCID CDATA #IMPLIED
 >
 

@@ -4352,7 +4352,7 @@ class ilUtil
 	 * @param
 	 * @return
 	 */
-	function includeMathjax($a_tpl = null)
+	public static function includeMathjax($a_tpl = null)
 	{
 		global $tpl;
 

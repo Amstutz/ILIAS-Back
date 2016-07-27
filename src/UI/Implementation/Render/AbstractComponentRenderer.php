@@ -26,11 +26,17 @@ abstract class AbstractComponentRenderer implements ComponentRenderer {
 	private $tpl_factory;
 
 	/**
+	 * @var	\ilLanguage
+	 */
+	private $lng;
+
+	/**
 	 * Component renderers must only depend on a UI-Factory and a Template Factory.
 	 */
-	final public function __construct(Factory $ui_factory, TemplateFactory $tpl_factory) {
+	final public function __construct(Factory $ui_factory, TemplateFactory $tpl_factory, \ilLanguage $lng) {
 		$this->ui_factory = $ui_factory;
 		$this->tpl_factory = $tpl_factory;
+		$this->lng = $lng;
 	}
 
 	/**
@@ -48,6 +54,16 @@ abstract class AbstractComponentRenderer implements ComponentRenderer {
 	 */
 	final protected function getUIFactory() {
 		return $this->ui_factory;
+	}
+
+	/**
+	 * Get a text from the language file.
+	 *
+	 * @param	string	$id
+	 * @return	string
+	 */
+	final public function txt($id) {
+		return $this->lng->txt($id);
 	}
 
 	/**
@@ -70,18 +86,27 @@ abstract class AbstractComponentRenderer implements ComponentRenderer {
 
 	/**
 	 * Check if a given component fits this renderer and throw \LogicError if that is not
-     * the case.
+	 * the case.
 	 *
 	 * @param	Component			$component
 	 * @throws	\LogicException		if component does not fit.
-     * @return  null
+	 * @return  null
 	 */
 	final protected function checkComponent(Component $component) {
-		$interface = $this->getComponentInterfaceName();
-		if(!($component instanceof $interface)) {
+		$interfaces = $this->getComponentInterfaceName();
+		if(!is_array($interfaces)){
 			throw new \LogicException(
-				"Expected $interface, found '".get_class($component)."' when rendering.");
+					"Expected array, found '".(string)(null)."' when rendering.");
 		}
+
+		foreach ($interfaces as $interface) {
+			if ($component instanceof $interface) {
+				return;
+			}
+		}
+		$ifs = implode(", ", $interfaces);
+		throw new \LogicException(
+			"Expected $ifs, found '".get_class($component)."' when rendering.");
 	}
 
 	/**
@@ -89,7 +114,7 @@ abstract class AbstractComponentRenderer implements ComponentRenderer {
 	 *
 	 * ATTENTION: Fully qualified please!
 	 *
-	 * @return string
+	 * @return string[]
 	 */
 	abstract protected function getComponentInterfaceName();
 

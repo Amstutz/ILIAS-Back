@@ -1537,7 +1537,7 @@ class ilObjTest extends ilObject implements ilMarkSchemaAware, ilEctsGradesEnabl
 				$item->toggleVisible($this->getActivationVisibility());
 			}						
 			
-			//$item->update($this->ref_id);		
+			$item->update($this->ref_id);		
 		}
 
 		if (!$properties_only)
@@ -5416,7 +5416,7 @@ function getAnswerFeedbackPoints()
 	{
 		if( $this->isStartingTimeEnabled() && $this->getStartingTime() != 0 )
 		{
-				$now = mktime();
+				$now = time();
 				if ($now < $this->getStartingTime())
 				{
 					return false;
@@ -5436,7 +5436,7 @@ function getAnswerFeedbackPoints()
 	{
 		if( $this->isEndingTimeEnabled() && $this->getEndingTime() != 0 )
 		{
-				$now = mktime();
+				$now = time();
 				if ($now > $this->getEndingTime())
 				{
 					return true;
@@ -5643,6 +5643,12 @@ function getAnswerFeedbackPoints()
 				case "sequence_settings":
 					$this->setSequenceSettings($metadata["entry"]);
 					break;
+				case "solution_details":
+					$this->setShowSolutionDetails((int)$metadata["entry"]);
+					break;
+				case "print_bs_with_res":
+					$this->setPrintBestSolutionWithResult((int)$metadata["entry"]);
+					break;
 				case "author":
 					$this->setAuthor($metadata["entry"]);
 					break;
@@ -5761,6 +5767,9 @@ function getAnswerFeedbackPoints()
 				case "anonymity":
 					$this->setAnonymity($metadata["entry"]);
 					break;
+				case "use_pool":
+					$this->setPoolUsage((int)$metadata["entry"]);
+					break;
 				case "show_cancel":
 					$this->setShowCancel($metadata["entry"]);
 					break;
@@ -5807,6 +5816,9 @@ function getAnswerFeedbackPoints()
 					break;
 				case "pass_scoring":
 					$this->setPassScoring($metadata["entry"]);
+					break;
+				case 'pass_deletion_allowed':
+					$this->setPassDeletionAllowed((int)$metadata['entry']);
 					break;
 				case "show_summary":
 					$this->setListOfQuestionsSettings($metadata["entry"]);
@@ -5999,6 +6011,11 @@ function getAnswerFeedbackPoints()
 		$a_xml_writer->xmlElement("fieldentry", NULL, sprintf("%d", $this->getAnonymity()));
 		$a_xml_writer->xmlEndTag("qtimetadatafield");
 
+		$a_xml_writer->xmlStartTag("qtimetadatafield");
+		$a_xml_writer->xmlElement("fieldlabel", NULL, "use_pool");
+		$a_xml_writer->xmlElement("fieldentry", NULL, $this->getPoolUsage() ? 1 : 0);
+		$a_xml_writer->xmlEndTag("qtimetadatafield");
+
 		// question set type (fixed, random, dynamic, ...)
 		$a_xml_writer->xmlStartTag("qtimetadatafield");
 		$a_xml_writer->xmlElement("fieldlabel", NULL, "question_set_type");
@@ -6064,6 +6081,11 @@ function getAnswerFeedbackPoints()
 		$a_xml_writer->xmlElement("fieldlabel", NULL, "pass_scoring");
 		$a_xml_writer->xmlElement("fieldentry", NULL, $this->getPassScoring());
 		$a_xml_writer->xmlEndTag("qtimetadatafield");
+
+		$a_xml_writer->xmlStartTag('qtimetadatafield');
+		$a_xml_writer->xmlElement('fieldlabel', NULL, 'pass_deletion_allowed');
+		$a_xml_writer->xmlElement('fieldentry', NULL, (int)$this->isPassDeletionAllowed());
+		$a_xml_writer->xmlEndTag('qtimetadatafield');
 
 		// score reporting date
 		if ($this->getReportingDate())
@@ -6139,6 +6161,15 @@ function getAnswerFeedbackPoints()
 		$a_xml_writer->xmlStartTag("qtimetadatafield");
 		$a_xml_writer->xmlElement("fieldlabel", NULL, "score_reporting");
 		$a_xml_writer->xmlElement("fieldentry", NULL, sprintf("%d", $this->getScoreReporting()));
+		$a_xml_writer->xmlEndTag("qtimetadatafield");
+
+		$a_xml_writer->xmlStartTag("qtimetadatafield");
+		$a_xml_writer->xmlElement("fieldlabel", NULL, "solution_details");
+		$a_xml_writer->xmlElement("fieldentry", NULL, (int)$this->getShowSolutionDetails());
+		$a_xml_writer->xmlEndTag("qtimetadatafield");
+		$a_xml_writer->xmlStartTag("qtimetadatafield");
+		$a_xml_writer->xmlElement("fieldlabel", NULL, "print_bs_with_res");
+		$a_xml_writer->xmlElement("fieldentry", NULL, (int)$this->getShowSolutionDetails() ? (int)$this->isBestSolutionPrintedWithResult() : 0);
 		$a_xml_writer->xmlEndTag("qtimetadatafield");
 
 		// solution details
@@ -6262,7 +6293,7 @@ function getAnswerFeedbackPoints()
 		// processing time
 		$a_xml_writer->xmlStartTag("qtimetadatafield");
 		$a_xml_writer->xmlElement("fieldlabel", NULL, "processing_time");
-		$a_xml_writer->xmlElement("fieldentry", NULL, (int)$this->getProcessingTime());
+		$a_xml_writer->xmlElement("fieldentry", NULL, $this->getProcessingTime());
 		$a_xml_writer->xmlEndTag("qtimetadatafield");
 		
 		// enable_examview
@@ -6833,7 +6864,7 @@ function getAnswerFeedbackPoints()
 				if(preg_match("/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/", $this->getReportingDate(), $matches))
 				{
 					$epoch_time = mktime($matches[4], $matches[5], $matches[6], $matches[2], $matches[3], $matches[1]);
-					$now        = mktime();
+					$now        = time();
 					if($now < $epoch_time)
 					{
 						return true;
@@ -8267,7 +8298,7 @@ function getAnswerFeedbackPoints()
 				if (preg_match("/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/", $this->getReportingDate(), $matches))
 				{
 					$epoch_time = mktime($matches[4], $matches[5], $matches[6], $matches[2], $matches[3], $matches[1]);
-					$now = mktime();
+					$now = time();
 					if ($now < $epoch_time)
 					{
 						return false;
@@ -8334,12 +8365,12 @@ function getAnswerFeedbackPoints()
 			}
 			else
 			{
-				return mktime();
+				return time();
 			}
 		}
 		else
 		{
-			return mktime();
+			return time();
 		}
 	}
 
@@ -8356,7 +8387,7 @@ function getAnswerFeedbackPoints()
 		if ($this->getEnableProcessingTime())
 		{
 			$processing_time = $this->getProcessingTimeInSeconds($active_id);
-			$now = mktime();
+			$now = time();
 			if ($now > ($starting_time + $processing_time))
 			{
 				return TRUE;
@@ -9080,7 +9111,7 @@ function getAnswerFeedbackPoints()
 		$time_gap = ($this->getAllowedUsersTimeGap()) ? $this->getAllowedUsersTimeGap() : 60;
 		if (($nr_of_users > 0) && ($time_gap > 0))
 		{
-			$now = mktime();
+			$now = time();
 			$time_border = $now - $time_gap;
 			$str_time_border = strftime("%Y%m%d%H%M%S", $time_border);
 			$query = "
@@ -10255,11 +10286,13 @@ function getAnswerFeedbackPoints()
 		
 		$query = "
 			SELECT tst_test_result.active_fi, tst_test_result.question_fi, tst_test_result.pass 
-			FROM tst_test_result, tst_active, qpl_questions 
-			WHERE tst_active.active_id = tst_test_result.active_fi 
-			AND tst_active.test_fi = %s 
-			AND tst_test_result.question_fi = qpl_questions.question_id 
-			AND tst_test_result.question_fi = %s";
+			FROM tst_test_result
+			INNER JOIN tst_active ON tst_active.active_id = tst_test_result.active_fi AND tst_active.test_fi = %s 
+			INNER JOIN qpl_questions ON qpl_questions.question_id = tst_test_result.question_fi
+			LEFT JOIN usr_data ON usr_data.usr_id = tst_active.user_fi
+			WHERE tst_test_result.question_fi = %s
+			ORDER BY usr_data.lastname ASC, usr_data.firstname ASC
+		";
 
 		$result = $ilDB->queryF($query,
 			array('integer', 'integer'),
