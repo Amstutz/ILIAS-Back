@@ -37,8 +37,12 @@ class ilSystemStyleException extends ilException
 
     const NO_STYLE_ID = 5001;
     const NO_SKIN_ID = 5002;
+    const NO_PARENT_STYLE = 5003;
 
     const SKIN_ALREADY_EXISTS = 6001;
+
+    const SUBSTYLE_ASSIGNMENT_EXISTS = 7001;
+
     /**
      * @var string
      */
@@ -134,6 +138,12 @@ class ilSystemStyleException extends ilException
                 break;
             case self::SKIN_ALREADY_EXISTS:
                 $this->message = "Skin already exists: ".$this->add_info;
+                breaK;
+            case self::NO_PARENT_STYLE:
+                $this->message = "No parent style defined for style: ".$this->add_info;
+                break;
+            case self::SUBSTYLE_ASSIGNMENT_EXISTS:
+                $this->message = "The assignment of this substyle already exists: ".$this->add_info;
                 breaK;
             default:
                 $this->message = "Unknonw Exception " . $this->add_info;

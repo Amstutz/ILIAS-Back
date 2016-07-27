@@ -52,9 +52,6 @@ class ilSystemStyleDeleteGUI
         $table_form->addCommandButton('confirmDelete', $this->lng ->txt('confirm'));
         $table_form->addCommandButton('cancel', $this->lng ->txt('cancel'));
         $table_form->setFormAction($this->ctrl->getFormActionByClass("ilSystemStyleOverviewGUI"));
-
-
-
         $table_form->setData($this->getStyles());
         return $table_form->getHTML();
 

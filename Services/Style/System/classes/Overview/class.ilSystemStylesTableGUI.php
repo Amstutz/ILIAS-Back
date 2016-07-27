@@ -75,7 +75,7 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 		$users_missing_styles = 0;
 		foreach($all_user_styles as $style)
 		{
-			if (!ilStyleDefinition::doesStyleExist($style))
+			if (!ilStyleDefinition::styleExists($style))
 			{
 				$style_arr = explode(":", $style);
 				$users_missing_styles += ilObjUser::_getNumberOfUsersForStyle($style_arr[0], $style_arr[1]);
@@ -189,7 +189,7 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 			$this->ctrl->setParameterByClass('ilSystemStyleOverviewGUI','style_id',$a_set["style_id"]);
 
 			$this->tpl->setCurrentBlock("actions");
-			$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','delete'));
+			$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','deleteStyle'));
 			$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('delete'));
 			$this->tpl->parseCurrentBlock();
 

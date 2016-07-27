@@ -1,5 +1,8 @@
 <?php
 include_once("Services/Style/System/classes/Utilities/class.ilSkinXML.php");
+include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleSkinContainer.php");
+include_once("Services/Style/System/classes/class.ilSystemStyleSettings.php");
+
 
 /* Copyright (c) 1998-2012 ILIAS open source, Extended GPL, see docs/LICENSE */
 
@@ -81,6 +84,7 @@ class ilStyleDefinition
 	 */
 	protected static $cached_all_styles_information = null;
 
+
 	/**
 	 * ilStyleDefinition constructor.
 	 * @param string $skin_id
@@ -113,13 +117,20 @@ class ilStyleDefinition
 		/**
 		 * @var $ilias ILIAS
 		 */
-		global $ilias;
+		global $DIC,$ilias;
 
 		if (is_object($ilias)) {
-			return $ilias->account->skin;
+			$skin_id = $ilias->account->skin;
+			if(!self::skinExists($skin_id)){
+				ilUtil::sendFailure($DIC->language()->txt("skin_does_not_exit").$skin_id);
+				$skin_id = self::DEFAULT_SKIN_ID;
+			}
+			return $skin_id;
+		}else{
+			return null;
 		}
 
-		return null;
+
 	}
 
 
@@ -150,7 +161,7 @@ class ilStyleDefinition
 	public function getImageDirectory($style_id)
 	{
 		if(!$this->getSkin()->getStyle($style_id)){
-			throw new ilException("Style: ".$style_id. " does not exist for skin: ".$this->getSkin()->getId());
+			throw new ilSystemStyleException(ilSystemStyleException::NO_STYLE_ID,$style_id);
 		}
 		return $this->getSkin()->getStyle($style_id)->getImageDirectory();
 	}
@@ -161,14 +172,13 @@ class ilStyleDefinition
 	}
 
 
-	public static function  getAllTemplates()
-	{
+	public static function getAllSkins(){
 		if(!self::$skins){
 			/**
 			 * @var $skins ilSkinXML[]
 			 */
 			$skins = array();
-			$skins[] = ilSkinXML::parseFromXML("./templates/default/template.xml");
+			$skins[self::DEFAULT_SKIN_ID] = ilSkinXML::parseFromXML(self::DEFAULT_TEMPLATE_PATH);
 
 			$cust_skins_directory = new RecursiveDirectoryIterator("./Customizing/global/skin",FilesystemIterator::SKIP_DOTS);
 			foreach ($cust_skins_directory as $skin_folder) {
@@ -176,7 +186,8 @@ class ilStyleDefinition
 					$template_path = $skin_folder->getRealPath()."/template.xml";
 					if (file_exists($template_path))
 					{
-						$skins[] = ilSkinXML::parseFromXML($template_path);
+						$skin = ilSkinXML::parseFromXML($template_path);
+						$skins[$skin->getId()] = $skin;
 					}
 				}
 			}
@@ -186,26 +197,34 @@ class ilStyleDefinition
 		return self::$skins;
 	}
 
+	/**
+	 * @deprecated
+	 * @return ilSkinXML[]
+	 */
+	public static function getAllTemplates(){
+		return self::getAllSkins();
+	}
+
 
 	/**
-	* Check whether a skin exists
+	* Check whether a skin exists. Not using array_key_exists($skin_id,self::getAllSkins()); for performance reasons
 	*
 	* @param	string	$skin		skin id
 	*
 	* @return	boolean
 	*/
-	public static function skinExists($skin)
+	public static function skinExists($skin_id)
 	{
-		if ($skin == "default")
-		{		
-			if (is_file("./templates/".$skin."/template.xml"))
+		if ($skin_id == self::DEFAULT_SKIN_ID)
+		{
+			if (is_file(self::DEFAULT_TEMPLATE_PATH))
 			{
 				return true;
 			}
 		}
 		else
 		{
-			if (is_file("./Customizing/global/skin/".$skin."/template.xml"))
+			if (is_file(self::CUSTOMIZING_SKINS_PATH.$skin_id."/template.xml"))
 			{
 				return true;
 			}
@@ -223,6 +242,8 @@ class ilStyleDefinition
 	 */
 	public static function getCurrentStyle()
 	{
+		global $DIC;
+
 		/**
 		 * @var ilStyleDefinition $styleDefinition
 		 */
@@ -238,15 +259,15 @@ class ilStyleDefinition
 			return null;
 		}
 
+		self::setCurrentStyle($ilias->account->prefs['style']);
 
-		$current_style = $ilias->account->prefs['style'];
 		if (is_object($styleDefinition))
 		{
 			// Todo Fix this for suubstyles
-			if (false)//($styleDefinition->getSkin()->getStyle($current_style)["substyle"])
+			if ($styleDefinition->getSkin()->hasStyleSubstyles(self::$current_style))
 			{
 				// read assignments, if given
-				$assignments = ilSystemStyleSettings::getSystemStyleCategoryAssignments(self::getCurrentSkin(), $current_style);
+				$assignments = ilSystemStyleSettings::getSystemStyleCategoryAssignments(self::getCurrentSkin(), self::$current_style);
 				if (count($assignments) > 0)
 				{
 					$ref_ass = array();
@@ -272,13 +293,13 @@ class ilStyleDefinition
 				}
 			}
 		}
-		
-		if ($_GET["ref_id"] != "")
-		{
-			self::$current_style = $current_style;
+
+		if(!self::styleExistsForCurrentSkin(self::$current_style)){
+			ilUtil::sendFailure($DIC->language()->txt("style_does_not_exit").self::$current_style);
+			self::setCurrentSkin(self::DEFAULT_SKIN_ID);
+			self::setCurrentStyle(self::DEFAULT_STYLE_ID);
 		}
-		
-		return $current_style;
+		return self::$current_style;
 	}
 
 	/**
@@ -316,7 +337,7 @@ class ilStyleDefinition
 									"skin_id" => $skin->getId(),
 									"style_id" =>  $style->getId(),
 									"template_name" => $skin->getName(),
-									"substyle" => "Todo",
+									"substyle_of" => $style->getSubstyleOf(),
 									"style_name" => $style->getName(),
 									"users" => $num_users
 							);
@@ -346,26 +367,33 @@ class ilStyleDefinition
 		}
 	}
 
-	public static function doesSkinExist($skin_id){
+
+
+	public static function styleExists($style_id){
 		foreach(self::getSkins() as $skin)
 		{
-			if($skin->getId()==$skin_id){
+			if($skin->hasStyle($style_id)){
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public static function doesStyleExist($style_id){
-		foreach(self::getSkins() as $skin)
-		{
-			foreach($skin->getStyles() as $style){
-				if($style->getId()==$style_id){
-					return true;
-				}
-			}
+	public static function styleExistsForSkinId($skin_id,$style_id){
+		if(!self::skinExists($skin_id)){
+			return false;
 		}
-		return false;
+		$skin = ilSystemStyleSkinContainer::generateFromId($skin_id)->getSkin();
+		return $skin->hasStyle($style_id);
+	}
+
+	public static function styleExistsForCurrentSkin($style_id){
+		/**
+		 * @var ilStyleDefinition $styleDefinition
+		 */
+		global $styleDefinition;
+
+		return $styleDefinition->getSkin()->hasStyle($style_id);
 	}
 
 	/**
@@ -381,7 +409,7 @@ class ilStyleDefinition
 	 */
 	public static function getSkins()
 	{
-		return self::getAllTemplates();
+		return self::getAllSkins();
 	}
 
 	/**

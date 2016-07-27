@@ -80,19 +80,39 @@ class ilSystemStyleSettings
 	{
 		global $ilDB;
 
-		$assignmnts = array();
+		$assignments = array();
 		$set = $ilDB->query("SELECT substyle, category_ref_id FROM syst_style_cat ".
 				" WHERE skin_id = ".$ilDB->quote($a_skin_id, "text").
 				" AND style_id = ".$ilDB->quote($a_style_id, "text")
 		);
 		while ($rec = $ilDB->fetchAssoc($set))
 		{
-			$assignmnts[] = array("substyle" => $rec["substyle"],
+			$assignments[] = array(
+					"substyle" => $rec["substyle"],
+					"ref_id" => $rec["category_ref_id"]);
+		}
+		return $assignments;
+	}
+
+	static function getSubStyleCategoryAssignments($a_skin_id, $a_style_id, $a_sub_style_id)
+	{
+		global $ilDB;
+
+		$assignmnts = array();
+
+		$set = $ilDB->query("SELECT substyle, category_ref_id FROM syst_style_cat ".
+				" WHERE skin_id = ".$ilDB->quote($a_skin_id, "text").
+				" AND substyle = ".$ilDB->quote($a_sub_style_id, "text").
+				" AND style_id = ".$ilDB->quote($a_style_id, "text")
+		);
+		while ($rec = $ilDB->fetchAssoc($set))
+		{
+			$assignmnts[] = array(
+					"substyle" => $rec["substyle"],
 					"ref_id" => $rec["category_ref_id"]);
 		}
 		return $assignmnts;
 	}
-
 	/**
 	 * @param $a_skin_id
 	 * @param $a_style_id
@@ -104,6 +124,13 @@ class ilSystemStyleSettings
 	{
 		global $ilDB;
 
+		$assignments = self::getSubStyleCategoryAssignments($a_skin_id, $a_style_id,$a_substyle);
+
+		foreach($assignments as $assignment){
+			if($assignment["ref_id"] == $a_ref_id){
+				throw new ilSystemStyleException(ilSystemStyleException::SUBSTYLE_ASSIGNMENT_EXISTS,$a_substyle. ": ".$a_ref_id);
+			}
+		}
 		$ilDB->manipulate("INSERT INTO syst_style_cat ".
 				"(skin_id, style_id, substyle, category_ref_id) VALUES (".
 				$ilDB->quote($a_skin_id, "text").",".
@@ -129,6 +156,21 @@ class ilSystemStyleSettings
 				" AND style_id = ".$ilDB->quote($a_style_id, "text").
 				" AND substyle = ".$ilDB->quote($a_substyle, "text").
 				" AND category_ref_id = ".$ilDB->quote($a_ref_id, "integer"));
+	}
+
+	/**
+	 * @param $a_skin_id
+	 * @param $a_style_id
+	 * @param $a_substyle
+	 */
+	static function deleteSubStyleCategoryAssignments($a_skin_id, $a_style_id, $a_substyle)
+	{
+		global $ilDB;
+
+		$ilDB->manipulate("DELETE FROM syst_style_cat WHERE ".
+				" skin_id = ".$ilDB->quote($a_skin_id, "text").
+				" AND style_id = ".$ilDB->quote($a_style_id, "text").
+				" AND substyle = ".$ilDB->quote($a_substyle, "text"));
 	}
 
 	/**

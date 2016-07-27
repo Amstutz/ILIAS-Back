@@ -1,4 +1,5 @@
 <?php
+include_once("Services/Style/System/classes/Exceptions/class.ilSystemStyleException.php");
 include_once("Services/Style/System/classes/Utilities/class.ilSkinStyleXML.php");
 
 /**
@@ -38,6 +39,10 @@ class ilSkinXML implements \Iterator, \Countable{
      * @return ilSkinXML
      */
     public static function parseFromXML($path = ""){
+        global $DIC;
+
+        $DIC->logger()->root()->critical($path);
+
         try{
             $xml = new SimpleXMLElement(file_get_contents($path));
         }catch(Exception $e){
@@ -47,8 +52,24 @@ class ilSkinXML implements \Iterator, \Countable{
         $id = basename (dirname($path));
         $skin = new self($id,(string)$xml->attributes()["name"]);
 
-        foreach($xml->style as $style_xml){
-            $skin->addStyle(ilSkinStyleXML::parseFromXMLElement($style_xml));
+        /**
+         * @var ilSkinStyleXML $last_style
+         */
+        $last_style = null;
+
+
+        foreach($xml->children() as $style_xml){
+            $style = ilSkinStyleXML::parseFromXMLElement($style_xml);
+
+            if($style_xml->getName() == "substyle") {
+                if(!$last_style){
+                    throw new ilSystemStyleException(ilSystemStyleException::NO_PARENT_STYLE, $style->getId());
+                }
+                $style->setSubstyleOf($last_style->getId());
+            }
+            $skin->addStyle($style);
+            $last_style = $style;
+
         }
         return $skin;
     }
@@ -58,6 +79,8 @@ class ilSkinXML implements \Iterator, \Countable{
         $xml->addAttribute("xmlns","http://www.w3.org");
         $xml->addAttribute("version","1");
         $xml->addAttribute("name",$this->getName());
+
+        $last_style = null;
 
         foreach($this->getStyles() as $style){
             if(!$style->isSubstyle()){
@@ -76,7 +99,13 @@ class ilSkinXML implements \Iterator, \Countable{
     }
 
     protected function addChildToXML(SimpleXMLElement $xml,ilSkinStyleXML $style){
-        $xml_style = $xml->addChild("style");
+        $xml_style = null;
+        if($style->isSubstyle()){
+            $xml_style = $xml->addChild("substyle");
+        }
+        else{
+            $xml_style = $xml->addChild("style");
+        }
         $xml_style->addAttribute("id", $style->getId());
         $xml_style->addAttribute("name", $style->getName());
         $xml_style->addAttribute("image_directory", $style->getImageDirectory());
@@ -112,6 +141,14 @@ class ilSkinXML implements \Iterator, \Countable{
      */
     public function getStyle($id){
         return $this->styles[$id];
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function hasStyle($id){
+        return array_key_exists($id,$this->getStyles());
     }
 
     /**
@@ -230,6 +267,26 @@ class ilSkinXML implements \Iterator, \Countable{
             }
         }
         return $substyles;
+    }
 
+    public function hasStyleSubstyles($style_id){
+        if($this->getStyle($style_id)){
+            foreach($this->getStyles() as $style){
+                if($style->getId() != $style_id && $style->isSubstyle()){
+                    if($style->getSubstyleOf() == $style_id){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasStyles(){
+        return count($this->getStyles()) > 0;
     }
 }

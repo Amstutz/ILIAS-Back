@@ -46,7 +46,7 @@ class ilSkinStyleXML
      * @param string $id
      * @param string $name
      */
-    public function __construct($id, $name, $css_file = "", $image_directory = "", $font_directory = "", $sound_directory = "")
+    public function __construct($id, $name, $css_file = "", $image_directory = "", $font_directory = "", $sound_directory = "",$parent_style = "")
     {
         $this->setId($id);
         $this->setName($name);
@@ -71,6 +71,7 @@ class ilSkinStyleXML
         $this->setImageDirectory($image_directory);
         $this->setFontDirectory($font_directory);
         $this->setSoundDirectory($sound_directory);
+        $this->setSubstyleOf($parent_style);
     }
 
     /**
@@ -207,5 +208,12 @@ class ilSkinStyleXML
 
     public function isSubstyle(){
         return $this->getSubstyleOf() != "";
+    }
+
+    public function referencesResource($resource){
+        return $this->getCssFile() == $resource
+            || $this->getImageDirectory() == $resource
+            || $this->getFontDirectory() == $resource
+            || $this->getSoundDirectory()== $resource;
     }
 }

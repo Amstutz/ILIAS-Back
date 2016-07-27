@@ -115,6 +115,5 @@ class ilSystemStyleMainGUI
 		$this->tabs->addTab('documentation', $this->lng->txt('documentation'), $this->ctrl->getLinkTargetByClass('ilsystemstyledocumentationgui'));
 
 		$this->tabs->activateTab($active);
-
 	}
 }
