@@ -102,14 +102,17 @@ class ilKSDocumentationEntryGUI
                     )
                 )
             )
-        )->withCard($this->f->card(
-            "State", $this->f->listing()->descriptive(
+        )->withCard(
+            $this->f->card(
+                "State"
+            )->withHeaderSection(
+                $this->f->listing()->descriptive(
                 array(
                     "Entry" => $this->entry->getStatusEntry(),
                     "Implementation" => $this->entry->getStatusImplementation()
                 )
-            )
-        ));
+            ))
+        );
 
         $rule_listings = array();
         foreach($this->entry->getRulesAsArray() as $categoery => $category_rules){
@@ -135,7 +138,7 @@ class ilKSDocumentationEntryGUI
                 //$start_example =  microtime (true);
                 $example = $name(); //Executes function loaded in file indicated by 'path'
                 //$end_example =  microtime (true);
-                $examples_snippets[] = $this->f->card("", $this->f->generic($example));
+                $examples_snippets[] = $this->f->card("")->withHeaderSection($this->f->generic()->html($example));
                 //$example_tot_time = ($end_example-$start_example);
                 //$examples_snippets[] = $this->f->text()->standard("Time to generate and render example: ".$example_tot_time);
                 $examples_snippets[] = $this->f->text()->code(str_replace("<?php\n","",file_get_contents ($path)));

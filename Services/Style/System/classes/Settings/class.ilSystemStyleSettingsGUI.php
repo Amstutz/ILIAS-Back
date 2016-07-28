@@ -181,12 +181,11 @@ class ilSystemStyleSettingsGUI
     protected function saveStyle($message_stack){
         global $DIC;
 
-        $old_container = ilSystemStyleSkinContainer::generateFromId($_GET['skin_id'],$message_stack);
-        $old_skin = $old_container->getSkin();
-        $old_style = $old_skin->getStyle($_GET["style_id"]);
+        $container = ilSystemStyleSkinContainer::generateFromId($_GET['skin_id'],$message_stack);
+        $old_skin = clone $container->getSkin();
+        $old_style = clone $old_skin->getStyle($_GET["style_id"]);
 
-        $new_container = clone $old_container;
-        $new_skin = $new_container->getSkin();
+        $new_skin = $container->getSkin();
         $new_skin->setId($_POST["skin_id"]);
         $new_skin->setName($_POST["skin_name"]);
 
@@ -198,8 +197,8 @@ class ilSystemStyleSettingsGUI
         $new_style->setSoundDirectory($_POST["sound_dir"]);
         $new_style->setFontDirectory($_POST["font_dir"]);
 
-        $new_container->updateSkin($old_skin);
-        $new_container->updateStyle($old_style->getId(),$new_style);
+        $container->updateSkin($old_skin);
+        $container->updateStyle($new_style->getId(),$old_style);
 
 
         if($_POST["active"] == 1){

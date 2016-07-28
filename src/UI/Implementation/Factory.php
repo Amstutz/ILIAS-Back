@@ -4,7 +4,8 @@
 
 namespace ILIAS\UI\Implementation;
 
-// TODO: This might cache the created factories.
+use ILIAS\UI\Component as AbstractComponent;
+
 class Factory implements \ILIAS\UI\Factory {
 	/**
 	 * @inheritdoc
@@ -12,18 +13,85 @@ class Factory implements \ILIAS\UI\Factory {
 	public function counter() {
 		return new Component\Counter\Factory();
 	}
-
 	/**
 	 * @inheritdoc
 	 */
 	public function glyph() {
 		return new Component\Glyph\Factory();
 	}
-
 	/**
 	 * @inheritdoc
 	 */
 	public function button() {
 		return new Component\Button\Factory();
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function link($href,$caption="")
+	{
+		return new Component\Link\Link($href,$caption);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function card($title,\ILIAS\UI\Component\Image\Image $image = null){
+		return new Component\Card\Card($title,$image);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function deck($cards){
+		return new Component\Deck\Deck($cards, Component\Deck\Deck::SIZE_S);
+	}
+	/**
+	 * @inheritdoc
+	 */
+	public function image()
+	{
+		return new Component\Image\Factory();
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function text()
+	{
+		return new Component\Text\Factory();
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function grid()
+	{
+		return new Component\Grid\Factory();
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function listing()
+	{
+		return new Component\Listing\Factory();
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function panel(){
+		return new Component\Panel\Factory();
+
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function generic()
+	{
+		return new Component\Generic\Factory();
 	}
 }

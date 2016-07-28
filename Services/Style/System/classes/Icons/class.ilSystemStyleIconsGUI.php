@@ -157,38 +157,22 @@ class ilSystemStyleIconsGUI
 
 
     protected function renderIconsPreviews(){
-        $icons_per_row = 6;
-        $i=1;
+        global $DIC;
 
+        $f = $DIC->ui()->factory();
 
-        $html = "";
-        $html .= "<row>";
-        foreach($this->getIconFolder()->getIcons() as $icon){
-            if(($i % $icons_per_row ) == 0){
-                $html .= "</row>";
-                $i = 0;
-            }
-            $i++;
+        $cards = array();
 
-            $path = $icon->getSkinPath();
-            $name = $icon->getName();
-            $content = $icon->getName();
-            $thumbnail = "
-                 <div class=\"col-sm-2 col-md-2\">
-                    <div class=\"thumbnail\">
-                      <img src=\"$path\" alt=\"...\">
-                      <div class=\"caption\">
-                        <h3>$name</h3>
-                        <p>$content</p>
-                      </div>
-                    </div>
-                  </div>";
-
-            $html .= $thumbnail;
+        foreach($this->getIconFolder()->getIcons() as $id => $icon){
+            $icon_image = $f->image()->responsive($icon->getSkinPath(),$icon->getName());
+            $cards[] = $f->card(
+                $icon->getName(),
+                $icon_image
+            );
         }
-        $html .= "</row>";
+        $deck = $f->deck($cards);
 
-        return $html;
+        return $DIC->ui()->renderer()->render($deck);
     }
 
     /**

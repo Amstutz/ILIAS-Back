@@ -175,13 +175,14 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
-     * @param ilSkinStyleXML $style
+     * @param $source
+     * @param $target
      * @throws ilSystemStyleException
      */
     protected function createResourceDirectory($source, $target){
         $path = $this->getSkinDirectory().$target;
 
-        mkdir($target);
+        mkdir($path);
         self::xCopy($source,$path);
         $this->getMessageStack()->addMessage(
             new ilSystemStyleMessage($this->lng->txt("dir_created").$path,
@@ -189,10 +190,12 @@ class ilSystemStyleSkinContainer {
             ));
 
     }
+
     /**
- * @param ilSkinStyleXML $style
- * @throws ilSystemStyleException
- */
+     * @param $new_dir
+     * @param $old_dir
+     * @throws ilSystemStyleException
+     */
     protected function changeResourceDirectory($new_dir,$old_dir){
         $absolut_new_dir = $this->getSkinDirectory().$new_dir;
         $absolut_old_dir = $this->getSkinDirectory().$old_dir;
@@ -229,8 +232,7 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
-     * @param ilSkinStyleXML $style
-     * @throws ilSystemStyleException
+     * @param $dir
      */
     protected function removeResourceDirectory($dir){
         $absolut_dir = $this->getSkinDirectory().$dir;
@@ -416,6 +418,10 @@ class ilSystemStyleSkinContainer {
 
     /**
      * @param $import_zip_path
+     * @param $name
+     * @param ilSystemStyleMessageStack|null $message_stack
+     * @return ilSystemStyleSkinContainer
+     * @throws ilSystemStyleException
      */
     public static function import($import_zip_path, $name, ilSystemStyleMessageStack $message_stack = null){
         $skin_id = rtrim($name,".zip");

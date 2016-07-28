@@ -2,6 +2,7 @@
 include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
 include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleSkinContainer.php");
 include_once("Services/Style/System/classes/Less/class.ilSystemStyleLessFile.php");
+include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessageStack.php");
 
 
 /**
@@ -31,11 +32,15 @@ class ilSystemStyleLessGUI
      */
     protected $style_container;
 
-
     /**
      * @var ilSystemStyleLessFile
      */
     protected $less_file;
+
+    /**
+     * @var ilSystemStyleMessageStack
+     */
+    protected $message_stack;
     /**
      * Constructor
      */
@@ -46,6 +51,8 @@ class ilSystemStyleLessGUI
         $this->ctrl = $DIC->ctrl();
         $this->lng = $DIC->language();
         $this->tpl = $DIC["tpl"];
+
+        $this->setMessageStack(new ilSystemStyleMessageStack());
 
         if($skin_id == ""){
             $skin_id = $_GET["skin_id"];
@@ -59,8 +66,9 @@ class ilSystemStyleLessGUI
             $less_file = new ilSystemStyleLessFile($this->getStyleContainer()->getLessVariablesFilePath($style_id));
             $this->setLessFile($less_file);
         }catch(ilSystemStyleException $e){
-            ilUtil::sendFailure($e->getMessage());
-            $this->ctrl->setCmd("handleNoVariables");
+            $this->getMessageStack()->addMessage(
+                new ilSystemStyleMessage($e->getMessage(),ilSystemStyleMessage::TYPE_ERROR)
+            );
         }
 
 
@@ -82,23 +90,44 @@ class ilSystemStyleLessGUI
             case "lessUpdatedVariables":
                 $this->update();
                 break;
-            case "handleNoVariables":
-                $this->handleNoVariables();
-                break;
             default:
                 $this->edit();
                 break;
         }
     }
 
-    protected function handleNoVariables(){
+
+
+    protected function edit(){
+
+        $this->checkRequirements();
+        if($this->getLessFile()){
+            $form = $this->initSystemStyleLessForm();
+            $this->getVariablesValues($form);
+            $this->tpl->setContent($form->getHTML());
+        }
+
+        $this->getMessageStack()->sendMessages(true);
+
 
     }
 
-    protected function edit(){
-        $form = $this->initSystemStyleLessForm();
-        $this->getVariablesValues($form);
-        $this->tpl->setContent($form->getHTML());
+    protected function checkRequirements(){
+        $style_id = $_GET['style_id'];
+        $less_path = $this->getStyleContainer()->getLessFilePath($style_id);
+        if(file_exists($less_path)){
+            $less_variables_path = $this->getStyleContainer()->getSkin()->getStyle($style_id)->getCssFile()."-variables.less";
+            $reg_exp = "/@import \"".$less_variables_path."\"/";
+            if(!preg_match($reg_exp,file_get_contents($less_path))){
+                $this->getMessageStack()->addMessage(
+                    new ilSystemStyleMessage($this->lng->txt("less_file_not_included"),ilSystemStyleMessage::TYPE_ERROR)
+                );
+            }
+        }else{
+            $this->getMessageStack()->addMessage(
+                new ilSystemStyleMessage($this->lng->txt("less_file_does_not_exist").$less_path,ilSystemStyleMessage::TYPE_ERROR)
+            );
+        }
 
     }
 
@@ -219,6 +248,20 @@ class ilSystemStyleLessGUI
         $this->less_file = $less_file;
     }
 
+    /**
+     * @return ilSystemStyleMessageStack
+     */
+    public function getMessageStack()
+    {
+        return $this->message_stack;
+    }
 
+    /**
+     * @param ilSystemStyleMessageStack $message_stack
+     */
+    public function setMessageStack($message_stack)
+    {
+        $this->message_stack = $message_stack;
+    }
 
 }
