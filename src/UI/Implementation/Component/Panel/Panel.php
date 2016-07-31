@@ -5,37 +5,66 @@
 namespace ILIAS\UI\Implementation\Component\Panel;
 
 use ILIAS\UI\Component as C;
+use ILIAS\UI\Implementation\Component\ComponentHelper;
 
+/**
+ * Class Panel
+ * @package ILIAS\UI\Implementation\Component\Panel
+ */
 class Panel implements C\Panel\Panel {
+    use ComponentHelper;
 
     /**
      * @var	string
      */
     private $type;
 
-
+    /**
+     * @var string
+     */
     private  $heading;
 
+    /**
+     * @var \ILIAS\UI\Component\Component
+     */
     private  $body;
 
+    /**
+     * @var \ILIAS\UI\Component\Card\Card
+     */
     private $card = null;
 
     /**
-     * @var \ILIAS\UI\Factory
+     * @var array
      */
-    protected $f;
+    private static $types = array
+        (   self::BLOCK,
+            self::HEADING,
+            self::REPORT
+        );
 
+    /**
+     * @param $type
+     * @param $heading
+     * @param $body
+     */
     public function __construct($type, $heading,$body) {
-        global $DIC;
-        $this->f = $DIC->ui()->factory();
+        $this->checkArgIsElement("type", $type, self::$types, "panel type");
+        $this->checkStringArg("string",$heading);
 
         $this->type = $type;
-        $this->heading = $heading;//$this->getFactory()->text()->heading($heading);
-        $this->body = $this->formatBody($body);
+        $this->heading = $heading;
+        $this->body = $body;
 
 
     }
+
+    /**
+     * @inheritdoc
+     */
     public function withType($type){
+        $this->checkArgIsElement("type", $type, self::$types, "panel type");
+
         $clone = clone $this;
         $clone->type = $type;
         return $clone;
@@ -48,9 +77,12 @@ class Panel implements C\Panel\Panel {
         return $this->type;
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function withHeading($heading){
-        assert('self::is_valid_type($type)');
+        $this->checkStringArg("heading", $heading);
+
         $clone = clone $this;
         $this->heading = $heading;//$this->getFactory()->text()->heading($heading);
         return $clone;
@@ -63,9 +95,12 @@ class Panel implements C\Panel\Panel {
         return $this->heading;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function withBody($body){
         $clone = clone $this;
-        $clone->body = $this->formatBody($body);
+        $clone->body = $body;
         return $clone;
     }
 
@@ -77,9 +112,7 @@ class Panel implements C\Panel\Panel {
     }
 
     /**
-     * Todo: Discuss this pattern with Richard, Bullets do not have cards. How to procceed? Share a lot of functionality, but not all
-     * @param $body
-     * @return Panel
+     * @inheritdoc
      */
     public function withCard($card){
         $clone = clone $this;
@@ -93,58 +126,5 @@ class Panel implements C\Panel\Panel {
     public function getCard() {
         return $this->card;
     }
-
-
-    // Helper
-    static protected function is_valid_type($type) {
-        static $types = array
-        (   self::BLOCK,
-            self::HEADING
-        );
-        return in_array($type, $types);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFactory()
-    {
-        return $this->factory;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getHeadingClass()
-    {
-        return $this->getType() == self::HEADING ? "ilHeader":"ilBlockHeader";
-    }
-    /**
-     * @param mixed $factory
-     */
-    public function setFactory($factory)
-    {
-        $this->factory = $factory;
-    }
-
-    /**
-     * Todo: Discuss this pattern with Richard
-     * @param $body
-     * @return C\Component[]
-     */
-    protected function formatBody($body){
-        global $DIC;
-        $f = $DIC->ui()->factory();
-
-        if(is_string($body)){
-            $body = $f->text()->standard($body);
-        }
-        if(!is_array($body)){
-            $body = array($body);
-        }
-        return $body;
-
-    }
-
 }
 ?>

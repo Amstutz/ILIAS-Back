@@ -168,10 +168,10 @@ interface Factory {
 	 * description:
 	 *   purpose: >
 	 *     	A card is a flexible content container for small chunks of structured data.
-	 *      Cards are often used in so-called Decks which are a gallery of Cards.
+     *      Cards are often used in so-called Decks which are a gallery of Cards.
 	 *   composition: >
 	 *      Cards contain a header, which often includes an Image or Icon and a Title as well as possible actions as
-	 *      Default Buttons and 0 to n sections that may contain further links and buttons.
+	 *      Default Buttons and 0 to n sections that may contain further textual descriptions, links and buttons.
 	 *   effect: >
 	 *      Cards may contain Interaction Triggers.
 	 *   rivals:
@@ -205,7 +205,8 @@ interface Factory {
 	 *      They should be used if a  page contains many content items that have similar style and importance.
 	 *      A Deck gives each item equal horizontal space indicating that they are of equal importance.
 	 *   composition: >
-	 *      Decks are composed only of Cards arranged in a grid.
+	 *      Decks are composed only of Cards arranged in a grid. The cards displayed by decks are all of equal size. This
+     *      Size ranges very small (XS) to very large (XL).
 	 *   effect: >
 	 *      The Deck is a mere scaffolding element, is has no effect.
 	 *
@@ -217,8 +218,6 @@ interface Factory {
 	 *      1: Decks MUST only be used to display multiple Cards.
 	 *   style:
 	 *      1: The number of cards displayed per row MUST adapt to the screen size.
-	 *   accessibility:
-	 *      1: If Cards in Decks contain actions or links they MUST be accessible by keyboard.
 	 * ---
 	 * @param \ILIAS\UI\Component\Card\Card[] $cards
 	 * @return \ILIAS\UI\Component\Deck\Deck
@@ -315,13 +314,15 @@ interface Factory {
 	 * description:
 	 *   purpose: >
 	 *     Panels are used to group titled Content.
-	 *   composition: Panels consist of a header and content section.
+	 *   composition: >
+     *      Panels consist of a header and content section. They form one Gestalt and so build a perceivable
+     *      cluster of information
 	 *   effect: The effect of interaction with panels heavily depends on their content.
 	 *
 	 * rules:
 	 *   wording:
 	 *      1: Panels MUST contain a heading.
-	 *      2: Panels MUST form one Gestalt and so build a perceivable cluster of information
+	 *      2: Panels MUST
 	 * ---
 	 * @return \ILIAS\UI\Component\Panel\Factory
 	 */
@@ -336,7 +337,7 @@ interface Factory {
 	 *   usage:
 	 *      1: Do only this component to solve legacy issues.
 	 * ---
-	 * @return \ILIAS\UI\Component\Generic\Generic
+	 * @return \ILIAS\UI\Component\Generic\Factory
 	 */
 	public function generic();
 }

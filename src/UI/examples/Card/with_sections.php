@@ -16,7 +16,8 @@ function with_sections() {
     );
 
     $image = $f->image()->responsive(
-        "./templates/default/images/HeaderIcon.svg", "Thumbnail Example");
+        "./templates/default/images/HeaderIcon.svg",
+        "Thumbnail Example");
 
     $card = $f->card(
         "Title",

@@ -1,6 +1,6 @@
 <?php
 
-function bulletin() {
+function report() {
     //Init Factory and Renderer
     global $DIC;
     $f = $DIC->ui()->factory();
@@ -17,11 +17,10 @@ function bulletin() {
     );
 
     $block_panel_1 = $f->panel()->block("Title of Block 1",
-        array($ordered_list)
+        $ordered_list
     )->withCard($card);
 
     $block_panel_2 = $f->panel()->block("Title of Block 2",
-        array(
             $f->listing()->descriptive(
                 array(
                     "Description 1"=>"Point 1",
@@ -29,10 +28,10 @@ function bulletin() {
                     "Description 3"=>"Point 3"
                 )
             )
-        )
     );
 
-    $bulletin = $f->panel()->bulletin("Bulletin for the Win", array($block_panel_1,$block_panel_2));
+    $content = $f->generic()->container(array($block_panel_1,$block_panel_2));
+    $report = $f->panel()->report("Bulletin for the Win", $content);
 
-    return $renderer->render($bulletin);
+    return $renderer->render($report);
 }

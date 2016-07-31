@@ -25,7 +25,8 @@ function base() {
         $content,
     ));
 
-    $deck = $f->deck(array($card,$card,$card,$card,$card,$card,$card,$card,$card));
+    $deck = $f->deck(array($card,$card,$card,$card,$card,
+        $card,$card,$card,$card));
 
     //Render
     return $renderer->render($deck);

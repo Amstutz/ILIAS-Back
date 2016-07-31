@@ -24,7 +24,7 @@ class Factory implements \ILIAS\UI\Component\Panel\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function bulletin($heading,$body) {
-		return new Panel(P\Panel::HEADING,$heading,$body);
+	public function report($heading,$body) {
+		return new Panel(P\Panel::REPORT,$heading,$body);
 	}
 }

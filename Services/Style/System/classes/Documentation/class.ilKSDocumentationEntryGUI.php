@@ -84,21 +84,23 @@ class ilKSDocumentationEntryGUI
         }
 
         $description = $this->f->panel()->block("Description",
-            array(
-                $this->f->listing()->descriptive(
-                    array(
-                        "Purpose" => $this->entry->getDescription()->getProperty("purpose"),
-                        "Composition" => $this->entry->getDescription()->getProperty("composition"),
-                        "Effect" => $this->entry->getDescription()->getProperty("effect"),
-                        "Rivals" => $this->f->listing()->ordered(
-                            $this->entry->getDescription()->getProperty("rivals")
+            $this->f->generic()->container(
+                array(
+                    $this->f->listing()->descriptive(
+                        array(
+                            "Purpose" => $this->entry->getDescription()->getProperty("purpose"),
+                            "Composition" => $this->entry->getDescription()->getProperty("composition"),
+                            "Effect" => $this->entry->getDescription()->getProperty("effect"),
+                            "Rivals" => $this->f->listing()->ordered(
+                                $this->entry->getDescription()->getProperty("rivals")
+                            )
                         )
-                    )
-                ),
-                $this->f->listing()->descriptive(
-                    array(
-                        "Background" => $this->entry->getBackground(),
-                        "Feature Wiki References" => $this->f->listing()->ordered($feature_wiki_links)
+                    ),
+                    $this->f->listing()->descriptive(
+                        array(
+                            "Background" => $this->entry->getBackground(),
+                            "Feature Wiki References" => $this->f->listing()->ordered($feature_wiki_links)
+                        )
                     )
                 )
             )
@@ -146,24 +148,26 @@ class ilKSDocumentationEntryGUI
 
         }
 
-        $examples = $this->f->panel()->block("Examples", $examples_snippets);
+        $examples = $this->f->panel()->block("Examples", $this->f->generic()->container($examples_snippets));
 
         $relations = $this->f->panel()->block("Relations",
             $this->f->listing()->descriptive(
-                array(
-                    "Parents" => $this->f->listing()->ordered(
-                        $this->entries->getParentsOfEntryTitles($this->entry->getId())
-                    ),
-                    "Descendants" => $this->f->listing()->unordered(
-                        $this->entries->getDescendantsOfEntryTitles($this->entry->getId())
+                $this->f->generic()->container(
+                    array(
+                        "Parents" => $this->f->listing()->ordered(
+                            $this->entries->getParentsOfEntryTitles($this->entry->getId())
+                        ),
+                        "Descendants" => $this->f->listing()->unordered(
+                            $this->entries->getDescendantsOfEntryTitles($this->entry->getId())
+                        )
                     )
                 )
             )
         );
 
+        $body = $this->f->generic()->container(array($description,$rules,$examples,$relations));
 
-        $bulletin = $this->f->panel()->bulletin($this->entry->getTitle(),
-            array($description,$examples,$rules,$relations));
+        $bulletin = $this->f->panel()->report($this->entry->getTitle(),$body);
 
         $mid =  microtime (true);
         $html = $this->r->render($bulletin);

@@ -16,30 +16,21 @@ class Renderer extends AbstractComponentRenderer {
 		$this->checkComponent($component);
 		$tpl = $this->getTemplate("tpl.panel.html", true, true);
 
-		global $DIC;
-		$f = $DIC->ui()->factory();
-
 		$tpl->setVariable("TYPE",$component->getType());
-		$tpl->setVariable("HEADING_CLASS",$component->getHeadingClass());
+		$tpl->setVariable("HEADING_CLASS",Component\Panel\Panel::BLOCK ? "ilBlockHeader":"ilHeader");
 
 		$tpl->setVariable("HEADING",$component->getHeading());//$default_renderer->render($component->getHeading(),$default_renderer));
 
-		$body = "";
-
 		if($component->getCard()){
-			$row = $f->grid()->row(
-					array(
-							$f->grid()->column($component->getBody(),8),
-							$f->grid()->column(array($component->getCard()),4),
-					)
-			);
-			$body = $default_renderer->render($row);
+            $tpl->setCurrentBlock("with_card");
+            $tpl->setVariable("BODY",  $default_renderer->render($component->getBody()));
+            $tpl->setVariable("CARD",  $default_renderer->render($component->getCard()));
+            $tpl->parseCurrentBlock();
 		}else{
-			foreach($component->getBody() as $item){
-				$body .= $default_renderer->render($item,$default_renderer);
-			}
-		}
-		$tpl->setVariable("BODY",$body);
+            $tpl->setCurrentBlock("no_card");
+            $tpl->setVariable("BODY",  $default_renderer->render($component->getBody()));
+            $tpl->parseCurrentBlock();
+        }
 
 		return $tpl->get();
 	}

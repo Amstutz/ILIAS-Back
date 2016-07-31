@@ -36,7 +36,7 @@ function user() {
     )->withContentSections(array($meta_content,$actions));
 
     $deck = $f->deck(array($card,$card,$card,$card,$card,$card,$card))
-        ->withCardsSize(ILIAS\UI\Component\Deck\Deck::SIZE_M);
+        ->withCardsSize(ILIAS\UI\Component\Deck\Deck::SIZE_L);
 
     //Render
     return $renderer->render($deck);
