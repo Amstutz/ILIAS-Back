@@ -26,13 +26,15 @@ class Renderer extends AbstractComponentRenderer {
 
 
 			foreach($component->getItems() as $item){
+                $tpl->setCurrentBlock("item");
 				if(is_string($item)){
-					$item = $f->text()->standard($item);
-				}
+                    $tpl->setVariable("ITEM", $item);
+				}else{
+                    $tpl->setVariable("ITEM", $default_renderer->render($item, $default_renderer));
+                }
+                $tpl->parseCurrentBlock();
 
-				$tpl->setCurrentBlock("item");
-				$tpl->setVariable("ITEM", $default_renderer->render($item, $default_renderer));
-				$tpl->parseCurrentBlock();
+
 
 			}
 		}

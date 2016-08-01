@@ -6,9 +6,7 @@ function item_block() {
     $renderer = $DIC->ui()->renderer();
 
     $content = $f->generic()->container(array(
-        $f->text()->standard("Ordered List"),
         $f->listing()->ordered(array("item 1","item 2","item 3")),
-        $f->text()->standard("Unordered List"),
         $f->listing()->unordered(array("item 1","item 2","item 3"))
     ));
 

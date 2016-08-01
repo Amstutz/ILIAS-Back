@@ -58,22 +58,6 @@ class Factory implements \ILIAS\UI\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function text()
-	{
-		return new Component\Text\Factory();
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function grid()
-	{
-		return new Component\Grid\Factory();
-	}
-
-	/**
-	 * @inheritdoc
-	 */
 	public function listing()
 	{
 		return new Component\Listing\Factory();

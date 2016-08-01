@@ -5,8 +5,8 @@ function with_card() {
     $f = $DIC->ui()->factory();
     $renderer = $DIC->ui()->renderer();
 
-    $block = $f->panel()->block("Block Panel Title",$f->generic()->html("Some Content"))->withCard(
-        $f->card("Card Heading","Card Content"));
+    $block = $f->panel()->block("Block Panel Title", $f->generic()->html("Some Content"))
+        ->withCard($f->card("Card Heading"));
 
     return $renderer->render($block);
 }

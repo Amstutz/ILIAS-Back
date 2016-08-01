@@ -23,18 +23,15 @@ class Renderer extends AbstractComponentRenderer {
 		$f = $DIC->ui()->factory();
 
 		foreach($component->getItems() as $key => $item){
-
-			$key = $f->text()->standard($key);
-
 			if(is_string($item)){
-				$item = $f->text()->standard($item);
-			}
-
-			$content = $default_renderer->render($item,$default_renderer);
+                $content = $item;
+            }else{
+                $content = $default_renderer->render($item,$default_renderer);
+            }
 
 			if(trim($content) != ""){
 				$tpl->setCurrentBlock("item");
-				$tpl->setVariable("DESCRIPTION",$default_renderer->render($key,$default_renderer));
+				$tpl->setVariable("DESCRIPTION",$key,$default_renderer);
 				$tpl->setVariable("CONTENT",$content);
 				$tpl->parseCurrentBlock();
 			}

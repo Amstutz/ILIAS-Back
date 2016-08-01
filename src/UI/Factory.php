@@ -186,10 +186,9 @@ interface Factory {
 	 *      1: Cards MUST contain a title.
 	 *      2: Cards SHOULD contain an Image or Icon in the header section.
 	 *      3: Cards MAY contain Interaction Triggers.
-	 *   style:
+     *      4: If multiple Cards are used, they MUST be contained in a Deck.
+     *   style:
 	 *      1: Sections of  Cards MUST be separated by Dividers.
-	 *   accessibility:
-	 *      1: If multiple Cards are used, they MUST be contained in a Deck.
 	 * ---
 	 * @param string $title
 	 * @param \ILIAS\UI\Component\Image\Image $image
@@ -227,28 +226,14 @@ interface Factory {
 	/**
 	 * ---
 	 * description:
-	 *   purpose: Images are used for previous of downloads or view of user images.
+	 *   purpose: The Image component is used to display images of various sources.
+     *   composition: An Image is composed of the image and an alternative text for screen readers.
+     *   effect: Images may be included in interacted components but not interactive on their own.
+     *
 	 * ---
-	 * Todo: Description in Incomplete!
-	 * Todo: Do we allow this shortcut for families with only one member?
 	 * @return \ILIAS\UI\Component\Image\Factory
 	 */
 	public function image();
-
-	/**
-	 * ---
-	 * description:
-	 *   purpose: >
-	 *      Text is read by users and transmits informative messages to them.
-	 *   composition: >
-	 *      Text Elements may only contain characters.
-	 * rules:
-	 *   wording:
-	 *      1: Reading is hard thus all written information displayed to the user SHOULD be as short and as non-technical as possible.
-	 * ---
-	 * @return \ILIAS\UI\Component\Text\Factory
-	 */
-	public function text();
 
 	/**
 	 * ---
@@ -280,7 +265,6 @@ interface Factory {
 	 *     1: Links that are part of (user generated) content MUST be underlined, others MUST NOT.
 	 * ---
 	 *
-	 * Todo: Do we allow this shortcut for families with only one member?
 	 * @param string $href
 	 * @param string $caption
 	 * @return \ILIAS\UI\Component\Link\Link
@@ -289,22 +273,18 @@ interface Factory {
 
 	/**
 	 * ---
-	 * ---
-	 * Todo: Description Incomplete
-	 * Todo: Is this even an popror UI-Component? We definitely this for internal use, but should we advertise it and describe it to the outside?
-	 * Todo: Pro it gives the user (probably needed) flexibility in the organization of views -> much less components will be needed.
-	 * Todo: Contra we shift UI decisions to the logic part of ILIAS
-	 * @return \ILIAS\UI\Component\Grid\Factory
-	 */
-	public function grid();
-
-	/**
-	 * ---
 	 * description:
 	 *   purpose: >
-	 *     Listings are used to structure textual information.
+	 *     Listings are used to structure itemised textual information.
+     *   composition: >
+     *     Listings may contain ordered, unordered, or
+     *     labeled items.
+     *   effect: >
+     *     Listings hold only textual information. They may contain links but no buttons.
+     * rules:
+     *   composition: >
+     *     Listings MUST NOT contain Buttons.
 	 * ---
-	 * Todo: Description in Incomplete!
 	 * @return \ILIAS\UI\Component\Listing\Factory
 	 */
 	public function listing();
@@ -331,11 +311,7 @@ interface Factory {
 	/**
 	 * ---
 	 * description:
-	 *   purpose: Can hold any content.
-	 *
-	 * rules:
-	 *   usage:
-	 *      1: Do only this component to solve legacy issues.
+	 *   purpose: Generic components are used for the ease of use of the centralized UI components or backwards compability.
 	 * ---
 	 * @return \ILIAS\UI\Component\Generic\Factory
 	 */

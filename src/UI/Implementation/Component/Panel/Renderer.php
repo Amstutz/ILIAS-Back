@@ -21,14 +21,20 @@ class Renderer extends AbstractComponentRenderer {
 
 		$tpl->setVariable("HEADING",$component->getHeading());//$default_renderer->render($component->getHeading(),$default_renderer));
 
+        if(is_string($component->getBody())){
+            $body = $component->getBody();
+        } else{
+            $body = $default_renderer->render($component->getBody());
+        }
+
 		if($component->getCard()){
             $tpl->setCurrentBlock("with_card");
-            $tpl->setVariable("BODY",  $default_renderer->render($component->getBody()));
+            $tpl->setVariable("BODY",  $body);
             $tpl->setVariable("CARD",  $default_renderer->render($component->getCard()));
             $tpl->parseCurrentBlock();
 		}else{
             $tpl->setCurrentBlock("no_card");
-            $tpl->setVariable("BODY",  $default_renderer->render($component->getBody()));
+            $tpl->setVariable("BODY",  $body);
             $tpl->parseCurrentBlock();
         }
 
