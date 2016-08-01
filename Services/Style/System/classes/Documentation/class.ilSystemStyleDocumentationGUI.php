@@ -1,6 +1,8 @@
 <?php
 require_once("Services/Style/System/classes/Documentation/class.ilKSDocumentationExplorerGUI.php");
 require_once("Services/Style/System/classes/Documentation/class.ilKSDocumentationEntryGUI.php");
+require_once("libs/composer/vendor/geshi/geshi/src/geshi.php");
+
 
 use ILIAS\UI\Implementation\Crawler as Crawler;
 /**

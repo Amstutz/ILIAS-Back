@@ -4,6 +4,8 @@ include_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
 include_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/class.KitchenSinkSkin.php");
 
 include_once ("Services/Form/classes/class.ilPropertyFormGUI.php");
+include_once ("libs/composer/vendor/geshi/geshi/src/geshi.php");
+
 
 use ILIAS\UI\Implementation\Crawler\Entry as Entry;
 
@@ -125,7 +127,7 @@ class ilKSDocumentationEntryGUI
             $this->f->listing()->descriptive($rule_listings)
         );
 
-        $examples_snippets = array();
+        $example_panels = array();
 
         $start_example = 0;
         $end_example = 0;
@@ -135,20 +137,23 @@ class ilKSDocumentationEntryGUI
             $nr = 1;
             foreach($this->entry->getExamples() as $name => $path){
                 include_once($path);
-                $examples_snippets[] = $this->f->text()->heading("Example ".$nr.": ".ucfirst(str_replace("_"," ",$name)));
+                $title = "Example ".$nr.": ".ucfirst(str_replace("_"," ",$name));
                 $nr++;
                 //$start_example =  microtime (true);
                 $example = $name(); //Executes function loaded in file indicated by 'path'
                 //$end_example =  microtime (true);
-                $examples_snippets[] = $this->f->card("")->withHeaderSection($this->f->generic()->html($example));
+                $content_part_1 = $this->f->card("")->withHeaderSection($this->f->generic()->html($example));
                 //$example_tot_time = ($end_example-$start_example);
                 //$examples_snippets[] = $this->f->text()->standard("Time to generate and render example: ".$example_tot_time);
-                $examples_snippets[] = $this->f->text()->code(str_replace("<?php\n","",file_get_contents ($path)));
+                $code = str_replace("<?php\n","",file_get_contents ($path));
+                $geshi = new GeSHi($code, "php");
+                $content_part_2 = $this->f->generic()->html($geshi->parse_code());
+                $content = $this->f->generic()->container(array($content_part_1,$content_part_2));
+                $example_panels[] = $this->f->panel()->block($title, $content);
             }
-
         }
 
-        $examples = $this->f->panel()->block("Examples", $this->f->generic()->container($examples_snippets));
+        $examples = $this->f->generic()->container($example_panels);
 
         $relations = $this->f->panel()->block("Relations",
             $this->f->listing()->descriptive(
