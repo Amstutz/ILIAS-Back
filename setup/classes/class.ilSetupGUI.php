@@ -851,6 +851,12 @@ echo "<br>+".$client_id;
 		$ne->setValue($p ? $p : $this->lng->txt("not_configured"));
 		$this->form->addItem($ne);
 
+        // lessc command
+        $ne = new ilNonEditableValueGUI($lng->txt("lessc"), "lessc");
+        $p = $this->setup->ini->readVariable("tools","lessc");
+        $ne->setValue($p ? $p : $this->lng->txt("not_configured"));
+        $this->form->addItem($ne);
+
 		$this->form->setFormAction("setup.php?cmd=gateway");
 	}
 
@@ -1151,6 +1157,11 @@ echo "<br>+".$client_id;
 		$ti = new ilTextInputGUI($lng->txt("clean_command"), "clean_command");
 		$this->form->addItem($ti);
 
+        // lessc command
+        $ti = new ilTextInputGUI($lng->txt("lessc_path"), "lessc_path");
+        $ti->setInfo($lng->txt("lessc_path_comment"));
+        $this->form->addItem($ti);
+
 		if ($a_install)
 		{
 			$sh = new ilFormSectionHeaderGUI();
@@ -1207,7 +1218,9 @@ echo "<br>+".$client_id;
 		$values["vscanner_type"] = $this->setup->ini->readVariable("tools", "vscantype");
 		$values["scan_command"] = $this->setup->ini->readVariable("tools", "scancommand");
 		$values["clean_command"] = $this->setup->ini->readVariable("tools", "cleancommand");
-		$values["log_path"] = $this->setup->ini->readVariable("log","path")."/".
+        $values["lessc_path"] = $this->setup->ini->readVariable("tools", "lessc");
+
+        $values["log_path"] = $this->setup->ini->readVariable("log","path")."/".
 			$this->setup->ini->readVariable("log","file");
 		$values["chk_log_status"] = !$this->setup->ini->readVariable("log","enabled");
 		$values["time_zone"] = $this->setup->ini->readVariable("server", "timezone");
@@ -1235,7 +1248,7 @@ echo "<br>+".$client_id;
 			if (ilUtil::isWindows())
 			{
 				$fs = array("datadir_path", "log_path", "convert_path", "zip_path",
-					"unzip_path", "ghostscript_path", "java_path", "ffmpeg_path");
+					"unzip_path", "ghostscript_path", "java_path", "ffmpeg_path","lessc_path");
 				foreach ($fs as $f)
 				{
 					$_POST[$f] = str_replace("\\", "/", $_POST[$f]);
@@ -1289,7 +1302,7 @@ echo "<br>+".$client_id;
 			if (ilUtil::isWindows())
 			{
 				$fs = array("datadir_path", "log_path", "convert_path", "zip_path",
-					"unzip_path", "ghostscript_path", "java_path", "ffmpeg_path");
+					"unzip_path", "ghostscript_path", "java_path", "ffmpeg_path","lessc_path");
 				foreach ($fs as $f)
 				{
 					$_POST[$f] = str_replace("\\", "/", $_POST[$f]);
@@ -1528,7 +1541,7 @@ echo "<br>+".$client_id;
 		{
 			$tools = array("convert" => "convert",
 				"zip" => "zip", "unzip" => "unzip", "ghostscript" => "gs",
-				"java" => "java", "ffmpeg" => "ffmpeg");
+				"java" => "java", "ffmpeg" => "ffmpeg", "lessc" => "lessc");
 			$dirs = array("/usr/local", "/usr/local/bin", "/usr/bin", "/bin", "/sw/bin", "/usr/bin");
 		}
 		else
@@ -1560,6 +1573,7 @@ echo "<br>+".$client_id;
 				}
 			}
 		}
+
 		return $a_tools;
 	}
 
