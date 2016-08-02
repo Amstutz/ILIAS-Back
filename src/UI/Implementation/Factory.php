@@ -44,7 +44,7 @@ class Factory implements \ILIAS\UI\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function deck($cards){
+	public function deck(array $cards){
 		return new Component\Deck\Deck($cards, Component\Deck\Deck::SIZE_S);
 	}
 	/**
