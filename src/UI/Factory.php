@@ -98,7 +98,7 @@ interface Factory {
 	 *      Buttons trigger interactions that change the system’s status. Usually
 	 *      Buttons are contained in an Input Collection. The Toolbar is the main
 	 *      exception to this rule, since buttons in the Toolbar might also perform
-	 *      view changes.
+     *      view changes.
 	 *   composition: >
 	 *      Button is a clickable, graphically obtrusive control element. It can
 	 *      bear text.
@@ -163,73 +163,74 @@ interface Factory {
 	 */
 	public function button();
 
-	/**
-	 * ---
-	 * description:
-	 *   purpose: >
-	 *     	A card is a flexible content container for small chunks of structured data.
+    /**
+     * ---
+     * description:
+     *   purpose: >
+     *      A card is a flexible content container for small chunks of structured data.
      *      Cards are often used in so-called Decks which are a gallery of Cards.
-	 *   composition: >
-	 *      Cards contain a header, which often includes an Image or Icon and a Title as well as possible actions as
-	 *      Default Buttons and 0 to n sections that may contain further textual descriptions, links and buttons.
-	 *   effect: >
-	 *      Cards may contain Interaction Triggers.
-	 *   rivals:
-	 *      Heading Panel: Heading Panels fill up the complete available width in the Center Content Section. Multiple Heading Panels are stacked vertically.
-	 *      Block Panels: Block Panels are used in Sidebars
-	 *
-	 * featurewiki:
-	 *       - http://www.ilias.de/docu/goto_docu_wiki_wpage_3208_1357.html
-	 *
-	 * rules:
-	 *   composition:
-	 *      1: Cards MUST contain a title.
-	 *      2: Cards SHOULD contain an Image or Icon in the header section.
-	 *      3: Cards MAY contain Interaction Triggers.
-     *      4: If multiple Cards are used, they MUST be contained in a Deck.
+     *   composition: >
+     *      Cards contain a header, which often includes an Image or Icon and a Title as well as possible actions as
+     *      Default Buttons and 0 to n sections that may contain further textual descriptions, links and buttons.
+     *   effect: >
+     *      Cards may contain Interaction Triggers.
+     *   rivals:
+     *      Heading Panel: Heading Panels fill up the complete available width in the Center Content Section. Multiple Heading Panels are stacked vertically.
+     *      Block Panels: Block Panels are used in Sidebars
+     *
+     * featurewiki:
+     *       - http://www.ilias.de/docu/goto_docu_wiki_wpage_3208_1357.html
+     *
+     * rules:
+     *   composition:
+     *      1: Cards MUST contain a title.
+     *      2: Cards SHOULD contain an Image or Icon in the header section.
+     *      3: Cards MAY contain Interaction Triggers.
      *   style:
-	 *      1: Sections of  Cards MUST be separated by Dividers.
-	 * ---
-	 * @param string $title
-	 * @param \ILIAS\UI\Component\Image\Image $image
-	 * @return \ILIAS\UI\Component\Card\Card
-	 */
-	public function card($title, \ILIAS\UI\Component\Image\Image $image = null);
+     *      1: Sections of  Cards MUST be separated by Dividers.
+     *   accessibility:
+     *      1: If multiple Cards are used, they MUST be contained in a Deck.
+     * ---
+     * @param string $title
+     * @param \ILIAS\UI\Component\Image\Image $image
+     * @return \ILIAS\UI\Component\Card\Card
+     */
+    public function card($title, \ILIAS\UI\Component\Image\Image $image = null);
 
-	/**
-	 * ---
-	 * description:
-	 *   purpose: >
-	 *     	Decks are used to display multiple Cards in a grid.
-	 *      They should be used if a  page contains many content items that have similar style and importance.
-	 *      A Deck gives each item equal horizontal space indicating that they are of equal importance.
-	 *   composition: >
-	 *      Decks are composed only of Cards arranged in a grid. The cards displayed by decks are all of equal size. This
+    /**
+     * ---
+     * description:
+     *   purpose: >
+     *      Decks are used to display multiple Cards in a grid.
+     *      They should be used if a  page contains many content items that have similar style and importance.
+     *      A Deck gives each item equal horizontal space indicating that they are of equal importance.
+     *   composition: >
+     *      Decks are composed only of Cards arranged in a grid. The cards displayed by decks are all of equal size. This
      *      Size ranges very small (XS) to very large (XL).
-	 *   effect: >
-	 *      The Deck is a mere scaffolding element, is has no effect.
-	 *
-	 * featurewiki:
-	 *       - http://www.ilias.de/docu/goto_docu_wiki_wpage_3992_1357.html
-	 *
-	 * rules:
-	 *   usage:
-	 *      1: Decks MUST only be used to display multiple Cards.
-	 *   style:
-	 *      1: The number of cards displayed per row MUST adapt to the screen size.
-	 * ---
-	 * @param \ILIAS\UI\Component\Card\Card[] $cards
-	 * @return \ILIAS\UI\Component\Deck\Deck
-	 */
-	public function deck($cards);
+     *   effect: >
+     *      The Deck is a mere scaffolding element, is has no effect.
+     *
+     * featurewiki:
+     *       - http://www.ilias.de/docu/goto_docu_wiki_wpage_3992_1357.html
+     *
+     * rules:
+     *   usage:
+     *      1: Decks MUST only be used to display multiple Cards.
+     *   style:
+     *      1: The number of cards displayed per row MUST adapt to the screen size.
+     * ---
+     * @param \ILIAS\UI\Component\Card\Card[] $cards
+     * @return \ILIAS\UI\Component\Deck\Deck
+     */
+    public function deck(array $cards);
 
 	/**
 	 * ---
 	 * description:
 	 *   purpose: The Image component is used to display images of various sources.
-     *   composition: An Image is composed of the image and an alternative text for screen readers.
-     *   effect: Images may be included in interacted components but not interactive on their own.
-     *
+	 *   composition: An Image is composed of the image and an alternative text for screen readers.
+	 *   effect: Images may be included in interacted components but not interactive on their own.
+	 *
 	 * ---
 	 * @return \ILIAS\UI\Component\Image\Factory
 	 */
@@ -276,14 +277,14 @@ interface Factory {
 	 * description:
 	 *   purpose: >
 	 *     Listings are used to structure itemised textual information.
-     *   composition: >
-     *     Listings may contain ordered, unordered, or
-     *     labeled items.
-     *   effect: >
-     *     Listings hold only textual information. They may contain links but no buttons.
-     * rules:
-     *   composition: >
-     *     Listings MUST NOT contain Buttons.
+	 *   composition: >
+	 *     Listings may contain ordered, unordered, or
+	 *     labeled items.
+	 *   effect: >
+	 *     Listings hold only textual information. They may contain links but no buttons.
+	 * rules:
+	 *   composition: >
+	 *     Listings MUST NOT contain Buttons.
 	 * ---
 	 * @return \ILIAS\UI\Component\Listing\Factory
 	 */
@@ -295,8 +296,8 @@ interface Factory {
 	 *   purpose: >
 	 *     Panels are used to group titled Content.
 	 *   composition: >
-     *      Panels consist of a header and content section. They form one Gestalt and so build a perceivable
-     *      cluster of information
+	 *      Panels consist of a header and content section. They form one Gestalt and so build a perceivable
+	 *      cluster of information
 	 *   effect: The effect of interaction with panels heavily depends on their content.
 	 *
 	 * rules:
@@ -316,4 +317,5 @@ interface Factory {
 	 * @return \ILIAS\UI\Component\Generic\Factory
 	 */
 	public function generic();
+
 }
