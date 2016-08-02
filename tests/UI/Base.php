@@ -21,8 +21,10 @@ class NoUIFactory implements Factory {
 	public function counter() {}
 	public function glyph() {}
 	public function button() {}
-	public function deck($cards) {}
+	public function deck(array $cards) {}
 	public function card($title, \ILIAS\UI\Component\Image\Image $image = null) {}
+	public function listing() {}
+	public function image() {}
 }
 
 class LoggingRegistry implements ResourceRegistry {
