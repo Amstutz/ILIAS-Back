@@ -13,21 +13,21 @@ class Factory implements \ILIAS\UI\Component\Listing\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function unordered($items){
+	public function unordered(array $items){
 		return new S\SimpleList(S\SimpleList::UNORDERED,$items);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function ordered($items){
+	public function ordered(array $items){
 		return new S\SimpleList(S\SimpleList::ORDERED,$items);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function descriptive($items){
+	public function descriptive(array $items){
 		return new D\DescriptiveList($items);
 	}
 }

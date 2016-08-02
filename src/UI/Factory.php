@@ -281,10 +281,10 @@ interface Factory {
 	 *     Listings may contain ordered, unordered, or
 	 *     labeled items.
 	 *   effect: >
-	 *     Listings hold only textual information. They may contain links but no buttons.
+	 *     Listings hold only textual information. They may contain Links but no Buttons.
 	 * rules:
-	 *   composition: >
-	 *     Listings MUST NOT contain Buttons.
+	 *   composition:
+	 *     1: Listings MUST NOT contain Buttons.
 	 * ---
 	 * @return \ILIAS\UI\Component\Listing\Factory
 	 */

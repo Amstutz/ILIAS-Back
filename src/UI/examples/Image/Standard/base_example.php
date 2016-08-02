@@ -9,7 +9,8 @@ function base_example() {
     $renderer = $DIC->ui()->renderer();
 
     //Genarating and rendering the image
-    $image = $f->image()->standard("./templates/default/images/logo/ilias_logo_114x114.png",
+    $image = $f->image()->standard(
+        "./templates/default/images/HeaderIcon.svg",
         "Thumbnail Example");
     $html = $renderer->render($image);
 

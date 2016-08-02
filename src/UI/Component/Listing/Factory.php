@@ -13,9 +13,10 @@ interface Factory {
      *   composition: >
      *     Unordered Lists are composed of a set of bullets labeling the listed items.
      * ----
+     * @param string[] $items
      * @return  \ILIAS\UI\Component\Listing\SimpleList
      */
-    public function unordered($items);
+    public function unordered(array $items);
 
     /**
      * ---
@@ -26,9 +27,10 @@ interface Factory {
      *   composition: >
      *     Ordered Lists are composed of a set of numbers labeling the items enumerated.
      * ----
+     * @param string[] $items
      * @return  \ILIAS\UI\Component\Listing\SimpleList
      */
-    public function ordered($items);
+    public function ordered(array $items);
 
     /**
      * ---
@@ -39,8 +41,9 @@ interface Factory {
      *     Descriptive Lists are composed of a key acting as title describing the type of
      *     information being displayed underneath.
      * ----
+     * @param string[] $items
      * @return  \ILIAS\UI\Component\Listing\DescriptiveList
      */
-    public function descriptive($items);
+    public function descriptive(array $items);
 
 }

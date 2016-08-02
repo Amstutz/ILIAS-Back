@@ -6,19 +6,28 @@ namespace ILIAS\UI\Implementation\Component\Listing\DescriptiveList;
 
 use ILIAS\UI\Component as C;
 
+/**
+ * Class DescriptiveList
+ * @package ILIAS\UI\Implementation\Component\Listing\DescriptiveList
+ */
 class DescriptiveList implements C\Listing\DescriptiveList {
 
     /**
-     * @var	string
+     * @var	array
      */
     private  $items;
 
-
-    public function __construct($items) {
+    /**
+     * @inheritdoc
+     */
+    public function __construct(array $items) {
         $this->items = $items;
     }
 
-    public function withItems($items){
+    /**
+     * @inheritdoc
+     */
+    public function withItems(array $items){
         $clone = clone $this;
         $clone->items = $items;
         return $clone;
@@ -30,7 +39,5 @@ class DescriptiveList implements C\Listing\DescriptiveList {
     public function getItems() {
         return $this->items;
     }
-
-
 }
 ?>

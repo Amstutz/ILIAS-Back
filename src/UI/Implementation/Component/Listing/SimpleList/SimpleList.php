@@ -5,8 +5,12 @@
 namespace ILIAS\UI\Implementation\Component\Listing\SimpleList;
 
 use ILIAS\UI\Component as C;
+use ILIAS\UI\Implementation\Component\ComponentHelper;
+
 
 class SimpleList implements C\Listing\SimpleList {
+    use ComponentHelper;
+
     /**
      * @var	string
      */
@@ -17,13 +21,32 @@ class SimpleList implements C\Listing\SimpleList {
      */
     private  $items;
 
+    /**
+     * @var array
+     */
+    private static $types = array(
+        self::UNORDERED
+        , self::ORDERED
+    );
 
+    /**
+     * SimpleList constructor.
+     * @param $type
+     * @param $items
+     */
     public function __construct($type, $items) {
+        $this->checkArgIsElement("type", $type, self::$types, "listing type");
+
         $this->type = $type;
         $this->items = $items;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function withType($type){
+        $this->checkArgIsElement("type", $type, self::$types, "listing type");
+
         $clone = clone $this;
         $clone->type = $type;
         return $clone;
@@ -36,8 +59,10 @@ class SimpleList implements C\Listing\SimpleList {
         return $this->type;
     }
 
-
-    public function withItems($items){
+    /**
+     * @inheritdoc
+     */
+    public function withItems(array $items){
         $clone = clone $this;
         $clone->items = $items;
         return $clone;
@@ -48,16 +73,6 @@ class SimpleList implements C\Listing\SimpleList {
      */
     public function getItems() {
         return $this->items;
-    }
-
-
-    // Helper
-    static protected function is_valid_type($type) {
-        static $types = array
-        (   self::UNORDERED,
-            self::ORDERED
-        );
-        return in_array($type, $types);
     }
 }
 ?>
