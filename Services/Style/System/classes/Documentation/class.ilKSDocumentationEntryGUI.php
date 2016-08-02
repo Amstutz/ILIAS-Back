@@ -109,12 +109,12 @@ class ilKSDocumentationEntryGUI
         )->withCard(
             $this->f->card(
                 "State"
-            )->withHeaderSection(
+            )->withSections(array(
                 $this->f->listing()->descriptive(
                 array(
                     "Entry" => $this->entry->getStatusEntry(),
                     "Implementation" => $this->entry->getStatusImplementation()
-                )
+                ))
             ))
         );
 
@@ -142,7 +142,7 @@ class ilKSDocumentationEntryGUI
                 //$start_example =  microtime (true);
                 $example = $name(); //Executes function loaded in file indicated by 'path'
                 //$end_example =  microtime (true);
-                $content_part_1 = $this->f->card("")->withHeaderSection($this->f->generic()->html($example));
+                $content_part_1 = $this->f->card("")->withSections(array($this->f->generic()->html($example)));
                 //$example_tot_time = ($end_example-$start_example);
                 //$examples_snippets[] = $this->f->text()->standard("Time to generate and render example: ".$example_tot_time);
                 $code = str_replace("<?php\n","",file_get_contents ($path));
