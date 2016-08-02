@@ -50,11 +50,11 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
      */
     public function __construct($name, $value, $comment,$category_name, $references)
     {
-        $this->name = $name;
-        $this->value = $value;
-        $this->category_name = $category_name;
-        $this->comment = $comment;
-        $this->references = $references;
+        $this->setName($name);
+        $this->setValue($value);
+        $this->setCategoryName($category_name);
+        $this->setComment($comment);
+        $this->setReferences($references);
     }
 
     /**
@@ -87,7 +87,7 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
     public function setValue($value)
     {
         /**
-         * @Todo: Fix this nasty hack to correct th icon-font-path
+         * @Todo: Fix this nasty hack to correct the icon-font-path
          */
         if($value == "\"../../Services/UICore/lib/bootstrap-3.2.0/fonts/\""){
             $this->value = "\"../../../../Services/UICore/lib/bootstrap-3.2.0/fonts/\"";

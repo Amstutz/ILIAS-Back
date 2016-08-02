@@ -9,16 +9,11 @@ include_once("Services/Style/System/classes/Icons/class.ilSystemStyleIconColorSe
  */
 class ilSystemStyleIcon
 {
-    /**
-     * @var string
-     */
-    protected $default_directory = "";
-
 
     /**
      * @var string
      */
-    protected $skin_directory = "";
+    protected $path = "";
 
     /**
      * @var string
@@ -31,52 +26,35 @@ class ilSystemStyleIcon
     protected $type = "";
 
     /**
-     * @var KitchenSinkIconColorSet
+     * @var ilSystemStyleIconColorSet
      */
-    protected $color_set;
+    protected $color_set = null;
 
     /**
      * ilSystemStyleIcon constructor.
-     * @param $default_directory
-     * @param $skin_directory
      * @param $name
+     * @param $path
      * @param $type
      */
-    public function __construct($default_directory, $skin_directory, $name, $type)
+    public function __construct($name, $path, $type)
     {
-        $this->default_directory = $default_directory;
-        $this->skin_directory = $skin_directory;
-        $this->name = $name;
-        $this->type = $type;
+        $this->setName($name);
+        $this->setType($type);
+        $this->setPath($path);
     }
 
 
     /**
-     * @param ilSystemStyleIconColorSet $color_set
+     * @param ilSystemStyleIconColorSet $old_colors
+     * @param ilSystemStyleIconColorSet $new_colors
      */
-    public function changeColor(ilSystemStyleIconColorSet $color_set){
+    public function changeColor(array $color_changes){
         if($this->getType() == "svg"){
-            $icon = file_get_contents($this->getDefaultPath());
-            foreach($color_set::getDefaultColors() as $default_color){
-                if($color_set->getColorById($default_color->getId())){
-                    $icon = preg_replace (  '/'.$default_color->getColor().'/' , $color_set->getColorById($default_color->getId())->getColor() , $icon, -1 );
-                }
+            $icon = file_get_contents($this->getPath());
+            foreach($color_changes as $old_color => $new_color){
+                $icon = preg_replace (  '/'.$old_color.'/i' , $new_color, $icon, -1 );
             }
-            file_put_contents ($this->getSkinPath(),$icon);
-        }
-    }
-
-    /**
-     * @param ilSystemStyleIconColorSet $color_set
-     */
-    public function findUsage(ilSystemStyleIconColorSet $color_set){
-        if($this->getType() == "svg"){
-            $icon = file_get_contents($this->getDefaultPath());
-            foreach($color_set::getDefaultColors() as $default_color){
-                if(preg_match (  '/'.$default_color->getColor().'/' ,$icon)){
-                    $default_color->addUsage($this);
-                }
-            }
+            file_put_contents ($this->getPath(),$icon);
         }
     }
 
@@ -99,38 +77,6 @@ class ilSystemStyleIcon
     /**
      * @return string
      */
-    public function getSkinDirectory()
-    {
-        return $this->skin_directory;
-    }
-
-    /**
-     * @param string $skin_directory
-     */
-    public function setSkinDirectory($skin_directory)
-    {
-        $this->skin_directory = $skin_directory;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultDirectory()
-    {
-        return $this->default_directory;
-    }
-
-    /**
-     * @param string $default_directory
-     */
-    public function setDefaultDirectory($default_directory)
-    {
-        $this->default_directory = $default_directory;
-    }
-
-    /**
-     * @return string
-     */
     public function getName()
     {
         return $this->name;
@@ -144,19 +90,7 @@ class ilSystemStyleIcon
         $this->name = $name;
     }
 
-    /***
-     * @return string
-     */
-    public function getDefaultPath(){
-        return $this->getDefaultDirectory()."/".$this->getName();
-    }
 
-    /***
-     * @return string
-     */
-    public function getSkinPath(){
-        return $this->getSkinDirectory()."/".$this->getName();
-    }
     /**
      * @return mixed
      */
@@ -164,5 +98,62 @@ class ilSystemStyleIcon
     {
         return $this->getName();
     }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @return ilSystemStyleIconColorSet
+     */
+    public function getColorSet()
+    {
+        if(!$this->color_set){
+            $this->extractColorSet();
+        }
+        return $this->color_set;
+    }
+
+    protected function extractColorSet(){
+        $this->color_set = new ilSystemStyleIconColorSet();
+        if($this->getType() == "svg"){
+            $icon_content = file_get_contents($this->getPath());
+            $color_matches = [];
+            preg_match_all (  '/(?<=#)[\dabcdef]{6}/i' ,$icon_content,$color_matches);
+            if(is_array($color_matches) && is_array($color_matches[0]))
+            foreach($color_matches[0] as $color_value){
+                $numeric = strtoupper(str_replace("#","",$color_value));
+                $color = new ilSystemStyleIconColor($numeric,$color_value,$numeric,$color_value);
+                $this->getColorSet()->addColor($color);
+            }
+        }
+    }
+
+    /**
+     * @param ilSystemStyleIconColorSet $color_set
+     */
+    public function setColorSet($color_set)
+    {
+        $this->color_set = $color_set;
+    }
+
+    /**
+     * @param $color_id
+     * @return bool
+     */
+    public function usesColor($color_id){
+        return $this->getColorSet()->getColorById($color_id) != null;
+    }
 }
-?>

@@ -56,7 +56,7 @@ class ilStyleDefinition
 	/**
 	 * @var string
 	 */
-	const DEFAULT_SOUNDS_PATH = "???";
+	const DEFAULT_SOUNDS_PATH = "";
 
 	/**
 	 * string

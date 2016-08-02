@@ -32,17 +32,14 @@ class ilSystemStyleIconsGUI
     protected $style_container;
 
     /**
-     * @var ilSystemStyleIconColorSet
-     */
-    protected $icon_color_set = null;
-
-    /**
      * @var ilSystemStyleIconFolder
      */
     protected $icon_folder = null;
 
     /**
-     * Constructor
+     * ilSystemStyleIconsGUI constructor.
+     * @param string $skin_id
+     * @param string $style_id
      */
     function __construct($skin_id = "",$style_id = "")
     {
@@ -60,11 +57,7 @@ class ilSystemStyleIconsGUI
         }
 
         $this->setStyleContainer(ilSystemStyleSkinContainer::generateFromId($skin_id));
-        $this->setIconColorSet(new ilSystemStyleIconColorSet());
-        $this->setIconFolder(new ilSystemStyleIconFolder(
-            ilStyleDefinition::DEFAULT_IMAGES_PATH,
-            $this->getStyleContainer()->getImagesSkinPath($style_id)
-        ));
+        $this->setIconFolder(new ilSystemStyleIconFolder($this->getStyleContainer()->getImagesSkinPath($style_id)));
     }
 
     /**
@@ -78,10 +71,9 @@ class ilSystemStyleIconsGUI
         {
             case "save":
             case "edit":
+            case "update":
+            case "reset":
                 $this->$cmd();
-                break;
-            case "updateIcons":
-                $this->update();
                 break;
             default:
                 $this->edit();
@@ -95,22 +87,54 @@ class ilSystemStyleIconsGUI
         $this->tpl->setContent($form->getHTML().$this->renderIconsPreviews());
     }
 
+    /**
+     * @return ilPropertyFormGUI
+     */
     public function initIconsForm()
     {
         $form = new ilPropertyFormGUI();
 
         $form->setTitle("Adapt Icon Colors");
 
-        foreach($this->getIconColorSet()->getDefaultColors() as $color){
-            $input = new ilColorPickerInputGUI($color->getName(),$color->getId());
-            $input->setRequired(true);
-            $input->setInfo("Usages: ".$color->getUsagesAsString());
-            $form->addItem($input);
+        foreach($this->getIconFolder()->getColorSet()->getColorsSorted() as $type => $colors){
+            $section = new ilFormSectionHeaderGUI();
 
+            if($type == ilSystemStyleIconColor::GREY){
+                $title = $this->lng->txt("grey_color");
+                $section->setTitle($this->lng->txt("grey_colors"));
+                $section->setInfo($this->lng->txt("grey_colors_description"));
+                $section->setSectionAnchor($this->lng->txt("grey_colors"));
+            }
+            if($type == ilSystemStyleIconColor::RED){
+                $title = $this->lng->txt("red_color");
+                $section->setTitle($this->lng->txt("red_colors"));
+                $section->setInfo($this->lng->txt("red_colors_description"));
+                $section->setSectionAnchor($this->lng->txt("red_colors"));
+            }
+            if($type == ilSystemStyleIconColor::GREEN){
+                $title = $this->lng->txt("green_color");
+                $section->setTitle($this->lng->txt("green_colors"));
+                $section->setInfo($this->lng->txt("green_colors_description"));
+                $section->setSectionAnchor($this->lng->txt("green_colors"));
+            }
+            if($type == ilSystemStyleIconColor::BLUE){
+                $title = $this->lng->txt("blue_color");
+                $section->setTitle($this->lng->txt("blue_colors"));
+                $section->setInfo($this->lng->txt("blue_colors_description"));
+                $section->setSectionAnchor($this->lng->txt("blue_colors"));
+            }
+            $form->addItem($section);
+
+            foreach($colors as $id => $color){
+                $input = new ilColorPickerInputGUI($title." ".($id+1),$color->getId());
+                $input->setRequired(true);
+                $input->setInfo("Usages: ".$this->getIconFolder()->getUsagesOfColorAsString($color->getId()));
+                $form->addItem($input);
+            }
         }
 
-        $form->addCommandButton("resetIcons", "Reset Colors");
-        $form->addCommandButton("updateIcons", "Update Colors");
+        $form->addCommandButton("reset", $this->lng->txt("reset_icons"));
+        $form->addCommandButton("update", $this->lng->txt("update_colors"));
 
         $form->setFormAction($this->ctrl->getFormAction($this));
 
@@ -118,25 +142,31 @@ class ilSystemStyleIconsGUI
     }
 
 
-    function getIconsValues($form)
+    /**
+     * @param ilPropertyFormGUI $form
+     */
+    function getIconsValues(ilPropertyFormGUI $form)
     {
-        $values = array();
-        $colors = $this->getIconColorSet()->getColors();
-        foreach($this->getIconColorSet()->getDefaultColors() as $default_color){
-            $id = $this->form_elements_prefix.$default_color->getId();
-            if($colors[$default_color->getId()]){
-                $values[$id] = $colors[$default_color->getId()]->getColor();
+        $values = [];
+        $colors = $this->getIconFolder()->getColorSet()->getColors();
+        foreach($colors as $color){
+            $id = $color->getId();
+            if($colors[$color->getId()]){
+                $values[$id] = $colors[$color->getId()]->getColor();
             }else{
-                $values[$id] = $default_color->getColor();
+                $values[$id] = $color->getColor();
             }
         }
 
         $form->setValuesByArray($values);
     }
-    public function resetIcons()
+
+    public function reset()
     {
-        $this->getSkin()->resetIcons();
-        return $this->renderIcons();
+        $style = $this->getStyleContainer()->getSkin()->getStyle($_GET["style_id"]);
+        $this->getStyleContainer()->resetImages($style);
+        $this->setIconFolder(new ilSystemStyleIconFolder($this->getStyleContainer()->getImagesSkinPath($style->getId())));
+        $this->edit();
     }
 
     public function update()
@@ -144,31 +174,48 @@ class ilSystemStyleIconsGUI
         $form = $this->initIconsForm();
         if ($form->checkInput())
         {
-            foreach($this->getIconColorSet()->getDefaultColors() as $color){
-                $this->getIconColorSet()->addColor(new ilSystemStyleIconColor($color->getId(),$color->getName(),"#".$form->getInput($color->getId()),$color->getDescription()));
-            }
-            $this->getIconColorSet()->writeColorSetToFile($this->getStyleContainer()->getImagesSkinPath($_GET['style_id']));
-            $this->getIconFolder()->changeIconColors($this->getIconColorSet());
-        }
+            $message_stack = new ilSystemStyleMessageStack();
 
+            $color_changes = [];
+            foreach($this->getIconFolder()->getColorSet()->getColors() as $old_color){
+                $new_color = $form->getInput($old_color->getId());
+                if(!preg_match("/[\dabcdef]{6}/i",$new_color)){
+                    $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("invalid_color").$new_color,
+                        ilSystemStyleMessage::TYPE_ERROR));
+                }else if($new_color != $old_color->getId()){
+                    $color_changes[$old_color->getId()] = $new_color;
+                    $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("color_changed").$old_color->getId(),
+                        ilSystemStyleMessage::TYPE_SUCCESS));
+                }
+            }
+            $this->getIconFolder()->changeIconColors($color_changes);
+            $this->setIconFolder(new ilSystemStyleIconFolder($this->getStyleContainer()->getImagesSkinPath($_GET["style_id"])));
+            $message_stack->sendMessages(false);
+            $form = $this->initIconsForm();
+        }
         $form->setValuesByPost();
-        $this->tpl->setContent($form->getHtml().$this->renderIconsPreviews());
+        $this->tpl->setContent($form->getHTML().$this->renderIconsPreviews());
     }
 
 
+    /**
+     * @return string
+     */
     protected function renderIconsPreviews(){
         global $DIC;
 
         $f = $DIC->ui()->factory();
 
-        $cards = array();
+        $cards = [];
 
         foreach($this->getIconFolder()->getIcons() as $id => $icon){
-            $icon_image = $f->image()->responsive($icon->getSkinPath(),$icon->getName());
+            $icon_image = $f->image()->standard($icon->getPath(),$icon->getName());
             $cards[] = $f->card(
                 $icon->getName(),
                 $icon_image
-            );
+            )->withSections(array(
+                $f->listing()->descriptive(array($this->lng->txt("used_colors")=>$icon->getColorSet()->asString()))
+            ));
         }
         $deck = $f->deck($cards);
 
@@ -189,22 +236,6 @@ class ilSystemStyleIconsGUI
     public function setStyleContainer($style_container)
     {
         $this->style_container = $style_container;
-    }
-
-    /**
-     * @return ilSystemStyleIconColorSet
-     */
-    public function getIconColorSet()
-    {
-        return $this->icon_color_set;
-    }
-
-    /**
-     * @param ilSystemStyleIconColorSet $icon_color_set
-     */
-    public function setIconColorSet($icon_color_set)
-    {
-        $this->icon_color_set = $icon_color_set;
     }
 
     /**
