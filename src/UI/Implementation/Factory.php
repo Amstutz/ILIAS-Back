@@ -4,7 +4,6 @@
 
 namespace ILIAS\UI\Implementation;
 
-// TODO: This might cache the created factories.
 class Factory implements \ILIAS\UI\Factory {
 	/**
 	 * @inheritdoc
@@ -39,5 +38,45 @@ class Factory implements \ILIAS\UI\Factory {
 	 */
 	public function deck(array $cards){
 		return new Component\Deck\Deck($cards, Component\Deck\Deck::SIZE_S);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function link($href,$caption="")
+	{
+		return new Component\Link\Link($href,$caption);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function image()
+	{
+		return new Component\Image\Factory();
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function listing()
+	{
+		return new Component\Listing\Factory();
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function panel(){
+		return new Component\Panel\Factory();
+
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function generic()
+	{
+		return new Component\Generic\Factory();
 	}
 }

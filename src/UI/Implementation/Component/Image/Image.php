@@ -5,88 +5,98 @@
 namespace ILIAS\UI\Implementation\Component\Image;
 
 use ILIAS\UI\Component as C;
+use ILIAS\UI\Implementation\Component\ComponentHelper;
+
 
 class Image implements C\Image\Image {
+    use ComponentHelper;
 
-    /**
-     * @var	string
-     */
-    private $type;
+	/**
+	 * @var	string
+	 */
+	private $type;
 
-    /**
-     * @var	string
-     */
-    private  $src;
+	/**
+	 * @var	string
+	 */
+	private  $src;
 
-    /**
-     * @var	string
-     */
-    private  $alt;
+	/**
+	 * @var	string
+	 */
+	private  $alt;
 
+	/**
+	 * @var array
+	 */
+	private static $types = array(
+		self::STANDARD
+	);
 
-    public function __construct($type, $src, $alt) {
-        assert('self::is_valid_type($type)');
+	/**
+	 * @inheritdoc
+	 */
+	public function __construct($type, $source, $alt) {
+        $this->checkStringArg("src", $source);
+        $this->checkStringArg("alt", $alt);
+        $this->checkArgIsElement("type", $type, self::$types, "image type");
 
         $this->type = $type;
-        $this->src = $src;
-        $this->alt = $alt;
+		$this->src = $source;
+		$this->alt = $alt;
 
-    }
-    public function withType($type){
-        assert('self::is_valid_type($type)');
-        $clone = clone $this;
-        $clone->type = $type;
-        return $clone;
-    }
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function getType() {
-        return $this->type;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function withType($type){
+        $this->checkArgIsElement("type", $type, self::$types, "image type");
 
+		$clone = clone $this;
+		$clone->type = $type;
+		return $clone;
+	}
 
-    public function withSource($source){
-        assert('self::is_valid_type($type)');
-        $clone = clone $this;
-        $clone->src = $source;
-        return $clone;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSource() {
-        return $this->src;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function getType() {
+		return $this->type;
+	}
 
 
-    public function withAlt($alt){
-        assert('self::is_valid_type($alt)');
-        $clone = clone $this;
-        $clone->alt = $alt;
-        return $clone;
-    }
+	public function withSource($source){
+        $this->checkStringArg("src", $source);
 
-    /**
-     * @inheritdoc
-     */
-    public function getAlt() {
-        return $this->alt;
-    }
+		$clone = clone $this;
+		$clone->src = $source;
+		return $clone;
+	}
 
-    // Helper
-    static protected function is_valid_type($type) {
-        static $types = array
-        (   self::RESPONSIVE,
-            self::CIRCLE,
-            self::ROUNDED,
-            self::THUMBNAIL,
-            self::STANDARD
-        );
-        return in_array($type, $types);
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function getSource() {
+		return $this->src;
+	}
 
+	/**
+	 * @inheritdoc
+	 */
+	public function withAlt($alt){
+        $this->checkStringArg("alt", $alt);
+
+		$clone = clone $this;
+		$clone->alt = $alt;
+		return $clone;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getAlt() {
+		return $this->alt;
+	}
 }
 ?>

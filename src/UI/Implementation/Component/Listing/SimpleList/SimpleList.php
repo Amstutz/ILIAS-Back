@@ -9,70 +9,70 @@ use ILIAS\UI\Implementation\Component\ComponentHelper;
 
 
 class SimpleList implements C\Listing\SimpleList {
-    use ComponentHelper;
+	use ComponentHelper;
 
-    /**
-     * @var	string
-     */
-    private $type;
+	/**
+	 * @var	string
+	 */
+	private $type;
 
-    /**
-     * @var	string
-     */
-    private  $items;
+	/**
+	 * @var	string
+	 */
+	private  $items;
 
-    /**
-     * @var array
-     */
-    private static $types = array(
-        self::UNORDERED
-        , self::ORDERED
-    );
+	/**
+	 * @var array
+	 */
+	private static $types = array(
+		self::UNORDERED
+		, self::ORDERED
+	);
 
-    /**
-     * SimpleList constructor.
-     * @param $type
-     * @param $items
-     */
-    public function __construct($type, $items) {
-        $this->checkArgIsElement("type", $type, self::$types, "listing type");
+	/**
+	 * SimpleList constructor.
+	 * @param $type
+	 * @param $items
+	 */
+	public function __construct($type, $items) {
+		$this->checkArgIsElement("type", $type, self::$types, "listing type");
 
-        $this->type = $type;
-        $this->items = $items;
-    }
+		$this->type = $type;
+		$this->items = $items;
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function withType($type){
-        $this->checkArgIsElement("type", $type, self::$types, "listing type");
+	/**
+	 * @inheritdoc
+	 */
+	public function withType($type){
+		$this->checkArgIsElement("type", $type, self::$types, "listing type");
 
-        $clone = clone $this;
-        $clone->type = $type;
-        return $clone;
-    }
+		$clone = clone $this;
+		$clone->type = $type;
+		return $clone;
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function getType() {
-        return $this->type;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function getType() {
+		return $this->type;
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function withItems(array $items){
-        $clone = clone $this;
-        $clone->items = $items;
-        return $clone;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function withItems(array $items){
+		$clone = clone $this;
+		$clone->items = $items;
+		return $clone;
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function getItems() {
-        return $this->items;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function getItems() {
+		return $this->items;
+	}
 }
 ?>
