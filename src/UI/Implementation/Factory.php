@@ -29,14 +29,6 @@ class Factory implements \ILIAS\UI\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function link($href,$caption="")
-	{
-		return new Component\Link\Link($href,$caption);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
 	public function card($title,\ILIAS\UI\Component\Image\Image $image = null){
 		return new Component\Card\Card($title,$image);
 	}
@@ -47,6 +39,15 @@ class Factory implements \ILIAS\UI\Factory {
 	public function deck(array $cards){
 		return new Component\Deck\Deck($cards, Component\Deck\Deck::SIZE_S);
 	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function link($href,$caption="")
+	{
+		return new Component\Link\Link($href,$caption);
+	}
+
 	/**
 	 * @inheritdoc
 	 */
