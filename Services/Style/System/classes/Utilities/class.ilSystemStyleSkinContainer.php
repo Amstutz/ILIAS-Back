@@ -4,6 +4,7 @@ include_once("Services/Style/System/classes/class.ilStyleDefinition.php");
 include_once("Services/Style/System/classes/Exceptions/class.ilSystemStyleException.php");
 include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessageStack.php");
 include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessage.php");
+include_once("Services/Style/System/classes/Less/class.ilSystemStyleLessFile.php");
 
 /**
  *
@@ -102,6 +103,7 @@ class ilSystemStyleSkinContainer {
         //Delete old template.xml and write a new one
         unlink($old_customizing_skin_directory."template.xml");
         $this->writeSkinToXML();
+        $this->setSkin(ilSkinXML::parseFromXML($this->getSkinDirectory()."template.xml"));
     }
 
     public function updateStyle($style_id, ilSkinStyleXML $old_style){
@@ -183,12 +185,14 @@ class ilSystemStyleSkinContainer {
         $path = $this->getSkinDirectory().$target;
 
         mkdir($path);
-        self::xCopy($source,$path);
-        $this->getMessageStack()->addMessage(
-            new ilSystemStyleMessage($this->lng->txt("dir_created").$path,
-                ilSystemStyleMessage::TYPE_SUCCESS
-            ));
 
+        if($source != ""){
+            self::xCopy($source,$path);
+            $this->getMessageStack()->addMessage(
+                new ilSystemStyleMessage($this->lng->txt("dir_created").$path,
+                    ilSystemStyleMessage::TYPE_SUCCESS
+                ));
+        }
     }
 
     /**
@@ -279,7 +283,15 @@ class ilSystemStyleSkinContainer {
      * @param ilSkinStyleXML $style
      */
     public function copyVariablesFromDefault(ilSkinStyleXML $style){
-        copy (ilStyleDefinition::DEFAULT_VARIABLES_PATH,$this->getLessVariablesFilePath($style->getId()));
+        $less_file = new ilSystemStyleLessFile(ilStyleDefinition::DEFAULT_VARIABLES_PATH);
+        $less_file->setLessVariablesFile($this->getLessVariablesFilePath($style->getId()));
+        $less_file->write();
+        return $less_file;
+    }
+
+    public function resetImages($style){
+        $this->recursiveRemoveDir($this->getSkinDirectory().$style->getImageDirectory());
+        $this->createResourceDirectory(ilStyleDefinition::DEFAULT_IMAGES_PATH,$style->getImageDirectory());
     }
 
     /**
@@ -442,16 +454,9 @@ class ilSystemStyleSkinContainer {
     }
 
     public function compileLess($style_id){
-        global $DIC;
-
-        $lessc_path =  $DIC['ilias']->ini->readVariable("tools","lessc");
-
-        if(!$lessc_path){
-            throw new ilSystemStyleException(ilSystemStyleException::LESS);
-        }
-        $output = shell_exec($lessc_path." ".$this->getLessFilePath($style_id));
+        $output = shell_exec(PATH_TO_LESSC." ".$this->getLessFilePath($style_id));
         if(!$output){
-            $less_error = shell_exec($lessc_path." ".$this->getLessFilePath($style_id)." 2>&1");
+            $less_error = shell_exec(PATH_TO_LESSC." ".$this->getLessFilePath($style_id)." 2>&1");
             if(!$less_error){
                 throw new ilSystemStyleException(ilSystemStyleException::LESS_COMPILE_FAILED, "Empty css output, unknown error.");
             }
@@ -459,9 +464,6 @@ class ilSystemStyleSkinContainer {
         }
         file_put_contents($this->getCSSFilePath($style_id),$output);
     }
-
-
-
     /**
      * @return ilSkinXML
      */

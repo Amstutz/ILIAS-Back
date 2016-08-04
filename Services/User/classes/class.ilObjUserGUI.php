@@ -1724,29 +1724,29 @@ class ilObjUserGUI extends ilObjectGUI
 			$templates = $styleDefinition->getAllTemplates();
 
 			$options = array();
-			if (count($templates) > 0 && is_array ($templates))
+			if (is_array($templates))
 			{
-				foreach ($templates as $template)
+				$sk = new ilSelectInputGUI($this->lng->txt("skin_style"), "skin_style");
+
+				$options = array();
+				foreach($templates as $template)
 				{
-					$styleDef = new ilStyleDefinition($template["id"]);
-					$styleDef->startParsing();
-					$styles = $styleDef->getStyles();
-					foreach ($styles as $style)
+					foreach($template->getStyles() as $style)
 					{
 						include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
-						if (!ilSystemStyleSettings::_lookupActivatedStyle($template["id"],$style["id"]))
+						if (!ilSystemStyleSettings::_lookupActivatedStyle($template->getId(),$style->getId()))
 						{
 							continue;
 						}
-						$options[$template["id"].":".$style["id"]] =
-							$styleDef->getTemplateName()." / ".$style["name"];
+
+						$options[$template->getId().":".$style->getId()] = $template->getName()." / ".$style->getName();
 					}
 				}
 			}
 			$sk->setOptions($options);
 			$sk->setValue($ilClientIniFile->readVariable("layout","skin").
 				":".$ilClientIniFile->readVariable("layout","style"));
-	
+
 			$this->form_gui->addItem($sk);
 		}
 

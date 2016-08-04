@@ -11,10 +11,23 @@ namespace ILIAS\UI\Component\Image;
 interface Factory {
 	/**
 	 * ---
-     * description:
-     *   purpose: The standard image is used if there is no specific reason to use another specialized one.
+	 * description:
+	 *   purpose: The standard image is used if there is no specific reason to use another specialized one.
 	 * ----
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */
 	public function standard($src,$alt);
+
+	/**
+	 * ---
+	 * description:
+	 *   purpose: >
+	 *     Use responsive image is to be used if the image needs to adapt to changing amount of space available.
+	 *   composition: >
+	 *     Responsive images scale nicely to the parent element.
+	 *
+	 * ----
+	 * @return  \ILIAS\UI\Component\Image\Image
+	 */
+	public function responsive($src,$alt);
 }

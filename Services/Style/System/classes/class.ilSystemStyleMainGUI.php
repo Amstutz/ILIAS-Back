@@ -1,4 +1,5 @@
 <?php
+include_once("Services/Object/exceptions/class.ilObjectException.php");
 
 /* Copyright (c) 1998-2016 ILIAS open source, Extended GPL, see docs/LICENSE */
 
@@ -38,6 +39,17 @@ class ilSystemStyleMainGUI
 	 */
 	protected $tabs;
 
+
+	/**
+	 * @var ilRbacSystem
+	 */
+	protected $rbacsystem;
+
+	/**
+	 * @var int
+	 */
+	protected $ref_id;
+
 	/**
 	 * Constructor
 	 */
@@ -48,7 +60,9 @@ class ilSystemStyleMainGUI
 		$this->ctrl = $DIC->ctrl();
 		$this->lng = $DIC->language();
 		$this->tabs = $DIC->tabs();
+		$this->rbacsystem = $DIC->rbac()->system();
 
+		$this->ref_id = (int) $_GET["ref_id"];
 	}
 
 
@@ -68,41 +82,89 @@ class ilSystemStyleMainGUI
 		$this->ctrl->setParameterByClass('ilsystemstyledocumentationgui','skin_id',$_GET["skin_id"]);
 		$this->ctrl->setParameterByClass('ilsystemstyledocumentationgui','style_id',$_GET["style_id"]);
 
-		switch ($next_class)
-		{
+		try{
+			switch ($next_class)
+			{
 
-			case "ilsystemstylesettingsgui":
-				$this->setUnderworldTabs('settings');
-				include_once("Settings/class.ilSystemStyleSettingsGUI.php");
-				$system_styles_settings = new ilSystemStyleSettingsGUI();
-				$this->ctrl->forwardCommand($system_styles_settings);
-				break;
-			case "ilsystemstylelessgui":
-				$this->setUnderworldTabs('less');
-				include_once("Less/class.ilSystemStyleLessGUI.php");
-				$system_styles_less = new ilSystemStyleLessGUI();
-				$this->ctrl->forwardCommand($system_styles_less);
-				break;
-			case "ilsystemstyleiconsgui":
-				$this->setUnderworldTabs('icons');
-
-				include_once("Icons/class.ilSystemStyleIconsGUI.php");
-				$system_styles_icons = new ilSystemStyleIconsGUI();
-				$this->ctrl->forwardCommand($system_styles_icons);
-				break;
-			case "ilsystemstyledocumentationgui":
-				$this->setUnderworldTabs('documentation');
-				include_once("Documentation/class.ilSystemStyleDocumentationGUI.php");
-				$system_styles_documentation = new ilSystemStyleDocumentationGUI();
-				$this->ctrl->forwardCommand($system_styles_documentation);
-				break;
-			case "ilsystemstyleoverviewgui":
-			default:
-				include_once("Overview/class.ilSystemStyleOverviewGUI.php");
-				$system_styles_overview = new ilSystemStyleOverviewGUI();
-				$this->ctrl->forwardCommand($system_styles_overview);
-				break;
+				case "ilsystemstylesettingsgui":
+					$this->checkPermission("sty_management");
+					$this->setUnderworldTabs('settings');
+					include_once("Settings/class.ilSystemStyleSettingsGUI.php");
+					$system_styles_settings = new ilSystemStyleSettingsGUI();
+					$this->ctrl->forwardCommand($system_styles_settings);
+					break;
+				case "ilsystemstylelessgui":
+					$this->checkPermission("sty_management");
+					$this->setUnderworldTabs('less');
+					include_once("Less/class.ilSystemStyleLessGUI.php");
+					$system_styles_less = new ilSystemStyleLessGUI();
+					$this->ctrl->forwardCommand($system_styles_less);
+					break;
+				case "ilsystemstyleiconsgui":
+					$this->checkPermission("sty_management");
+					$this->setUnderworldTabs('icons');
+					include_once("Icons/class.ilSystemStyleIconsGUI.php");
+					$system_styles_icons = new ilSystemStyleIconsGUI();
+					$this->ctrl->forwardCommand($system_styles_icons);
+					break;
+				case "ilsystemstyledocumentationgui":
+					$this->checkPermission("sty_management");
+					$this->setUnderworldTabs('documentation');
+					include_once("Documentation/class.ilSystemStyleDocumentationGUI.php");
+					$system_styles_documentation = new ilSystemStyleDocumentationGUI();
+					$this->ctrl->forwardCommand($system_styles_documentation);
+					break;
+				case "ilsystemstyleoverviewgui":
+				default:
+					$this->checkPermission("visible,read");
+					include_once("Overview/class.ilSystemStyleOverviewGUI.php");
+					$system_styles_overview = new ilSystemStyleOverviewGUI(!$this->checkPermission("sty_write_system",false)
+							,$this->checkPermission("sty_management",false));
+					$this->ctrl->forwardCommand($system_styles_overview);
+					break;
+			}
+		}catch(ilObjectException $e){
+			ilUtil::sendFailure($e->getMessage());
+			$this->checkPermission("visible,read");
+			include_once("Overview/class.ilSystemStyleOverviewGUI.php");
+			$this->ctrl->setCmd("");
+			$system_styles_overview = new ilSystemStyleOverviewGUI(!$this->checkPermission("sty_write_system",false),$this->checkPermission("sty_management",false));
+			$this->ctrl->forwardCommand($system_styles_overview);
 		}
+	}
+
+	/**
+	 * Check permission
+	 *
+	 * @param string $a_perm permission(s)
+	 * @return bool
+	 * @throws ilObjectException
+	 */
+	public function checkPermission($a_perm, $a_throw_exc = true)
+	{
+		global $DIC, $ilIliasIniFile;
+
+		$has_perm = true;
+
+		if($a_perm == "sty_management"){
+			$has_perm = $ilIliasIniFile->readVariable("tools","enable_system_styles_management")== "1" ? true:false;
+			$a_perm = "sty_write_system";
+		}
+
+		if($has_perm){
+			$has_perm = $this->rbacsystem->checkAccess($a_perm, $this->ref_id);
+		}
+
+		if (!$has_perm)
+		{
+			if ($a_throw_exc)
+			{
+				include_once "Services/Object/exceptions/class.ilObjectException.php";
+				throw new ilObjectException($this->lng->txt("sty_permission_denied"));
+			}
+			return false;
+		}
+		return true;
 	}
 
 	protected function setUnderworldTabs($active = "") {

@@ -1,10 +1,16 @@
 <?php
 include_once "Services/Form/classes/class.ilPropertyFormGUI.php";
-include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
-include_once("./Services/Style/System/classes/Overview/class.ilSystemStyleDeleteGUI.php");
+include_once("Services/Style/System/classes/class.ilSystemStyleSettings.php");
+include_once("Services/Style/System/classes/Overview/class.ilSystemStyleDeleteGUI.php");
 include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessageStack.php");
 include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleSkinContainer.php");
 include_once("Services/FileDelivery/classes/class.ilFileDelivery.php");
+include_once("Services/Style/System/classes/Overview/class.ilSystemStylesTableGUI.php");
+include_once("Services/Form/classes/class.ilSelectInputGUI.php");
+include_once("Services/Style/System/classes/class.ilStyleDefinition.php");
+include_once("Services/Style/System/classes/Utilities/class.ilSkinXML.php");
+include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleSkinContainer.php");
+include_once("Services/Object/exceptions/class.ilObjectException.php");
 
 /**
  * @author            Alex Killing <alex.killing@gmx.de>
@@ -17,11 +23,6 @@ class ilSystemStyleOverviewGUI
      * @var ilCtrl
      */
     protected $ctrl;
-
-    /**
-     * @var ilRbacSystem
-     */
-    protected $rbacsystem;
 
     /**
      * @var ilToolbarGUI
@@ -48,23 +49,35 @@ class ilSystemStyleOverviewGUI
      */
     protected $ref_id;
 
+    /**
+     * @var bool
+     */
+    protected $read_only = true;
+
+    /**
+     * @var bool
+     */
+    protected $management_enabled = false;
+
 
     /**
      * Constructor
      */
-    function __construct()
+    function __construct($read_only,$management_enabled)
     {
         global $DIC;
 
         $this->ilias = $DIC["ilias"];
         $this->dic = $DIC;
         $this->ctrl = $DIC->ctrl();
-        $this->rbacsystem = $DIC->rbac()->system();
         $this->toolbar = $DIC->toolbar();
         $this->lng = $DIC->language();
         $this->tpl = $DIC["tpl"];
 
         $this->ref_id = (int) $_GET["ref_id"];
+
+        $this->setReadOnly($read_only);
+        $this->setManagementEnabled($management_enabled);
     }
 
     /**
@@ -74,64 +87,59 @@ class ilSystemStyleOverviewGUI
     {
         $cmd = $this->ctrl->getCmd();
 
+        if($cmd == ""){
+            $cmd = $this->isReadOnly()?"view":"edit";
+        }
+
+
         switch ($cmd)
         {
             case "addSystemStyle":
             case "addSubStyle":
             case "saveNewSystemStyle":
             case "saveNewSubStyle":
+            case "copyStyle":
+            case "importStyle":
+            case "deleteStyles":
+            case "deleteStyle":
+            case "confirmDelete":
+                if(!$this->isManagementEnabled()){
+                    throw new ilObjectException($this->lng->txt("permission_denied"));
+                }
+                $this->$cmd();
+                return;
+            case "cancel":
             case "edit":
             case "copyStyle":
-            case "deleteStyle":
-            case "deleteStyles":
+            case "export":
             case "moveUserStyles":
             case "saveStyleSettings":
-            case "assignStylesToCats":
-            case "addStyleCatAssignment":
-            case "saveStyleCatAssignment":
-            case "deleteSysStyleCatAssignments":
-            case "confirmDelete":
-            case "export":
-            case "importStyle":
+                if($this->isReadOnly()){
+                    throw new ilObjectException($this->lng->txt("permission_denied"));
+                }
                 $this->$cmd();
+                return;
                 break;
             default:
-                $this->edit();
+                $this->view();
         }
     }
 
-    /**
-     * Check permission
-     *
-     * @param string $a_perm permission(s)
-     * @return bool
-     * @throws ilObjectException
-     */
-    function checkPermission($a_perm, $a_throw_exc = true)
-    {
-        if (!$this->rbacsystem->checkAccess($a_perm, $this->ref_id))
-        {
-            if ($a_throw_exc)
-            {
-                include_once "Services/Object/exceptions/class.ilObjectException.php";
-                throw new ilObjectException($this->lng->txt("permission_denied"));
-            }
-            return false;
-        }
-        return true;
+    protected function view(){
+        $table = new ilSystemStylesTableGUI($this, "editSystemStyles",true);
+        $this->tpl->setContent($table->getHTML());
     }
 
+    protected function cancel(){
+        $this->edit();
+    }
     /**
      * Edit
      */
     function edit()
     {
-        $this->checkPermission("visible,read");
 
-        // default skin/style
-        if ($this->checkPermission("sty_write_system", false))
-        {
-
+        if($this->isManagementEnabled()){
             // Add Button for adding skins
             $add_skin_btn = ilLinkButton::getInstance();
             $add_skin_btn->setCaption($this->lng->txt("add_system_stlye"),false);
@@ -145,34 +153,36 @@ class ilSystemStyleOverviewGUI
             $this->toolbar->addButtonInstance($add_substyle_btn);
 
             $this->toolbar->addSeparator();
-
-            // from styles selector
-            include_once("./Services/Form/classes/class.ilSelectInputGUI.php");
-            $si = new ilSelectInputGUI($this->lng->txt("sty_move_user_styles").": ".$this->lng->txt("sty_from"), "from_style");
-
-            $options = array();
-            foreach(ilStyleDefinition::getAllSkinStyles() as $id => $skin_style)
-            {
-                $options[$id] = $skin_style['title'];
-            }
-            $si->setOptions($options + array("other" => $this->lng->txt("other")));
-
-            $this->toolbar->addInputItem($si, true);
-
-            // from styles selector
-            $si = new ilSelectInputGUI($this->lng->txt("sty_to"), "to_style");
-            $si->setOptions($options);
-            $this->toolbar->addInputItem($si, true);
-            $this->toolbar->addFormButton($this->lng->txt("sty_move_style"), "moveUserStyles");
-
-
-
-            $this->toolbar->setFormAction($this->ctrl->getFormAction($this));
         }
 
-        include_once("./Services/Style/System/classes/Overview/class.ilSystemStylesTableGUI.php");
-        $tab = new ilSystemStylesTableGUI($this, "editSystemStyles");
-        $this->tpl->setContent($tab->getHTML());
+
+
+
+        // from styles selector
+        $si = new ilSelectInputGUI($this->lng->txt("sty_move_user_styles").": ".$this->lng->txt("sty_from"), "from_style");
+
+        $options = array();
+        foreach(ilStyleDefinition::getAllSkinStyles() as $id => $skin_style)
+        {
+            $options[$id] = $skin_style['title'];
+        }
+        $si->setOptions($options + array("other" => $this->lng->txt("other")));
+
+        $this->toolbar->addInputItem($si, true);
+
+        // from styles selector
+        $si = new ilSelectInputGUI($this->lng->txt("sty_to"), "to_style");
+        $si->setOptions($options);
+        $this->toolbar->addInputItem($si, true);
+        // Add Button for adding skins
+        $move_skin_btn = ilSubmitButton::getInstance();
+        $move_skin_btn->setCaption($this->lng->txt("sty_move_style"),false);
+        $this->toolbar->addButtonInstance($move_skin_btn);
+        $this->toolbar->setFormAction($this->ctrl->getLinkTarget($this, 'moveUserStyles'));
+
+        $table = new ilSystemStylesTableGUI($this, "editSystemStyles");
+        $table->addActions($this->isManagementEnabled());
+        $this->tpl->setContent($table->getHTML());
 
     }
 
@@ -181,8 +191,6 @@ class ilSystemStyleOverviewGUI
      */
     function moveUserStyles()
     {
-        $this->checkPermission("sty_write_system");
-
         $to = explode(":", $_POST["to_style"]);
 
         if ($_POST["from_style"] != "other")
@@ -195,7 +203,6 @@ class ilSystemStyleOverviewGUI
             // get all user assigned styles
             $all_user_styles = ilObjUser::_getAllUserAssignedStyles();
 
-            include_once("./Services/Style/System/classes/class.ilStyleDefinition.php");
 
         }
 
@@ -209,8 +216,6 @@ class ilSystemStyleOverviewGUI
         {
             // get all user assigned styles
             $all_user_styles = ilObjUser::_getAllUserAssignedStyles();
-
-            include_once("./Services/Style/System/classes/class.ilStyleDefinition.php");
 
             // move users that are not assigned to
             // currently existing style
@@ -234,8 +239,6 @@ class ilSystemStyleOverviewGUI
      */
     function saveStyleSettings()
     {
-        $this->checkPermission("sty_write_system");
-
         // check if one style is activated
         if (count($_POST["st_act"]) < 1)
         {
@@ -253,6 +256,7 @@ class ilSystemStyleOverviewGUI
         // check if a style should be deactivated, that still has
         // a user assigned to
         $all_styles = ilStyleDefinition::getAllSkinStyles();
+
         foreach ($all_styles as $st)
         {
             if (!isset($_POST["st_act"][$st["id"]]))
@@ -291,13 +295,10 @@ class ilSystemStyleOverviewGUI
 
         if ($form->checkInput() )
         {
-            include_once("Services/Style/System/classes/class.ilStyleDefinition.php");
             if(ilStyleDefinition::skinExists($_POST["skin_id"])){
                 ilUtil::sendFailure($this->lng->txt("skin_id_exists"));
             }
             else{
-                include_once("Services/Style/System/classes/Utilities/class.ilSkinXML.php");
-                include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleSkinContainer.php");
                 try{
                     $skin = new ilSkinXML($_POST["skin_id"],$_POST["skin_name"]);
                     $style = new ilSkinStyleXML($_POST["style_id"],$_POST["style_name"]);
@@ -612,13 +613,10 @@ class ilSystemStyleOverviewGUI
 
         if ($form->checkInput() )
         {
-            include_once("Services/Style/System/classes/class.ilStyleDefinition.php");
             if(false){
                 //Todo do check if style_id exists
             }
             else{
-                include_once("Services/Style/System/classes/Utilities/class.ilSkinXML.php");
-                include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleSkinContainer.php");
                 try{
                     $imploded_parent_skin_style_id = explode(":", $_POST['parent_style']);
                     $parent_skin_id = $imploded_parent_skin_style_id[0];
@@ -646,4 +644,38 @@ class ilSystemStyleOverviewGUI
         $form->setValuesByPost();
         $this->tpl->setContent($form->getHTML());
     }
+
+    /**
+     * @return boolean
+     */
+    public function isReadOnly()
+    {
+        return $this->read_only;
+    }
+
+    /**
+     * @param boolean $read_only
+     */
+    public function setReadOnly($read_only)
+    {
+        $this->read_only = $read_only;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isManagementEnabled()
+    {
+        return $this->management_enabled;
+    }
+
+    /**
+     * @param boolean $management_enabled
+     */
+    public function setManagementEnabled($management_enabled)
+    {
+        $this->management_enabled = $management_enabled;
+    }
+
+
 }

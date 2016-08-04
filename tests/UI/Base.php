@@ -17,27 +17,13 @@ class ilIndependentTemplateFactory implements TemplateFactory {
 	}
 }
 
-class NoUIFactory implements Factory{
+class NoUIFactory implements Factory {
 	public function counter() {}
 	public function glyph() {}
 	public function button() {}
-
-
-	public function card($title, $content,\ILIAS\UI\Component\Image\Image $image = null){}
-
-	public function image(){}
-
-	public function text(){}
-
-	public function link($href,$caption=""){}
-
-	public function grid(){}
-
-	public function listing(){}
-
-	public function panel(){}
-
-	public function generic($html){}
+	public function card($title, \ILIAS\UI\Component\Image\Image $image = null) {}
+	public function deck(array $cards) {}
+	public function listing() {}
 }
 
 class LoggingRegistry implements ResourceRegistry {

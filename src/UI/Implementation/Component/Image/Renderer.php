@@ -13,6 +13,9 @@ class Renderer extends AbstractComponentRenderer {
 	 * @inheritdocs
 	 */
 	public function render(Component\Component $component, RendererInterface $default_renderer) {
+		/**
+		 * @var Component\Image\Image $component
+		 */
 		$this->checkComponent($component);
 		$tpl = $this->getTemplate("tpl.image.html", true, true);
 		$tpl->setVariable("SOURCE",$component->getSource());

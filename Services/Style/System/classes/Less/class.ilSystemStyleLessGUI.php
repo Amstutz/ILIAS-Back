@@ -85,10 +85,9 @@ class ilSystemStyleLessGUI
         {
             case "save":
             case "edit":
+            case "reset":
+            case "update":
                 $this->$cmd();
-                break;
-            case "lessUpdatedVariables":
-                $this->update();
                 break;
             default:
                 $this->edit();
@@ -115,9 +114,10 @@ class ilSystemStyleLessGUI
     protected function checkRequirements(){
         $style_id = $_GET['style_id'];
         $less_path = $this->getStyleContainer()->getLessFilePath($style_id);
+
         if(file_exists($less_path)){
-            $less_variables_path = $this->getStyleContainer()->getSkin()->getStyle($style_id)->getCssFile()."-variables.less";
-            $reg_exp = "/@import \"".$less_variables_path."\"/";
+            $less_variables_path = $this->getStyleContainer()->getLessVariablesFilePath($style_id);
+            $reg_exp = "/@import \"".preg_quote ($less_variables_path,"/")."\"/";
             if(!preg_match($reg_exp,file_get_contents($less_path))){
                 $this->getMessageStack()->addMessage(
                     new ilSystemStyleMessage($this->lng->txt("less_file_not_included"),ilSystemStyleMessage::TYPE_ERROR)
@@ -157,8 +157,8 @@ class ilSystemStyleLessGUI
             }
         }
 
-        $form->addCommandButton("lessResetVariables", "Reset Variables");
-        $form->addCommandButton("lessUpdatedVariables", "Update Variables");
+        $form->addCommandButton("reset", $this->lng->txt("reset_variables"));
+        $form->addCommandButton("update", $this->lng->txt("update_variables"));
 
         $form->setFormAction($this->ctrl->getFormAction($this));
 
@@ -180,11 +180,12 @@ class ilSystemStyleLessGUI
 
         $form->setValuesByArray($values);
     }
-    public function resetLess()
+    public function reset()
     {
-        //$this->getSkin()->resetLess();
-        $this->initLessVariablesForm();
-        $this->ctrl->redirect($this->getParent(), "less");
+        $style = $this->getStyleContainer()->getSkin()->getStyle($_GET["style_id"]);
+        $this->setLessFile($this->getStyleContainer()->copyVariablesFromDefault($style));
+        $this->getStyleContainer()->compileLess($style->getId());
+        $this->edit();
     }
 
     public function update()
@@ -205,15 +206,6 @@ class ilSystemStyleLessGUI
         $form->setValuesByPost();
         $this->tpl->setContent($form->getHtml());
 
-    }
-
-    /**
-     * @return html
-     */
-    public function renderLess(){
-        $this->skin->readLessVariables();
-        $this->initLessVariablesForm();
-        $this->getLessValues();
     }
 
     /**

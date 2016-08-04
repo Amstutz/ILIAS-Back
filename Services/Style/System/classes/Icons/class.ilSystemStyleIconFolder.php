@@ -1,48 +1,43 @@
 <?php
 require_once("./Services/Style/System/classes/Icons/class.ilSystemStyleIcon.php");
 
-
-/***
+/**
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$
- *
+ */
+
+/**
+ * Class ilSystemStyleIconFolder
  */
 class ilSystemStyleIconFolder
 {
     /**
      * @var ilSystemStyleIcon[]
      */
-    protected $icons = array();
+    protected $icons = [];
 
     /**
      * @var string
      */
-    protected $skin_path = "";
+    protected $path = "";
 
     /**
-     * @var string
+     * @var ilSystemStyleIconColorSet
      */
-    protected $default_path = "";
+    protected $color_set = null;
 
     /**
      * ilSystemStyleIconFolder constructor.
-     * @param $default_path
-     * @param $skin_path
+     * @param string $path
      */
-    public function __construct($default_path,$skin_path )
+    public function __construct($path)
     {
-        $this->skin_path = $skin_path;
-        $this->default_path = $default_path;
-
+        $this->setPath($path);
         $this->read();
     }
 
-    public function read($default = false){
-        if($default){
-            $this->xRead($this->getSkinPath(),"");
-        }else{
-            $this->xRead($this->getDefaultPath(),"");
-        }
+    public function read(){
+        $this->xRead($this->getPath(),"");
         $this->sortIcons();
     }
 
@@ -73,7 +68,6 @@ class ilSystemStyleIconFolder
      */
     protected function xRead($src = "",$rel_path=""){
         foreach (scandir($src) as $file) {
-
             $src_file = rtrim($src, '/') . '/' . $file;
             if (!is_readable($src_file)) {
                 throw new ilSystemStyleException(ilSystemStyleException::FILE_OPENING_FAILED, $src_file);
@@ -82,30 +76,23 @@ class ilSystemStyleIconFolder
                 if (is_dir($src_file)) {
                     self::xRead($src_file,$rel_path."/".$file);
                 } else {
-
                     $info = new SplFileInfo($src_file);
-                    $this->addIcon(new ilSystemStyleIcon($this->getDefaultPath().$rel_path,$this->getSkinPath().$rel_path,$file,$info->getExtension()));
+                    $extension = $info->getExtension();
+                    if($extension == "gif" || $extension == "svg" || $extension == "png"){
+                        $this->addIcon(new ilSystemStyleIcon($file,$this->getPath().$rel_path."/".$file,$extension));
+                    }
                 }
-
             }
         }
     }
 
-    /**
-     * @param ilSystemStyleIconColorSet $color_set
-     */
-    public function changeIconColors(ilSystemStyleIconColorSet $color_set){
-        foreach($this->getIcons() as $icon){
-            $icon->changeColor($color_set);
-        }
-    }
 
     /**
-     * @param ilSystemStyleIconColorSet $color_set
+     * @param array $color_changes
      */
-    public function findIconColorUsages(ilSystemStyleIconColorSet $color_set){
+    public function changeIconColors(array $color_changes){
         foreach($this->getIcons() as $icon){
-            $icon->findUsage($color_set);
+            $icon->changeColor($color_changes);
         }
     }
 
@@ -125,6 +112,24 @@ class ilSystemStyleIconFolder
     }
 
     /**
+     *
+     */
+    public function getIconsSortedByFolder(){
+        $folders = [];
+
+        foreach($this->getIcons() as $icon){
+            $folders[dirname($icon->getPath())][] = $icon;
+        }
+
+        ksort($folders);
+
+        foreach($folders as $id => $folder){
+            ksort($folders[$id]);
+        }
+
+        return $folders;
+    }
+    /**
      * @param ilSystemStyleIcon[] $icons
      */
     public function setIcons($icons)
@@ -135,34 +140,71 @@ class ilSystemStyleIconFolder
     /**
      * @return string
      */
-    public function getSkinPath()
+    public function getPath()
     {
-        return $this->skin_path;
+        return $this->path;
     }
 
     /**
-     * @param string $skin_path
+     * @param string $path
      */
-    public function setSkinPath($skin_path)
+    public function setPath($path)
     {
-        $this->skin_path = $skin_path;
+        $this->path = $path;
     }
 
     /**
+     * @return ilSystemStyleIconColorSet
+     */
+    public function getColorSet()
+    {
+        if(!$this->color_set){
+            $this->extractColorSet();
+        }
+        return $this->color_set;
+    }
+
+    protected function extractColorSet(){
+        $this->color_set = new ilSystemStyleIconColorSet();
+        foreach($this->getIcons() as $icon){
+            $this->color_set->mergeColorSet($icon->getColorSet());
+        }
+    }
+
+    /**
+     * @param $color_id
+     * @return ilSystemStyleIcon[]
+     */
+    public function getUsagesOfColor($color_id){
+        $icons = [];
+        foreach($this->getIcons() as $icon){
+            if($icon->usesColor($color_id)){
+                $icons[] = $icon;
+            }
+        }
+        return $icons;
+    }
+
+    /**
+     * @param $color_id
      * @return string
      */
-    public function getDefaultPath()
+    public function getUsagesOfColorAsString($color_id)
     {
-        return $this->default_path;
+        $usage_string = "";
+        foreach($this->getUsagesOfColor($color_id) as $icon){
+            $usage_string .= rtrim($icon->getName(),".svg")."; ";
+        }
+        return $usage_string;
     }
 
     /**
-     * @param string $default_path
+     * @param $color_set
      */
-    public function setDefaultPath($default_path)
+    public function setColorSet($color_set)
     {
-        $this->default_path = $default_path;
+        $this->color_set = $color_set;
     }
 
+
 }
-?>

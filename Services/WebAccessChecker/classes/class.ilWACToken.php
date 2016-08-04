@@ -24,10 +24,6 @@ class ilWACToken {
 	 */
 	protected $timestamp = 0;
 	/**
-	 * @var int
-	 */
-	protected $type = self::TYPE_FILE;
-	/**
 	 * @var string
 	 */
 	protected $ip = '';
@@ -60,7 +56,9 @@ class ilWACToken {
 		$this->setPath($parts['path']);
 		$session_id = session_id();
 		$this->setSessionId($session_id ? $session_id : '-');
-		$this->setIp($_SERVER['REMOTE_ADDR']);
+		if (isset($_SERVER['REMOTE_ADDR'])) {
+			$this->setIp($_SERVER['REMOTE_ADDR']);
+		}
 		$this->setTimestamp(time());
 		$this->generateToken();
 		$this->setId(md5($this->getPath()));
@@ -90,13 +88,12 @@ class ilWACToken {
 		if (self::getSALT()) {
 			return true;
 		}
-		$salt = NULL;
-		if (is_file ($this->getSaltFilePath()))
-		{
+		$salt = null;
+		if (is_file($this->getSaltFilePath())) {
 			include($this->getSaltFilePath());
 		}
 		self::setSALT($salt);
-		if (! $salt) {
+		if (!$salt) {
 			$this->generateSaltFile();
 		}
 	}
@@ -155,22 +152,6 @@ class ilWACToken {
 	 */
 	public function setTimestamp($timestamp) {
 		$this->timestamp = $timestamp;
-	}
-
-
-	/**
-	 * @return int
-	 */
-	public function getType() {
-		return $this->type;
-	}
-
-
-	/**
-	 * @param int $type
-	 */
-	public function setType($type) {
-		$this->type = $type;
 	}
 
 

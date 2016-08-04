@@ -109,12 +109,12 @@ class ilKSDocumentationEntryGUI
         )->withCard(
             $this->f->card(
                 "State"
-            )->withHeaderSection(
+            )->withSections(array(
                 $this->f->listing()->descriptive(
                 array(
                     "Entry" => $this->entry->getStatusEntry(),
                     "Implementation" => $this->entry->getStatusImplementation()
-                )
+                ))
             ))
         );
 
@@ -140,9 +140,9 @@ class ilKSDocumentationEntryGUI
                 $title = "Example ".$nr.": ".ucfirst(str_replace("_"," ",$name));
                 $nr++;
                 //$start_example =  microtime (true);
-                $example = $name(); //Executes function loaded in file indicated by 'path'
+                $example = "<div class='well'>".$name()."</div>"; //Executes function loaded in file indicated by 'path'
                 //$end_example =  microtime (true);
-                $content_part_1 = $this->f->card("")->withHeaderSection($this->f->generic()->html($example));
+                $content_part_1 = $this->f->generic()->html($example);
                 //$example_tot_time = ($end_example-$start_example);
                 //$examples_snippets[] = $this->f->text()->standard("Time to generate and render example: ".$example_tot_time);
                 $code = str_replace("<?php\n","",file_get_contents ($path));
@@ -157,7 +157,6 @@ class ilKSDocumentationEntryGUI
 
         $relations = $this->f->panel()->block("Relations",
             $this->f->listing()->descriptive(
-                $this->f->generic()->container(
                     array(
                         "Parents" => $this->f->listing()->ordered(
                             $this->entries->getParentsOfEntryTitles($this->entry->getId())
@@ -166,7 +165,6 @@ class ilKSDocumentationEntryGUI
                             $this->entries->getDescendantsOfEntryTitles($this->entry->getId())
                         )
                     )
-                )
             )
         );
 

@@ -167,8 +167,8 @@ interface Factory {
 	 * ---
 	 * description:
 	 *   purpose: >
-	 *     	A card is a flexible content container for small chunks of structured data.
-     *      Cards are often used in so-called Decks which are a gallery of Cards.
+	 *      A card is a flexible content container for small chunks of structured data.
+	 *      Cards are often used in so-called Decks which are a gallery of Cards.
 	 *   composition: >
 	 *      Cards contain a header, which often includes an Image or Icon and a Title as well as possible actions as
 	 *      Default Buttons and 0 to n sections that may contain further textual descriptions, links and buttons.
@@ -186,9 +186,10 @@ interface Factory {
 	 *      1: Cards MUST contain a title.
 	 *      2: Cards SHOULD contain an Image or Icon in the header section.
 	 *      3: Cards MAY contain Interaction Triggers.
-     *      4: If multiple Cards are used, they MUST be contained in a Deck.
-     *   style:
+	 *   style:
 	 *      1: Sections of  Cards MUST be separated by Dividers.
+	 *   accessibility:
+	 *      1: If multiple Cards are used, they MUST be contained in a Deck.
 	 * ---
 	 * @param string $title
 	 * @param \ILIAS\UI\Component\Image\Image $image
@@ -200,12 +201,12 @@ interface Factory {
 	 * ---
 	 * description:
 	 *   purpose: >
-	 *     	Decks are used to display multiple Cards in a grid.
+	 *      Decks are used to display multiple Cards in a grid.
 	 *      They should be used if a  page contains many content items that have similar style and importance.
 	 *      A Deck gives each item equal horizontal space indicating that they are of equal importance.
 	 *   composition: >
 	 *      Decks are composed only of Cards arranged in a grid. The cards displayed by decks are all of equal size. This
-     *      Size ranges very small (XS) to very large (XL).
+	 *      Size ranges very small (XS) to very large (XL).
 	 *   effect: >
 	 *      The Deck is a mere scaffolding element, is has no effect.
 	 *
@@ -221,15 +222,15 @@ interface Factory {
 	 * @param \ILIAS\UI\Component\Card\Card[] $cards
 	 * @return \ILIAS\UI\Component\Deck\Deck
 	 */
-	public function deck($cards);
+	public function deck(array $cards);
 
 	/**
 	 * ---
 	 * description:
 	 *   purpose: The Image component is used to display images of various sources.
-     *   composition: An Image is composed of the image and an alternative text for screen readers.
-     *   effect: Images may be included in interacted components but not interactive on their own.
-     *
+	 *   composition: An Image is composed of the image and an alternative text for screen readers.
+	 *   effect: Images may be included in interacted components but not interactive on their own.
+	 *
 	 * ---
 	 * @return \ILIAS\UI\Component\Image\Factory
 	 */
@@ -276,14 +277,14 @@ interface Factory {
 	 * description:
 	 *   purpose: >
 	 *     Listings are used to structure itemised textual information.
-     *   composition: >
-     *     Listings may contain ordered, unordered, or
-     *     labeled items.
-     *   effect: >
-     *     Listings hold only textual information. They may contain links but no buttons.
-     * rules:
-     *   composition:
-     *     1: Listings MUST NOT contain Buttons.
+	 *   composition: >
+	 *     Listings may contain ordered, unordered, or
+	 *     labeled items.
+	 *   effect: >
+	 *     Listings hold only textual information. They may contain Links but no Buttons.
+	 * rules:
+	 *   composition:
+	 *     1: Listings MUST NOT contain Buttons.
 	 * ---
 	 * @return \ILIAS\UI\Component\Listing\Factory
 	 */
@@ -295,8 +296,8 @@ interface Factory {
 	 *   purpose: >
 	 *     Panels are used to group titled Content.
 	 *   composition: >
-     *      Panels consist of a header and content section. They form one Gestalt and so build a perceivable
-     *      cluster of information
+	 *      Panels consist of a header and content section. They form one Gestalt and so build a perceivable
+	 *      cluster of information
 	 *   effect: The effect of interaction with panels heavily depends on their content.
 	 *
 	 * rules:
@@ -316,4 +317,5 @@ interface Factory {
 	 * @return \ILIAS\UI\Component\Generic\Factory
 	 */
 	public function generic();
+
 }
