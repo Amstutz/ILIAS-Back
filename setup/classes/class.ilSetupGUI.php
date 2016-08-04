@@ -851,11 +851,19 @@ echo "<br>+".$client_id;
 		$ne->setValue($p ? $p : $this->lng->txt("not_configured"));
 		$this->form->addItem($ne);
 
+
+		// system styles
+		$ne = new ilNonEditableValueGUI($lng->txt("enable_system_styles_management"), "enable_system_styles_management");
+		$p = $this->setup->ini->readVariable("tools","enable_system_styles_management");
+		$ne->setValue($p ? $p : $this->lng->txt("not_enabled"));
+		$this->form->addItem($ne);
+
         // lessc command
         $ne = new ilNonEditableValueGUI($lng->txt("lessc"), "lessc");
         $p = $this->setup->ini->readVariable("tools","lessc");
         $ne->setValue($p ? $p : $this->lng->txt("not_configured"));
         $this->form->addItem($ne);
+
 
 		$this->form->setFormAction("setup.php?cmd=gateway");
 	}
@@ -1157,10 +1165,18 @@ echo "<br>+".$client_id;
 		$ti = new ilTextInputGUI($lng->txt("clean_command"), "clean_command");
 		$this->form->addItem($ti);
 
-        // lessc command
-        $ti = new ilTextInputGUI($lng->txt("lessc_path"), "lessc_path");
-        $ti->setInfo($lng->txt("lessc_path_comment"));
-        $this->form->addItem($ti);
+		// enabled system styles mangesment
+		$check = new ilCheckboxInputGUI($lng->txt('enable_system_styles_management'),'enable_system_styles_management');
+		$check->setInfo($lng->txt('enable_system_styles_management_info'));
+		$check->setValue(1);
+
+		// lessc command
+		$lessc = new ilTextInputGUI($lng->txt("lessc_path"), "lessc_path");
+		$lessc->setInfo($lng->txt("lessc_path_comment"));
+		$check->addSubItem($lessc);
+
+		$this->form->addItem($check);
+
 
 		if ($a_install)
 		{
@@ -1218,6 +1234,7 @@ echo "<br>+".$client_id;
 		$values["vscanner_type"] = $this->setup->ini->readVariable("tools", "vscantype");
 		$values["scan_command"] = $this->setup->ini->readVariable("tools", "scancommand");
 		$values["clean_command"] = $this->setup->ini->readVariable("tools", "cleancommand");
+		$values["enable_system_styles_management"] = $this->setup->ini->readVariable("tools", "enable_system_styles_management");
         $values["lessc_path"] = $this->setup->ini->readVariable("tools", "lessc");
 
         $values["log_path"] = $this->setup->ini->readVariable("log","path")."/".

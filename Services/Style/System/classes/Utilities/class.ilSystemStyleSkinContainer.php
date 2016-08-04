@@ -454,9 +454,9 @@ class ilSystemStyleSkinContainer {
     }
 
     public function compileLess($style_id){
-        $output = shell_exec("lessc ".$this->getLessFilePath($style_id));
+        $output = shell_exec(PATH_TO_LESSC." ".$this->getLessFilePath($style_id));
         if(!$output){
-            $less_error = shell_exec("lessc ".$this->getLessFilePath($style_id)." 2>&1");
+            $less_error = shell_exec(PATH_TO_LESSC." ".$this->getLessFilePath($style_id)." 2>&1");
             if(!$less_error){
                 throw new ilSystemStyleException(ilSystemStyleException::LESS_COMPILE_FAILED, "Empty css output, unknown error.");
             }

@@ -37,6 +37,11 @@ class ilSystemStyleIconsGUI
     protected $icon_folder = null;
 
     /**
+     * @var ilTabsGUI
+     */
+    protected $tabs;
+
+    /**
      * ilSystemStyleIconsGUI constructor.
      * @param string $skin_id
      * @param string $style_id
@@ -48,6 +53,8 @@ class ilSystemStyleIconsGUI
         $this->ctrl = $DIC->ctrl();
         $this->lng = $DIC->language();
         $this->tpl = $DIC["tpl"];
+        $this->tabs = $DIC->tabs();
+
 
         if($skin_id == ""){
             $skin_id = $_GET["skin_id"];
@@ -67,12 +74,15 @@ class ilSystemStyleIconsGUI
     {
         $cmd = $this->ctrl->getCmd();
 
+        $this->setSubStyleSubTabs($cmd);
+
         switch ($cmd)
         {
             case "save":
             case "edit":
             case "update":
             case "reset":
+            case "preview":
                 $this->$cmd();
                 break;
             default:
@@ -81,12 +91,27 @@ class ilSystemStyleIconsGUI
         }
     }
 
+    protected function setSubStyleSubTabs($active = "") {
+        $this->tabs->addSubTab('edit', $this->lng->txt('edit'), $this->ctrl->getLinkTarget($this,'edit'));
+        $this->tabs->addSubTab('preview', $this->lng->txt('preview'), $this->ctrl->getLinkTarget($this,"preview"));
+
+        if($active == "preview"){
+            $this->tabs->activateSubTab($active);
+        }else{
+            $this->tabs->activateSubTab("edit");
+        }
+
+    }
+
     protected function edit(){
         $form = $this->initIconsForm();
         $this->getIconsValues($form);
-        $this->tpl->setContent($form->getHTML().$this->renderIconsPreviews());
+        $this->tpl->setContent($form->getHTML());
     }
 
+    protected function preview(){
+        $this->tpl->setContent($this->renderIconsPreviews());
+    }
     /**
      * @return ilPropertyFormGUI
      */
@@ -194,7 +219,7 @@ class ilSystemStyleIconsGUI
             $form = $this->initIconsForm();
         }
         $form->setValuesByPost();
-        $this->tpl->setContent($form->getHTML().$this->renderIconsPreviews());
+        $this->tpl->setContent($form->getHTML());
     }
 
 
@@ -206,20 +231,31 @@ class ilSystemStyleIconsGUI
 
         $f = $DIC->ui()->factory();
 
-        $cards = [];
 
-        foreach($this->getIconFolder()->getIcons() as $id => $icon){
-            $icon_image = $f->image()->standard($icon->getPath(),$icon->getName());
-            $cards[] = $f->card(
-                $icon->getName(),
-                $icon_image
-            )->withSections(array(
-                $f->listing()->descriptive(array($this->lng->txt("used_colors")=>$icon->getColorSet()->asString()))
-            ));
+        $blocks = [];
+        foreach($this->getIconFolder()->getIconsSortedByFolder() as $folder_name => $icons){
+            $cards = [];
+
+            foreach($icons as $icon){
+                $icon_image = $f->image()->standard($icon->getPath(),$icon->getName());
+                $card = $f->card(
+                    $icon->getName(),
+                    $icon_image
+                );
+                $colors = $icon->getColorSet()->asString();
+                if($colors){
+                    $card = $card->withSections(array(
+                        $f->listing()->descriptive(array($this->lng->txt("used_colors")=>$colors))
+                    ));
+                }
+                $cards[] = $card;
+            }
+            $blocks[] = $f->panel()->block($folder_name,$f->deck($cards));
         }
-        $deck = $f->deck($cards);
 
-        return $DIC->ui()->renderer()->render($deck);
+        $report = $f->panel()->report($this->lng->txt("icons"),$f->generic()->container($blocks));
+
+        return $DIC->ui()->renderer()->render($report);
     }
 
     /**

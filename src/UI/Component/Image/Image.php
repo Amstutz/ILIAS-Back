@@ -12,8 +12,9 @@ interface Image extends \ILIAS\UI\Component\Component {
      * Types of images
      */
     const STANDARD = "standard";
-
+    const RESPONSIVE = "responsive";
     /**
+     *
      * Set the source (path) of the image.
      * @param string
      * @return \ILIAS\UI\Component\Image\Image

@@ -112,6 +112,24 @@ class ilSystemStyleIconFolder
     }
 
     /**
+     *
+     */
+    public function getIconsSortedByFolder(){
+        $folders = [];
+
+        foreach($this->getIcons() as $icon){
+            $folders[dirname($icon->getPath())][] = $icon;
+        }
+
+        ksort($folders);
+
+        foreach($folders as $id => $folder){
+            ksort($folders[$id]);
+        }
+
+        return $folders;
+    }
+    /**
      * @param ilSystemStyleIcon[] $icons
      */
     public function setIcons($icons)

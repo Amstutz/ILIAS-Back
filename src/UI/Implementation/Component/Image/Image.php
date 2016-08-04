@@ -30,7 +30,8 @@ class Image implements C\Image\Image {
 	 * @var array
 	 */
 	private static $types = array(
-		self::STANDARD
+		self::STANDARD,
+		self::RESPONSIVE
 	);
 
 	/**
