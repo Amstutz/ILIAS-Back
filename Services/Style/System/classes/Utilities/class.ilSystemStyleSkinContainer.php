@@ -442,9 +442,16 @@ class ilSystemStyleSkinContainer {
     }
 
     public function compileLess($style_id){
-        $output = shell_exec("lessc ".$this->getLessFilePath($style_id));
+        global $DIC;
+
+        $lessc_path =  $DIC['ilias']->ini->readVariable("tools","lessc");
+
+        if(!$lessc_path){
+            throw new ilSystemStyleException(ilSystemStyleException::LESS);
+        }
+        $output = shell_exec($lessc_path." ".$this->getLessFilePath($style_id));
         if(!$output){
-            $less_error = shell_exec("lessc ".$this->getLessFilePath($style_id)." 2>&1");
+            $less_error = shell_exec($lessc_path." ".$this->getLessFilePath($style_id)." 2>&1");
             if(!$less_error){
                 throw new ilSystemStyleException(ilSystemStyleException::LESS_COMPILE_FAILED, "Empty css output, unknown error.");
             }
@@ -452,6 +459,9 @@ class ilSystemStyleSkinContainer {
         }
         file_put_contents($this->getCSSFilePath($style_id),$output);
     }
+
+
+
     /**
      * @return ilSkinXML
      */

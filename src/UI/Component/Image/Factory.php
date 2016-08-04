@@ -17,31 +17,4 @@ interface Factory {
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */
 	public function standard($src,$alt);
-	/**
-	 * ---
-	 * ----
-	 * @return  \ILIAS\UI\Component\Image\Image
-	 */
-	public function responsive($src,$alt);
-
-	/**
-	 * ---
-	 * ----
-	 * @return  \ILIAS\UI\Component\Image\Image
-	 */
-	public function circle($src,$alt);
-
-	/**
-	 * ---
-	 * ----
-	 * @return  \ILIAS\UI\Component\Image\Image
-	 */
-	public function rounded($src,$alt);
-
-	/**
-	 * ---
-	 * ----
-	 * @return  \ILIAS\UI\Component\Image\Image
-	 */
-	public function thumbnail($src,$alt);
 }

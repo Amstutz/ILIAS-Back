@@ -30,7 +30,8 @@ class ilSystemStyleException extends ilException
     const FILE_OPENING_FAILED = 2003;
     const LESS_COMPILE_FAILED = 2004;
     const FOLDER_DELETION_FAILED = 2005;
-    const FILE_DELETION_FAILED = 2005;
+    const FILE_DELETION_FAILED = 2006;
+    const LESSC_NOT_INSTALLED = 2007;
 
     const SKIN_FOLDER_DOES_NOT_EXIST = 3001;
     const SKIN_CSS_DOES_NOT_EXIST = 3002;
@@ -138,13 +139,16 @@ class ilSystemStyleException extends ilException
                 break;
             case self::SKIN_ALREADY_EXISTS:
                 $this->message = "Skin already exists: ".$this->add_info;
-                breaK;
+                break;
             case self::NO_PARENT_STYLE:
                 $this->message = "No parent style defined for style: ".$this->add_info;
                 break;
             case self::SUBSTYLE_ASSIGNMENT_EXISTS:
                 $this->message = "The assignment of this substyle already exists: ".$this->add_info;
-                breaK;
+                break;
+            case self::LESSC_NOT_INSTALLED:
+                $this->message = "No less compiler is installed";
+                break;
             default:
                 $this->message = "Unknonw Exception " . $this->add_info;
                 break;

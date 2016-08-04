@@ -282,8 +282,8 @@ interface Factory {
      *   effect: >
      *     Listings hold only textual information. They may contain links but no buttons.
      * rules:
-     *   composition: >
-     *     Listings MUST NOT contain Buttons.
+     *   composition:
+     *     1: Listings MUST NOT contain Buttons.
 	 * ---
 	 * @return \ILIAS\UI\Component\Listing\Factory
 	 */
