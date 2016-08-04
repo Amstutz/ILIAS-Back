@@ -160,7 +160,7 @@ class ilSystemStyleMainGUI
 			if ($a_throw_exc)
 			{
 				include_once "Services/Object/exceptions/class.ilObjectException.php";
-				throw new ilObjectException($this->lng->txt("permission_denied"));
+				throw new ilObjectException($this->lng->txt("sty_permission_denied"));
 			}
 			return false;
 		}
