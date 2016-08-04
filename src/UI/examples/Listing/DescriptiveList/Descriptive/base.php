@@ -7,12 +7,10 @@ function base() {
 	$renderer = $DIC->ui()->renderer();
 
 	//Generate List
-	$descriptive = $f->listing()->descriptive(
-		array(
+	$descriptive = $f->listing()->descriptive([
 			"Title 1"=>"Description 1",
 			"Title 2"=>"Description 2",
-			"Title 3"=>"Description 3"
-		)
+			"Title 3"=>"Description 3"]
 	);
 
 	//Render

@@ -7,7 +7,10 @@ namespace ILIAS\UI\Implementation\Component\Listing\SimpleList;
 use ILIAS\UI\Component as C;
 use ILIAS\UI\Implementation\Component\ComponentHelper;
 
-
+/**
+ * Class SimpleList
+ * @package ILIAS\UI\Implementation\Component\Listing\SimpleList
+ */
 class SimpleList implements C\Listing\SimpleList {
 	use ComponentHelper;
 
@@ -22,12 +25,9 @@ class SimpleList implements C\Listing\SimpleList {
 	private  $items;
 
 	/**
-	 * @var array
+	 * @var []
 	 */
-	private static $types = array(
-		self::UNORDERED
-		, self::ORDERED
-	);
+	private static $types = [self::UNORDERED, self::ORDERED];
 
 	/**
 	 * SimpleList constructor.

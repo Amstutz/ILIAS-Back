@@ -9,6 +9,10 @@ use ILIAS\UI\Implementation\Render\AbstractComponentRenderer;
 use ILIAS\UI\Renderer as RendererInterface;
 use ILIAS\UI\Component;
 
+/**
+ * Class Renderer
+ * @package ILIAS\UI\Implementation\Component\Listing\DescriptiveList
+ */
 class Renderer extends AbstractComponentRenderer {
 	/**
 	 * @inheritdocs
@@ -43,6 +47,6 @@ class Renderer extends AbstractComponentRenderer {
 	 * @inheritdocs
 	 */
 	protected function getComponentInterfaceName() {
-		return array(Component\Listing\DescriptiveList::class);
+		return [Component\Listing\DescriptiveList::class];
 	}
 }

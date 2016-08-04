@@ -8,6 +8,10 @@ use ILIAS\UI\Implementation\Render\AbstractComponentRenderer;
 use ILIAS\UI\Renderer as RendererInterface;
 use ILIAS\UI\Component;
 
+/**
+ * Class Renderer
+ * @package ILIAS\UI\Implementation\Component\Listing\SimpleList
+ */
 class Renderer extends AbstractComponentRenderer {
 	/**
 	 * @inheritdocs
@@ -23,13 +27,13 @@ class Renderer extends AbstractComponentRenderer {
 		if(count($component->getItems())>0){
 			$tpl->setVariable("TYPE",$component->getType());
 			foreach($component->getItems() as $item){
-                $tpl->setCurrentBlock("item");
+				$tpl->setCurrentBlock("item");
 				if(is_string($item)){
-                    $tpl->setVariable("ITEM", $item);
+					$tpl->setVariable("ITEM", $item);
 				}else{
-                    $tpl->setVariable("ITEM", $default_renderer->render($item));
-                }
-                $tpl->parseCurrentBlock();
+					$tpl->setVariable("ITEM", $default_renderer->render($item));
+				}
+				$tpl->parseCurrentBlock();
 			}
 		}
 		return $tpl->get();
@@ -39,6 +43,6 @@ class Renderer extends AbstractComponentRenderer {
 	 * @inheritdocs
 	 */
 	protected function getComponentInterfaceName() {
-		return array(Component\Listing\SimpleList::class);
+		return [Component\Listing\SimpleList::class];
 	}
 }

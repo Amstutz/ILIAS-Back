@@ -8,7 +8,7 @@ function base() {
 
 	//Generate List
 	$unordered = $f->listing()->unordered(
-		array("Point 1","Point 2","Point 3")
+		["Point 1","Point 2","Point 3"]
 	);
 
 	//Render

@@ -8,6 +8,10 @@ namespace ILIAS\UI\Implementation\Component\Listing;
 use ILIAS\UI\Implementation\Component\Listing\SimpleList as S;
 use ILIAS\UI\Implementation\Component\Listing\DescriptiveList as D;
 
+/**
+ * Class Factory
+ * @package ILIAS\UI\Implementation\Component\Listing
+ */
 class Factory implements \ILIAS\UI\Component\Listing\Factory {
 
 	/**

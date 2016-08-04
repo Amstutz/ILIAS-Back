@@ -10,14 +10,15 @@ namespace ILIAS\UI\Component\Listing;
  */
 interface DescriptiveList extends \ILIAS\UI\Component\Component {
 
-    /**
-     * @param string[] $items
-     * @return \ILIAS\UI\Component\Listing\DescriptiveList
-     */
-    public function withItems(array $items);
+	/**
+	 * Sets a key value pair as items for the list. Key is used as title and value as content.
+	 * @param string[] $items string (key) => string (value)
+	 * @return \ILIAS\UI\Component\Listing\DescriptiveList
+	 */
+	public function withItems(array $items);
 
-    /**
-     * @return string[] $items
-     */
-    public function getItems();
+	/**
+	 * @return string[] $items
+	 */
+	public function getItems();
 }

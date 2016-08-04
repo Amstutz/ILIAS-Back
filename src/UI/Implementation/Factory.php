@@ -4,6 +4,7 @@
 
 namespace ILIAS\UI\Implementation;
 
+// TODO: This might cache the created factories.
 class Factory implements \ILIAS\UI\Factory {
 	/**
 	 * @inheritdoc
