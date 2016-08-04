@@ -2,25 +2,29 @@
 
 /* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 
-namespace ILIAS\UI\Implementation\Component\Listing\DescriptiveList;
+namespace ILIAS\UI\Implementation\Component\Listing\Listing;
 
 use ILIAS\UI\Component as C;
+use ILIAS\UI\Implementation\Component\ComponentHelper;
 
 /**
- * Class DescriptiveList
- * @package ILIAS\UI\Implementation\Component\Listing\DescriptiveList
+ * Class SimpleList
+ * @package ILIAS\UI\Implementation\Component\Listing\SimpleList
  */
-class DescriptiveList implements C\Listing\DescriptiveList {
+class Listing implements C\Listing\Listing {
+	use ComponentHelper;
 
 	/**
-	 * @var	array
+	 * @var	string
 	 */
 	private  $items;
 
+
 	/**
-	 * @inheritdoc
+	 * SimpleList constructor.
+	 * @param $items
 	 */
-	public function __construct(array $items) {
+	public function __construct($items) {
 		$this->items = $items;
 	}
 
@@ -40,3 +44,4 @@ class DescriptiveList implements C\Listing\DescriptiveList {
 		return $this->items;
 	}
 }
+?>
