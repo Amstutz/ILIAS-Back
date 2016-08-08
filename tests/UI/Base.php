@@ -51,7 +51,7 @@ class ilLanguageMock extends \ilLanguage {
 		$this->requested[] = $a_topic;
 		return $a_topic;
 	}
-} 
+}
 
 /**
  * Provides common functionality for UI tests.
@@ -89,10 +89,10 @@ class ILIAS_UI_TestBase extends PHPUnit_Framework_TestCase {
 		$resource_registry = $this->getResourceRegistry();
 		$lng = $this->getLanguage();
 		return new DefaultRendererTesting(
-						$ui_factory, $tpl_factory, $resource_registry, $lng);
+				$ui_factory, $tpl_factory, $resource_registry, $lng);
 	}
 
 	public function normalizeHTML($html) {
 		return trim(str_replace("\n", "", $html));
-	}        
+	}
 }
