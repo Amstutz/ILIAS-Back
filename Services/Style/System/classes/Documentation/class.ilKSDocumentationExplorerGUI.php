@@ -194,31 +194,8 @@ class ilKSDocumentationExplorerGUI extends ilExplorerBaseGUI
     }
 
     /**
-     *
-     */
-    public function getHTML()
-    {
-        /**
-        $explorer_panel = ilPanelGUI::getInstance();
-        $dropdown = (new ilKitchenSinkPlugin())->getTemplate('entry/tpl.tree_dropdown.html', true, true);
-        $dropdown->touchBlock("dropdown");
-        $dropdown->setVariable("HREF_RELOAD_ENTRIES", $this->ctrl->getLinkTarget($this->parent_obj,"reloadJson"));
-
-
-        $explorer_panel->setHeading("Kitchen Sink Entries ".$dropdown->get());
-        $explorer_panel->setBody(parent::getHTML());
-        $explorer_panel->setHeadingStyle(ilPanelGUI::HEADING_STYLE_BLOCK);
-        $explorer_panel->setPanelStyle(ilPanelGUI::PANEL_STYLE_PRIMARY);
-         */
-
-
-
-        return parent::getHTML();
-    }
-
-    /**
      * @return Entry\ComponentEntry
-     * @throws ilKitchenSinkException
+     * @throws ilSystemStyleException
      */
     public function getCurrentOpenedNode(){
         return $this->getEntries()->getEntryById($this->getCurrentOpenedNodeId());

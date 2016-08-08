@@ -13,7 +13,7 @@ require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessVariab
 class ilSystemStyleLessFile
 {
     /**
-     * @var KitchenSinkLessVariable[]
+     * @var ilSystemStyleLessVariable[]
      */
     protected $items = array();
 

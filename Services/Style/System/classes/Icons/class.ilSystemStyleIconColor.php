@@ -37,7 +37,7 @@ class ilSystemStyleIconColor
     protected $brightness = null;
 
     /**
-     * KitchenSinkIconColor constructor.
+     * ilSystemStyleIconColor constructor.
      * @param $id
      * @param $name
      * @param $color

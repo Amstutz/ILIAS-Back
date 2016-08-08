@@ -1,8 +1,5 @@
 <?php
 include_once("./Services/UIComponent/Panel/classes/class.ilPanelGUI.php");
-include_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/Less/class.KitchenSinkLessFile.php");
-include_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/class.KitchenSinkSkin.php");
-
 include_once ("Services/Form/classes/class.ilPropertyFormGUI.php");
 include_once ("libs/composer/vendor/geshi/geshi/src/geshi.php");
 
@@ -75,9 +72,6 @@ class ilKSDocumentationEntryGUI
          */
         global $tpl;
 
-        $tpl->addJavaScript("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/libs/highlight/highlight.pack.js");
-        $tpl->addOnLoadCode("hljs.initHighlightingOnLoad();");
-        $tpl->addCss("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/libs/highlight/styles/default.css");
 
         $start =  microtime (true);
         $feature_wiki_links = array();
@@ -215,7 +209,7 @@ class ilKSDocumentationEntryGUI
     }
 
     /**
-     * @return ilKitchenSinkMainGUI
+     * @return ilSystemStyleDocumentationGUI
      */
     public function getParent()
     {
@@ -223,7 +217,7 @@ class ilKSDocumentationEntryGUI
     }
 
     /**
-     * @param ilKitchenSinkMainGUI $parent
+     * @param ilSystemStyleDocumentationGUI $parent
      */
     public function setParent($parent)
     {

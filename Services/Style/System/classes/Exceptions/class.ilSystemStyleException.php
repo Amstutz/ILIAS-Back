@@ -60,7 +60,7 @@ class ilSystemStyleException extends ilException
     protected $add_info = "";
 
     /**
-     * ilKitchenSinkException constructor.
+     * ilSystemStyleException constructor.
      * @param int $exception_code
      * @param string $exception_info
      */

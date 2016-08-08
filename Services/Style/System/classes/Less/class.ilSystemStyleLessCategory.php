@@ -21,7 +21,7 @@ class ilSystemStyleLessCategory extends ilSystemStyleLessItem
     protected $comment = "";
 
     /**
-     * KitchenSinkLessCategory constructor.
+     * ilSystemStyleLessCategory constructor.
      * @param string $name
      * @param string $comment
      */

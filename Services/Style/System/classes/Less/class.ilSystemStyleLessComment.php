@@ -15,7 +15,7 @@ class ilSystemStyleLessComment extends ilSystemStyleLessItem
     protected $comment = "";
 
     /**
-     * KitchenSinkLessComment constructor.
+     * ilSystemStyleLessComment constructor.
      * @param string $comment
      */
     public function __construct($comment)

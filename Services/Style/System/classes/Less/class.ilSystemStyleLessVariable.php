@@ -1,5 +1,4 @@
 <?php
-require_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/KitchenSink/classes/Models/Less/class.KitchenSinkLessItem.php");
 
 /***
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
@@ -41,12 +40,14 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
      * @var array
      */
     protected $references = array();
+
     /**
-     * KitchenSinkLessVariables constructor.
-     * @param string $name
-     * @param string $value
-     * @param int $type
-     * @param string $comment
+     * ilSystemStyleLessVariable constructor.
+     * @param $name
+     * @param $value
+     * @param $comment
+     * @param $category_name
+     * @param $references
      */
     public function __construct($name, $value, $comment,$category_name, $references)
     {
