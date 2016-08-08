@@ -4,14 +4,15 @@
 <td class="std">
 {TITLE}
 </td>
+
 <td class="std">
-<input type="radio" name="default_skin_style" value="{ID}" disabled {CHECKED_DEFAULT} />
+    <!-- BEGIN default_input --><input type="radio" name="default_skin_style" value="{DEFAULT_ID}" disabled {CHECKED_DEFAULT} /><!-- END default_input -->
 </td>
 <td class="std">
-{USERS}
+    <!-- BEGIN active_input --><input type="checkbox" name="st_act[{ACTIVE_ID}]" value="1" disabled {CHECKED_ACTIVE} /><!-- END active_input -->
 </td>
 <td class="std">
-<input type="checkbox" name="st_act[{ID}]" value="1" disabled {CHECKED} />
+    {USERS}
 </td>
 <td class="std">
     <!-- BEGIN substyle -->

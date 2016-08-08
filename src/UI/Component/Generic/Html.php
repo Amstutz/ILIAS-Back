@@ -7,11 +7,11 @@ namespace ILIAS\UI\Component\Generic;
 /**
  */
 interface Html extends \ILIAS\UI\Component\Component {
-    /**
-     * Get HTML stored in this component.
-     *
-     * @return	string
-     */
-    public function getHtml();
+	/**
+	 * Get HTML stored in this component.
+	 *
+	 * @return	string
+	 */
+	public function getHtml();
 }
 

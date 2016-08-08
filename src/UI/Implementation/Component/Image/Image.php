@@ -9,7 +9,7 @@ use ILIAS\UI\Implementation\Component\ComponentHelper;
 
 
 class Image implements C\Image\Image {
-    use ComponentHelper;
+	use ComponentHelper;
 
 	/**
 	 * @var	string
@@ -38,11 +38,11 @@ class Image implements C\Image\Image {
 	 * @inheritdoc
 	 */
 	public function __construct($type, $source, $alt) {
-        $this->checkStringArg("src", $source);
-        $this->checkStringArg("alt", $alt);
-        $this->checkArgIsElement("type", $type, self::$types, "image type");
+		$this->checkStringArg("src", $source);
+		$this->checkStringArg("alt", $alt);
+		$this->checkArgIsElement("type", $type, self::$types, "image type");
 
-        $this->type = $type;
+		$this->type = $type;
 		$this->src = $source;
 		$this->alt = $alt;
 
@@ -52,7 +52,7 @@ class Image implements C\Image\Image {
 	 * @inheritdoc
 	 */
 	public function withType($type){
-        $this->checkArgIsElement("type", $type, self::$types, "image type");
+		$this->checkArgIsElement("type", $type, self::$types, "image type");
 
 		$clone = clone $this;
 		$clone->type = $type;
@@ -68,7 +68,7 @@ class Image implements C\Image\Image {
 
 
 	public function withSource($source){
-        $this->checkStringArg("src", $source);
+		$this->checkStringArg("src", $source);
 
 		$clone = clone $this;
 		$clone->src = $source;
@@ -86,7 +86,7 @@ class Image implements C\Image\Image {
 	 * @inheritdoc
 	 */
 	public function withAlt($alt){
-        $this->checkStringArg("alt", $alt);
+		$this->checkStringArg("alt", $alt);
 
 		$clone = clone $this;
 		$clone->alt = $alt;

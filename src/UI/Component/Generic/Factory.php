@@ -10,14 +10,14 @@ interface Factory {
 	 * ---
 	 * description:
 	 *   purpose: >
-     *     This component is used to wrap an existing ILIAS UI element into a UI component. This is useful if a container
-     *     of the UI components needs to contain content that is not yet implement in the centralized UI components.
-     *   composition: >
-     *     The html component contains html as string.
-     *
-     * rules:
-     *   wording:
-     *      1: This components MUST only be used to ensure backwards compatibility with existing UI elements in ILIAS.
+	 *     This component is used to wrap an existing ILIAS UI element into a UI component. This is useful if a container
+	 *     of the UI components needs to contain content that is not yet implement in the centralized UI components.
+	 *   composition: >
+	 *     The html component contains html as string.
+	 *
+	 * rules:
+	 *   wording:
+	 *      1: This components MUST only be used to ensure backwards compatibility with existing UI elements in ILIAS.
 	 * ---
 	 *
 	 * @param   string $html
@@ -30,7 +30,7 @@ interface Factory {
 	 * description:
 	 *   purpose: >
 	 *       Containers are used to store and array of UI components. This is useful if a contaienr should render not
-     *       only one UI component but an ordered set of components.
+	 *       only one UI component but an ordered set of components.
 	 * ---
 	 *
 	 * @param   \ILIAS\UI\Component\Component[] $components

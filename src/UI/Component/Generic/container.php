@@ -7,11 +7,11 @@ namespace ILIAS\UI\Component\Generic;
 /**
  */
 interface Container extends \ILIAS\UI\Component\Component {
-    /**
-     * Get Components contained by this component.
-     *
-     * @return	\ILIAS\UI\Component\Component
-     */
-    public function getComponents();
+	/**
+	 * Get Components contained by this component.
+	 *
+	 * @return	\ILIAS\UI\Component\Component
+	 */
+	public function getComponents();
 }
 

@@ -58,8 +58,8 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 		$this->addColumn($this->lng->txt(""));
 		$this->addColumn($this->lng->txt("title"));
 		$this->addColumn($this->lng->txt("default"));
-		$this->addColumn($this->lng->txt("users"));
 		$this->addColumn($this->lng->txt("active"));
+		$this->addColumn($this->lng->txt("users"));
 		$this->addColumn($this->lng->txt("sty_substyle_of"));
 		$this->setRowTemplate("tpl.sys_styles_row.html", "Services/Style/System");
 
@@ -127,22 +127,36 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 
 		$this->tpl->setVariable("TITLE", $a_set["title"]);
 		$this->tpl->setVariable("TITLE", $a_set["title"]);
-		$this->tpl->setVariable("ID", $a_set["id"]);
-		
+
 		// number of users
 		$this->tpl->setVariable("USERS", $a_set["users"]);
 
 		// activation
 		include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
-		if (ilSystemStyleSettings::_lookupActivatedStyle($a_set["skin_id"], $a_set["style_id"]))
-		{
-			$this->tpl->setVariable("CHECKED", ' checked="checked" ');
-		}
 
-		if ($ilClientIniFile->readVariable("layout","skin") == $a_set["skin_id"] &&
-				$ilClientIniFile->readVariable("layout","style") == $a_set["style_id"])
-		{
-			$this->tpl->setVariable("CHECKED_DEFAULT", ' checked="checked" ');
+		if($a_set["id"] != "other"){
+			$this->tpl->setCurrentBlock("default_input");
+			$this->tpl->setVariable("DEFAULT_ID", $a_set["id"]);
+			if ($ilClientIniFile->readVariable("layout","skin") == $a_set["skin_id"] &&
+					$ilClientIniFile->readVariable("layout","style") == $a_set["style_id"])
+
+			{
+				$this->tpl->setVariable("CHECKED_DEFAULT", ' checked="checked" ');
+			}else{
+				$this->tpl->setVariable("CHECKED_DEFAULT", '');
+			}
+			$this->tpl->parseCurrentBlock();
+
+			$this->tpl->setCurrentBlock("active_input");
+			$this->tpl->setVariable("ACTIVE_ID", $a_set["id"]);
+
+			if (ilSystemStyleSettings::_lookupActivatedStyle($a_set["skin_id"], $a_set["style_id"])){
+				$this->tpl->setVariable("CHECKED_ACTIVE", ' checked="checked" ');
+			}else{
+				$this->tpl->setVariable("CHECKED_ACTIVE", '');
+			}
+			$this->tpl->parseCurrentBlock();
+
 		}
 
 		if($a_set["substyle_of"] != ""){

@@ -12,22 +12,22 @@ use ILIAS\UI\Implementation\Crawler as Crawler;
  */
 class AbstractEntryPart
 {
-    /**
-     * @var Crawler\Exception\Factory
-     */
-    protected $f = null;
+	/**
+	 * @var Crawler\Exception\Factory
+	 */
+	protected $f = null;
 
-    /**
-     * AbstractEntryPart constructor.
-     */
-    protected function __construct(){
-        $this->f = new Crawler\Exception\Factory();
-    }
+	/**
+	 * AbstractEntryPart constructor.
+	 */
+	protected function __construct(){
+		$this->f = new Crawler\Exception\Factory();
+	}
 
-    /**
-     * @return Crawler\Exception\CrawlerAssertion
-     */
-    protected function assert(){
-        return $this->f->assertion();
-    }
+	/**
+	 * @return Crawler\Exception\CrawlerAssertion
+	 */
+	protected function assert(){
+		return $this->f->assertion();
+	}
 }

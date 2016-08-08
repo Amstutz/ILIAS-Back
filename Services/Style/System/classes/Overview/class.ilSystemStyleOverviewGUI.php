@@ -119,9 +119,10 @@ class ilSystemStyleOverviewGUI
                 }
                 $this->$cmd();
                 return;
-                break;
-            default:
-                $this->view();
+            case "view":
+                $this->$cmd();
+                return;
+
         }
     }
 
@@ -246,6 +247,12 @@ class ilSystemStyleOverviewGUI
             $this->ctrl->redirect($this, "edit");
         }
 
+        if (!isset($_POST["st_act"][$_POST["default_skin_style"]]))
+        {
+            ilUtil::sendFailure($this->lng->txt("cant_deactivate_default_style"), true);
+            $this->ctrl->redirect($this, "edit");
+        }
+
         //set default skin and style
         if ($_POST["default_skin_style"] != "")
         {
@@ -261,9 +268,14 @@ class ilSystemStyleOverviewGUI
         {
             if (!isset($_POST["st_act"][$st["id"]]))
             {
-                if (ilObjUser::_getNumberOfUsersForStyle($st["template_id"], $st["style_id"]) > 1)
+                if (ilObjUser::_getNumberOfUsersForStyle($st["template_id"], $st["style_id"]) > 0)
                 {
                     ilUtil::sendFailure($this->lng->txt("cant_deactivate_if_users_assigned"), true);
+                    $this->ctrl->redirect($this, "edit");
+                }
+                else if (ilSystemStyleSettings::getCurrentDefaultStyle()==$st["style_id"])
+                {
+                    ilUtil::sendFailure($this->lng->txt("cant_deactivate_default_style"), true);
                     $this->ctrl->redirect($this, "edit");
                 }
                 else
@@ -483,25 +495,50 @@ class ilSystemStyleOverviewGUI
     protected function deleteStyle(){
         $skin_id = $_GET["skin_id"];
         $style_id = $_GET["style_id"];
+        $message_stack = new ilSystemStyleMessageStack();
 
-        $delete_form_table = new ilSystemStyleDeleteGUI();
-        $container = ilSystemStyleSkinContainer::generateFromId($skin_id);
-        $delete_form_table->addStyle($container->getSkin(),$container->getSkin()->getStyle($style_id));
-        $this->tpl->setContent($delete_form_table->getDeleteStyleFormHTML());
+        if($this->checkDeletable($skin_id,$style_id,$message_stack)){
+            $delete_form_table = new ilSystemStyleDeleteGUI();
+            $container = ilSystemStyleSkinContainer::generateFromId($skin_id);
+            $delete_form_table->addStyle($container->getSkin(),$container->getSkin()->getStyle($style_id));
+            $this->tpl->setContent($delete_form_table->getDeleteStyleFormHTML());
+        }else{
+            $message_stack->sendMessages(true);
+        }
+        $this->edit();
+
     }
     protected function deleteStyles(){
         $delete_form_table = new ilSystemStyleDeleteGUI();
+        $message_stack = new ilSystemStyleMessageStack();
 
+        $all_deletable = true;
         foreach($_POST['id'] as $skin_style_id){
             $imploded_skin_style_id = explode(":", $skin_style_id);
             $skin_id = $imploded_skin_style_id[0];
             $style_id = $imploded_skin_style_id[1];
-            $container = ilSystemStyleSkinContainer::generateFromId($skin_id);
-            $delete_form_table->addStyle($container->getSkin(),$container->getSkin()->getStyle($style_id));
+            $all_deletable = $this->checkDeletable($skin_id,$style_id,$message_stack);
         }
-        $this->tpl->setContent($delete_form_table->getDeleteStyleFormHTML());
+        if($all_deletable){
+            foreach($_POST['id'] as $skin_style_id){
+                $imploded_skin_style_id = explode(":", $skin_style_id);
+                $skin_id = $imploded_skin_style_id[0];
+                $style_id = $imploded_skin_style_id[1];
+                $container = ilSystemStyleSkinContainer::generateFromId($skin_id);
+                $delete_form_table->addStyle($container->getSkin(),$container->getSkin()->getStyle($style_id));
+            }
+            $this->tpl->setContent($delete_form_table->getDeleteStyleFormHTML());
+        }else{
+            $message_stack->sendMessages(true);
+        }
+        $this->edit();
 
     }
+
+    protected function checkDeletable($skin_id,$style_id){
+
+    }
+
     protected function confirmDelete(){
         $message_stack = new ilSystemStyleMessageStack();
 

@@ -6,7 +6,6 @@ require_once(__DIR__."/../../../../libs/composer/vendor/autoload.php");
 require_once(__DIR__."/../../Base.php");
 
 use \ILIAS\UI\Component as C;
-use \ILIAS\UI\Implementation\Glyph\Renderer as GlyphRenderer;
 
 /**
  * Test on button implementation.

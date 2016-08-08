@@ -26,7 +26,7 @@ interface Factory {
 	 *   ordering:
 	 *       1: >
 	 *          The most important standard button SHOULD be first in reading
-     *          direction if there are several buttons.
+	 *          direction if there are several buttons.
 	 *       2: >
 	 *          In the toolbar and in forms special regulations for the ordering
 	 *          of the buttons MAY apply.

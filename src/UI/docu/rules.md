@@ -11,12 +11,12 @@ rules and propose changes.
 
 * Rules in this proposal are formulated according to [RFC2119](https://www.ietf.org/rfc/rfc2119.txt).
 * Goals of this proposal and the rules herein are as such:
-    * Spawn a reliable and controlled process to introduce new components in the
-      UI of ILIAS.
-    * The process should result in guidelines as little as possible and result in
-      machine verifiable rules as much as possible.
-    * The creation of a centralized UI framework for ILIAS where everyone can
-      contribute and that offers a coherent surface for its users.
+	* Spawn a reliable and controlled process to introduce new components in the
+	  UI of ILIAS.
+	* The process should result in guidelines as little as possible and result in
+	  machine verifiable rules as much as possible.
+	* The creation of a centralized UI framework for ILIAS where everyone can
+	  contribute and that offers a coherent surface for its users.
 
 ## Processes
 
@@ -41,8 +41,8 @@ rules and propose changes.
 * In addition to the YAML-Block described in **Interfaces to Factories** the
   proposed interfaces, if not already implemented, SHOULD contain the following
   fields:
-    * `less` - lists the LESS-variables that will be used to render the
-      UI component including their purpose
+	* `less` - lists the LESS-variables that will be used to render the
+	  UI component including their purpose
 * If the new UI component is not implemented, there SHOULD be an html-example in
   the examples-folder.
 * The new UI component MUST be presented on the JF, including the corresponding
@@ -86,7 +86,7 @@ rules and propose changes.
 	- the array is used as a plain list of values or objects, where the index
 	  is just 0 to n and the array is ordered accordingly
 	- the array is used as a key-value dictionary and the methods does not expect
-      any special keys or access the dictionary with special keys
+	  any special keys or access the dictionary with special keys
 
 ### Interfaces to Factories
 
@@ -113,44 +113,44 @@ The interface to the main factory is \ILIAS\UI\Factory.
 * If a method of a factory returns an UI-component it MAY have parameters.
 * All methods of every factory MUST be documented in a PHP DocBlock.
 * The documentation of all methods of every factory:
-    * MUST include a first part in YAML notation containing information for the
-      Kitchen Sink.
-    * MUST include a documentation of the parameters and return values according
-      to PHPDoc-format.
-    * MUST separate the block containing Kitchen Sink information from the block
-      containing documentation of parameters by an empty line in the DocBlock.
+	* MUST include a first part in YAML notation containing information for the
+	  Kitchen Sink.
+	* MUST include a documentation of the parameters and return values according
+	  to PHPDoc-format.
+	* MUST separate the block containing Kitchen Sink information from the block
+	  containing documentation of parameters by an empty line in the DocBlock.
 * The block in the documentation containing Kitchen Sink information:
-    * MUST be enclosed by comment lines containing only the delimiter `---`.
-    * SHOULD contain a field `description` that is a dictionary containing one or
-      more than one of the following text fields:
-        * `purpose` - describes the usage scenario of the component
-        * `composition` - describes how the component is composed with other
-          components
-        * `effect` - describes visual effects that relate to the item
-        * `rival` - describes other components fulfilling a similar function
-    * MAY contain a text field `background` that gives academic information
-    * SHOULD contain a text field `context` that describes occurences and
-      prevalences of the control if the method describes a concrete UI component.
-      If the method represents an abstract node in the in the Kitchen Sink
-      taxonomy it MUST NOT contain a `context` field.
-    * MAY contain a text field `featurewiki` that contains links to relevant
-      articles in the feature wiki.
-    * MUST contain a field `javascript` if the method represents an UI component
-      and the implementation of the component uses a javascript library other
-      than jquery and bootstrap or if the component is not yet implemented but a
-      javascript lib other than jquery and bootstrap is planned to be used, where
-      the field contains the names and versions of all said javascript libraries.
-    * SHOULD contain a field `rules` that contains one or more than one of the 
-      following fields `usage`, `interaction`, `wording`, `style`, `ordering`, 
-      `responsiveness`, `composition` and `accessibility`, where
-        * each of the contained fields is a dictionary from a number to a text
-        * each of the contained fields MUST contain at least one rule for the
-          proposed Kitchen Sink entry
-        * every rule in one field MUST have a successive number
-        * the number of a rule MUST NOT be changed
-        * a rule MAY keep its number upon minor changes in the rule
-        * rules MUST be formulated according to [RFC2119](https://www.ietf.org/rfc/rfc2119.txt)
-      This makes sure that each rule can be referenced by a unique name.
+	* MUST be enclosed by comment lines containing only the delimiter `---`.
+	* SHOULD contain a field `description` that is a dictionary containing one or
+	  more than one of the following text fields:
+		* `purpose` - describes the usage scenario of the component
+		* `composition` - describes how the component is composed with other
+		  components
+		* `effect` - describes visual effects that relate to the item
+		* `rival` - describes other components fulfilling a similar function
+	* MAY contain a text field `background` that gives academic information
+	* SHOULD contain a text field `context` that describes occurences and
+	  prevalences of the control if the method describes a concrete UI component.
+	  If the method represents an abstract node in the in the Kitchen Sink
+	  taxonomy it MUST NOT contain a `context` field.
+	* MAY contain a text field `featurewiki` that contains links to relevant
+	  articles in the feature wiki.
+	* MUST contain a field `javascript` if the method represents an UI component
+	  and the implementation of the component uses a javascript library other
+	  than jquery and bootstrap or if the component is not yet implemented but a
+	  javascript lib other than jquery and bootstrap is planned to be used, where
+	  the field contains the names and versions of all said javascript libraries.
+	* SHOULD contain a field `rules` that contains one or more than one of the
+	  following fields `usage`, `interaction`, `wording`, `style`, `ordering`,
+	  `responsiveness`, `composition` and `accessibility`, where
+		* each of the contained fields is a dictionary from a number to a text
+		* each of the contained fields MUST contain at least one rule for the
+		  proposed Kitchen Sink entry
+		* every rule in one field MUST have a successive number
+		* the number of a rule MUST NOT be changed
+		* a rule MAY keep its number upon minor changes in the rule
+		* rules MUST be formulated according to [RFC2119](https://www.ietf.org/rfc/rfc2119.txt)
+	  This makes sure that each rule can be referenced by a unique name.
 * The parameters of every method SHOULD be type hinted.
 * There MAY be more than one method in a factory declaring to return an instance
   of the same interface.
@@ -159,16 +159,16 @@ The interface to the main factory is \ILIAS\UI\Factory.
 * The proposed interfaces SHOULD pass a phpunit test extending tests/UI/AbstractFactoryTest.
   The final test
   * must have a public static $factoryTitle defined, containing the fully qualified
-    factory interface name
+	factory interface name
   * may contain an associative array, public $kitchensink_info_settings, mapping method
-    names to an array of kitchensink info yaml fields mapping to bools, meaning that
-    the test will check the existence of these fields. Example:
-    public $kitchensink_info_settings =
-        array( "method1" => array ("rules" => false, "javascript" => true));
-    If no settings are defined for a method, defaults deriving from above rules for
-    Kitchen Sink information will be used, where 'SHOULD' is interpreted as true and
-    'MAY' is interpreted as false.
-    Obligatory fields (MUST/MUST NOT) are always checked and MUST NOT be overwritten.
+	names to an array of kitchensink info yaml fields mapping to bools, meaning that
+	the test will check the existence of these fields. Example:
+	public $kitchensink_info_settings =
+		array( "method1" => array ("rules" => false, "javascript" => true));
+	If no settings are defined for a method, defaults deriving from above rules for
+	Kitchen Sink information will be used, where 'SHOULD' is interpreted as true and
+	'MAY' is interpreted as false.
+	Obligatory fields (MUST/MUST NOT) are always checked and MUST NOT be overwritten.
 
 
 ### Interfaces to UI components

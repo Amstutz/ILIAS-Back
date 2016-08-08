@@ -10,11 +10,11 @@ namespace ILIAS\UI\Implementation\Component;
 trait ComponentHelper {
 	/**
 	 * Throw an InvalidArgumentException containing the message if $check is false.
-     *
+	 *
 	 * @param	string	$which
 	 * @param	bool	$check
 	 * @param	string	$message
- 	 * @throws 	\InvalidArgumentException	if $check = false
+	 * @throws 	\InvalidArgumentException	if $check = false
 	 * @return	null
 	 */
 	protected function checkArg($which, $check, $message) {
@@ -31,7 +31,7 @@ trait ComponentHelper {
 	 *
 	 * @param	string	$which
 	 * @param	mixed	$value
- 	 * @throws 	\InvalidArgumentException	if $check = false
+	 * @throws 	\InvalidArgumentException	if $check = false
 	 * @return null
 	 */ 
 	protected function checkIntArg($which, $value) {
@@ -115,7 +115,7 @@ trait ComponentHelper {
 	}
 
 	/**
- 	 * Wrap the given value in an array if it is no array.
+	 * Wrap the given value in an array if it is no array.
 	 *
 	 * @param	mixed	$value
 	 * @return	array

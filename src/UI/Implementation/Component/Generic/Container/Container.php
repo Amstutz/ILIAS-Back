@@ -7,24 +7,24 @@ namespace ILIAS\UI\Implementation\Component\Generic\Container;
 use ILIAS\UI\Component as C;
 
 class Container implements C\Generic\Container {
-    /**
-     * @var	\ILIAS\UI\Implementation\Component\Component[]
-     */
-    private $components;
+	/**
+	 * @var	\ILIAS\UI\Implementation\Component\Component[]
+	 */
+	private $components;
 
-    /**
-     * Container constructor.
-     * @param \ILIAS\UI\Implementation\Component\Component[]
-     */
-    public function __construct($components) {
-        $this->components = $components;
-    }
+	/**
+	 * Container constructor.
+	 * @param \ILIAS\UI\Implementation\Component\Component[]
+	 */
+	public function __construct($components) {
+		$this->components = $components;
+	}
 
-    /**
-     * @return string
-     */
-    public function getComponents(){
-        return $this->components;
-    }
+	/**
+	 * @return string
+	 */
+	public function getComponents(){
+		return $this->components;
+	}
 }
 ?>

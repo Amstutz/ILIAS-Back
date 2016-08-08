@@ -142,7 +142,7 @@ class ilSystemStyleMainGUI
 	 */
 	public function checkPermission($a_perm, $a_throw_exc = true)
 	{
-		global $DIC, $ilIliasIniFile;
+		global $ilIliasIniFile;
 
 		$has_perm = true;
 
@@ -164,7 +164,7 @@ class ilSystemStyleMainGUI
 			}
 			return false;
 		}
-		return true;
+		return $has_perm;
 	}
 
 	protected function setUnderworldTabs($active = "") {

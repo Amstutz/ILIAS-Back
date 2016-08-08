@@ -11,13 +11,13 @@ class Factory implements G\Factory {
 	 * @inheritdoc
 	 */
 	public function html($html) {
-        return new Html\Html($html);
-    }
+		return new Html\Html($html);
+	}
 
 	/**
 	 * @inheritdoc
 	 */
 	public function container($components) {
-        return new Container\Container($components);
-    }
+		return new Container\Container($components);
+	}
 }

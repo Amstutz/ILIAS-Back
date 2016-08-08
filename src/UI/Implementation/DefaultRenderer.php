@@ -34,7 +34,7 @@ class DefaultRenderer implements Renderer {
 	/**
 	 * @var	ResourceRegistry
 	 */
-	private $resource_registry;
+	protected $resource_registry;
 
 	/**
 	 * @var	\ilLanguage
