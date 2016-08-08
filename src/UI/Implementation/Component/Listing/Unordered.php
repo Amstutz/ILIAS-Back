@@ -12,4 +12,3 @@ use \ILIAS\UI\Component as C;
  */
 class Unordered extends Listing  implements C\Listing\Unordered {
 }
-?>

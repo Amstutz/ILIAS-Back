@@ -18,6 +18,7 @@ interface Descriptive extends Listing {
 	public function withItems(array $items);
 
 	/**
+	 * Gets the key value pair as items for the list. Key is used as title and value as content.
 	 * @return [] $items string => Component | string
 	 */
 	public function getItems();

@@ -12,4 +12,3 @@ use \ILIAS\UI\Component as C;
  */
 class Ordered extends Listing  implements C\Listing\Ordered {
 }
-?>

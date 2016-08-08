@@ -25,6 +25,8 @@ class Listing implements C\Listing\Listing {
 	 * @param $items
 	 */
 	public function __construct($items) {
+		$types = array('string',C\Component::class);
+		$this->checkArgListElements("items", $items, $types);
 		$this->items = $items;
 	}
 
@@ -32,6 +34,9 @@ class Listing implements C\Listing\Listing {
 	 * @inheritdoc
 	 */
 	public function withItems(array $items){
+		$types = array('string',C\Component::class);
+		$this->checkArgListElements("items", $items, $types);
+
 		$clone = clone $this;
 		$clone->items = $items;
 		return $clone;
@@ -44,4 +49,3 @@ class Listing implements C\Listing\Listing {
 		return $this->items;
 	}
 }
-?>
