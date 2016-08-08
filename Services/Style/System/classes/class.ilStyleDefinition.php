@@ -180,17 +180,21 @@ class ilStyleDefinition
 			$skins = array();
 			$skins[self::DEFAULT_SKIN_ID] = ilSkinXML::parseFromXML(self::DEFAULT_TEMPLATE_PATH);
 
-			$cust_skins_directory = new RecursiveDirectoryIterator("./Customizing/global/skin",FilesystemIterator::SKIP_DOTS);
-			foreach ($cust_skins_directory as $skin_folder) {
-				if($skin_folder->isDir()){
-					$template_path = $skin_folder->getRealPath()."/template.xml";
-					if (file_exists($template_path))
-					{
-						$skin = ilSkinXML::parseFromXML($template_path);
-						$skins[$skin->getId()] = $skin;
+
+			if(is_dir(self::CUSTOMIZING_SKINS_PATH)){
+				$cust_skins_directory = new RecursiveDirectoryIterator(self::CUSTOMIZING_SKINS_PATH,FilesystemIterator::SKIP_DOTS);
+				foreach ($cust_skins_directory as $skin_folder) {
+					if($skin_folder->isDir()){
+						$template_path = $skin_folder->getRealPath()."/template.xml";
+						if (file_exists($template_path))
+						{
+							$skin = ilSkinXML::parseFromXML($template_path);
+							$skins[$skin->getId()] = $skin;
+						}
 					}
 				}
 			}
+
 			self::setSkins($skins);
 		}
 
