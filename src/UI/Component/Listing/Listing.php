@@ -17,7 +17,7 @@ interface Listing extends \ILIAS\UI\Component\Component {
 	/**
 	 * Gets the items to be listed
 	 *
-	 * @return string[] $items (Component|string)
+	 * @return [] $items (Component|string)
 	 */
 	public function getItems();
 }

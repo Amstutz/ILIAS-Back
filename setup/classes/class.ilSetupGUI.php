@@ -855,7 +855,7 @@ echo "<br>+".$client_id;
 		// system styles
 		$ne = new ilNonEditableValueGUI($lng->txt("enable_system_styles_management"), "enable_system_styles_management");
 		$p = $this->setup->ini->readVariable("tools","enable_system_styles_management");
-		$ne->setValue($p ? $p : $this->lng->txt("not_enabled"));
+		$ne->setValue($p ? $this->lng->txt("enabled") : $this->lng->txt("not_enabled"));
 		$this->form->addItem($ne);
 
         // lessc command

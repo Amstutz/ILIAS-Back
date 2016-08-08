@@ -2,14 +2,14 @@
 
 /* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 
-namespace ILIAS\UI\Implementation\Component\Listing\Listing;
+namespace ILIAS\UI\Implementation\Component\Listing;
 
 use ILIAS\UI\Component as C;
 use ILIAS\UI\Implementation\Component\ComponentHelper;
 
 /**
- * Class SimpleList
- * @package ILIAS\UI\Implementation\Component\Listing\SimpleList
+ * Class Listing
+ * @package ILIAS\UI\Implementation\Component\Listing\Listing
  */
 class Listing implements C\Listing\Listing {
 	use ComponentHelper;
@@ -21,7 +21,7 @@ class Listing implements C\Listing\Listing {
 
 
 	/**
-	 * SimpleList constructor.
+	 * Listing constructor.
 	 * @param $items
 	 */
 	public function __construct($items) {

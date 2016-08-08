@@ -8,7 +8,7 @@ namespace ILIAS\UI\Component\Listing;
  * Interface Descriptive
  * @package ILIAS\UI\Component\Listing
  */
-interface Descriptive extends \ILIAS\UI\Component\Component {
+interface Descriptive extends Listing {
 
 	/**
 	 * Sets a key value pair as items for the list. Key is used as title and value as content.

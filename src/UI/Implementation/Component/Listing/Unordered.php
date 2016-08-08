@@ -2,13 +2,13 @@
 
 /* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 
-namespace ILIAS\UI\Implementation\Component\Listing\SimpleList;
+namespace ILIAS\UI\Implementation\Component\Listing;
 
 use \ILIAS\UI\Component as C;
 
 /**
- * Class SimpleList
- * @package ILIAS\UI\Implementation\Component\Listing\SimpleList
+ * Class Listing
+ * @package ILIAS\UI\Implementation\Component\Listing\Listing
  */
 class Unordered extends Listing  implements C\Listing\Unordered {
 }

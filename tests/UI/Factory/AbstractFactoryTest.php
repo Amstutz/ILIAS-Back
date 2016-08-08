@@ -1,6 +1,7 @@
 <?php
 
-require_once("libs/composer/vendor/autoload.php");
+require_once(__DIR__."/../../../libs/composer/vendor/autoload.php");
+
 use ILIAS\UI\Implementation\Crawler\Exception as CrawlerException;
 use ILIAS\UI\Implementation\Crawler as Crawler;
 

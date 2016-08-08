@@ -2,12 +2,12 @@
 
 /* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 
-namespace ILIAS\UI\Implementation\Component\Listing\Descriptive;
+namespace ILIAS\UI\Implementation\Component\Listing;
 
 use ILIAS\UI\Component as C;
 
 /**
- * Class DescriptiveList
+ * Class Descriptive
  * @package ILIAS\UI\Implementation\Component\Listing\Descriptive
  */
 class Descriptive implements C\Listing\Descriptive {
