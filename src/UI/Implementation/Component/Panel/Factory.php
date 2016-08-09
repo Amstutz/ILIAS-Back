@@ -17,13 +17,6 @@ class Factory implements \ILIAS\UI\Component\Panel\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function heading($heading,$body) {
-		return new Panel(P\Panel::HEADING,$heading,$body);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
 	public function report($heading,$body) {
 		return new Panel(P\Panel::REPORT,$heading,$body);
 	}
