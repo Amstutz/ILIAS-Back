@@ -15,7 +15,9 @@ interface Factory {
 	 * description:
 	 *   purpose: >
 	 *      Standard Panels are used in the Center Content section to group content.
-	 *      The structure of this content might be varying from Standard Panel to Standard Panel.
+     *   composition: >
+     *      Standard consist of a title and a content section. The structure of this content might be varying from Standard
+     *      Panel to Standard Panel. Standard Panels may contain Sub Panels.
 	 *   rivals:
 	 *      Cards: >
 	 *        Often Cards are used in Decks to display multiple uniformly structured chunks of Data horizontally and vertically.
@@ -63,36 +65,31 @@ interface Factory {
 	 * description:
 	 *   purpose: >
 	 *       Report Panels display user-generated data combining text in lists, tables and sometimes  charts.
-	 *       Bulletins always draws from two distinct sources: the structure / scaffolding of the Report Panels
+	 *       Report Panels always draw from two distinct sources: the structure / scaffolding of the Report Panels
 	 *       stems from user-generated content (i.e a question of a survey, a competence with levels) and is
 	 *       filled with user-generated content harvested by that very structure (i.e. participants’ answers to
 	 *       the question, self-evaluation of competence).
 	 *   composition: >
-	 *       They comprise the structured content used to harvest input and the harvested input alongside:
-	 *       the text of the harvesting structure is given in full length with a headline,
-	 *       label of subitems, text of subitems in bulleted lists. This may be followed by a table
-	 *       comprising or aggregating the harvested input. This might be followed by a picture or a graph.
-	 *       They are composed of a heading panel which may contain several block panels. They might also cantain
-	 *       a card to display information requiring special information in their first block.
+	 *       They are composed of a Standard Panel which contains several Block Panels. They might also contain
+	 *       a card to display information meta information in their first block.
 	 *   effect: >
 	 *       Report Panels are predominantly used for displaying data. They may however comprise links or buttons.
 	 *
 	 * context: >
-	 *      Heading Panels: >
-	 *        The Report Panels contains one heading panel containing the block panels used to structure information.
-	 *      Cards: >
-	 *        The Report Panels may contain one card in it's first block.
+	 *      Standard Panels: >
+	 *        The Report Panels contains one Standard Panel containing the block panels used to structure information.
 	 *
 	 * rules:
 	 *   usage:
-	 *      1: Report Panels are to be used when user generated content of two sources (i.e results, guidelines in a template) is to be displayed alongside each other.
+	 *      1: Report Panels SHOULD be used when user generated content of two sources (i.e results, guidelines in a template)
+     *         is to be displayed alongside each other.
 	 *   interaction:
 	 *      1: Links MAY open new views.
 	 *      2: Buttons MAY trigger actions or inline editing.
 	 * ---
-	 * @param string $body
-	 * @param \ILIAS\UI\Component\Component $body
-	 * @return \ILIAS\UI\Component\Panel
+	 * @param string $title
+	 * @param \ILIAS\UI\Component\Panel\Sub[] $sub_panels
+	 * @return \ILIAS\UI\Component\Panel\Report
 	 */
-	public function report($heading,$blocks);
+	public function report($title,$sub_panels);
 }

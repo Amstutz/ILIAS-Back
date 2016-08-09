@@ -6,18 +6,29 @@ namespace ILIAS\UI\Implementation\Component\Panel;
 
 use ILIAS\UI\Component\Panel as P;
 
+/**
+ * Class Factory
+ * @package ILIAS\UI\Implementation\Component\Panel
+ */
 class Factory implements \ILIAS\UI\Component\Panel\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function block($heading,$body) {
-		return new Panel(P\Panel::BLOCK,$heading,$body);
+	public function standard($title,$content) {
+		return new Standard($title,$content);
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function report($heading,$body) {
-		return new Panel(P\Panel::REPORT,$heading,$body);
-	}
+    /**
+     * @inheritdoc
+     */
+    public function sub($title,$content) {
+        return new Sub($title,$content);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function report($title,$sub_panels) {
+        return new Report($title,$sub_panels);
+    }
 }

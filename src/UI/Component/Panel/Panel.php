@@ -8,46 +8,25 @@ namespace ILIAS\UI\Component\Panel;
  * This describes how a panel could be modified during construction of UI.
  */
 interface Panel extends \ILIAS\UI\Component\Component {
-	// Types of glyphs:
-	const BLOCK = "default";
-	const HEADING = "primary";
-	const REPORT = "primary";
+	/**
+	 * @param string $title Title of the Panel
+	 * @return \ILIAS\UI\Component\Panel\Panel
+	 */
+	public function withTitle($title);
 
 	/**
-	 * Get the type of the panel.
-	 *
-	 * @return	string
+	 * @return string $title Title of the Panel
 	 */
-	public function getType();
+	public function getTitle();
 
 	/**
-	 * Get a panel like this, but with a new type.
-	 *
-	 * @param	string	$type onne of the panel types.
-	 * @return	Glyph
+     * @param mixed $content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
+     * @return \ILIAS\UI\Component\Panel\Panel
 	 */
-	public function withType($type);
-
+	public function withContent($content);
 
 	/**
-	 * @param string $heading
-	 * @return \ILIAS\UI\Component\Panel
+	 * @return mixed content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
 	 */
-	public function withHeading($heading);
-
-	/**
-	 * @return string
-	 */
-	public function getHeading();
-
-	/**
-	 * @param \ILIAS\UI\Component\Component $body
-	 * @return \ILIAS\UI\Component\Panel
-	 */
-	public function withBody($body);
-
-	/**
-	 * @return \ILIAS\UI\Component\Component
-	 */
-	public function getBody();
+	public function getContent();
 }

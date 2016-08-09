@@ -11,7 +11,7 @@ use ILIAS\UI\Implementation\Component\ComponentHelper;
  * Class Panel
  * @package ILIAS\UI\Implementation\Component\Panel
  */
-class Panel implements C\Panel\Panel {
+class Report implements C\Panel\Report {
 	use ComponentHelper;
 
 	/**
@@ -20,25 +20,23 @@ class Panel implements C\Panel\Panel {
 	private  $title;
 
 	/**
-	 * @var mixed content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
+	 * @var \ILIAS\UI\Component\Panel\Sub[]
 	 */
-	private  $content;
+	private  $sub_panels;
 
 
     /**
      * @param string $title
-     * @param mixed $content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
+     * @param \ILIAS\UI\Component\Panel\Sub[]
      */
-	public function __construct($title,$content) {
+	public function __construct($title,$sub_panels) {
 		$this->checkStringArg("title",$title);
-        $content = $this->toArray($content);
-        $types = array(C\Component::class);
-        $this->checkArgListElements("content", $content, $types);
+        $sub_panels= $this->toArray($sub_panels);
+        $types = array(C\Panel\Sub::class);
+        $this->checkArgListElements("content", $sub_panels, $types);
 
 		$this->title = $title;
-		$this->content = $content;
-
-        return $this;
+		$this->sub_panels = $sub_panels;
 	}
 
 	/**
@@ -62,21 +60,21 @@ class Panel implements C\Panel\Panel {
 	/**
 	 * @inheritdoc
 	 */
-	public function withContent($content){
-        $content = $this->toArray($content);
-        $types = array(C\Component::class);
-        $this->checkArgListElements("content", $content, $types);
+	public function withSubPanels($sub_panels){
+        $sub_panels= $this->toArray($sub_panels);
+        $types = array(C\Panel\Sub::class);
+        $this->checkArgListElements("content", $sub_panels, $types);
 
         $clone = clone $this;
-		$clone->content = $content;
+		$clone->sub_panels = $sub_panels;
 		return $clone;
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function getContent() {
-		return $this->content;
+	public function getSubPanels() {
+		return $this->sub_panels;
 	}
 }
 ?>
