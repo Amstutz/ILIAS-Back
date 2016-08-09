@@ -14,28 +14,22 @@ interface Factory {
 	 * ---
 	 * description:
 	 *   purpose: >
-	 *      Heading Panels are used in the Center Content section to group content.
-	 *      The structure of this content might be varying from Heading Panel to Heading Panel.
+	 *      Standard Panels are used in the Center Content section to group content.
+	 *      The structure of this content might be varying from Standard Panel to Standard Panel.
 	 *   rivals:
-	 *      Block Panels: >
-	 *        Block Panels are used in Sidebars or as subpanels of heading panels.
 	 *      Cards: >
 	 *        Often Cards are used in Decks to display multiple uniformly structured chunks of Data horizontally and vertically.
 	 *
 	 * rules:
 	 *   usage:
-	 *      1: In Forms Heading Panel MUST be used  to group different sections into Form Parts.
-	 *      2: Heading Panels SHOULD be used in the Center Content as primary Container for grouping content of varying content.
-	 *   style:
-	 *      1: Heading Sections MUST not have a Cog to enable settings.
-	 *   ordering:
-	 *      1: Heading Sections MUST not have a Cog to enable settings.
+	 *      1: In Forms Standard Panels MUST be used to group different sections into Form Parts.
+	 *      2: Standard Panels SHOULD be used in the Center Content as primary Container for grouping content of varying content.
 	 * ---
-	 * @param string $body
-	 * @param \ILIAS\UI\Component\Component $body
-	 * @return \ILIAS\UI\Component\Panel
+	 * @param string $title
+	 * @param mixed $content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
+	 * @return \ILIAS\UI\Component\Panel\Standard
 	 */
-	public function standard($heading,$body);
+	public function standard($title,$content);
 
 	/**
 	 * ---

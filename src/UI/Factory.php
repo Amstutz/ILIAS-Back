@@ -294,10 +294,10 @@ interface Factory {
 	 * ---
 	 * description:
 	 *   purpose: >
-	 *     Panels are used to group titled Content.
+	 *     Panels are used to group titled content.
 	 *   composition: >
 	 *      Panels consist of a header and content section. They form one Gestalt and so build a perceivable
-	 *      cluster of information
+	 *      cluster of information.
 	 *   effect: The effect of interaction with panels heavily depends on their content.
 	 *
 	 * rules:
