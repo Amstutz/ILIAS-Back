@@ -7,7 +7,10 @@ namespace ILIAS\UI\Implementation\Component\Image;
 use ILIAS\UI\Component as C;
 use ILIAS\UI\Implementation\Component\ComponentHelper;
 
-
+/**
+ * Class Image
+ * @package ILIAS\UI\Implementation\Component\Image
+ */
 class Image implements C\Image\Image {
 	use ComponentHelper;
 
@@ -27,12 +30,12 @@ class Image implements C\Image\Image {
 	private  $alt;
 
 	/**
-	 * @var array
+	 * @var []
 	 */
-	private static $types = array(
-		self::STANDARD,
-		self::RESPONSIVE
-	);
+	private static $types = [
+			self::STANDARD,
+			self::RESPONSIVE
+	];
 
 	/**
 	 * @inheritdoc
@@ -66,7 +69,9 @@ class Image implements C\Image\Image {
 		return $this->type;
 	}
 
-
+	/**
+	 * @inheritdoc
+	 */
 	public function withSource($source){
 		$this->checkStringArg("src", $source);
 

@@ -12,8 +12,10 @@ interface Factory {
 	/**
 	 * ---
 	 * description:
-	 *   purpose: The standard image is used if there is no specific reason to use another specialized one.
+	 *   purpose: The standard image is used if the image is to be rendered in it's the original size.
 	 * ----
+	 * @param string $src
+	 * @param string $alt
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */
 	public function standard($src,$alt);
@@ -27,6 +29,8 @@ interface Factory {
 	 *     Responsive images scale nicely to the parent element.
 	 *
 	 * ----
+	 * @param string $src
+	 * @param string $alt
 	 * @return  \ILIAS\UI\Component\Image\Image
 	 */
 	public function responsive($src,$alt);

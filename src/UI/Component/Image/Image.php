@@ -6,6 +6,9 @@ namespace ILIAS\UI\Component\Image;
 
 /**
  * This describes how a glyph could be modified during construction of UI.
+ *
+ * Interface Image
+ * @package ILIAS\UI\Component\Image
  */
 interface Image extends \ILIAS\UI\Component\Component {
 	/**
@@ -13,9 +16,9 @@ interface Image extends \ILIAS\UI\Component\Component {
 	 */
 	const STANDARD = "standard";
 	const RESPONSIVE = "responsive";
+
 	/**
-	 *
-	 * Set the source (path) of the image.
+	 * Set the source (path) of the image. The complete path to the image has to be provided.
 	 * @param string
 	 * @return \ILIAS\UI\Component\Image\Image
 	 */
@@ -28,20 +31,20 @@ interface Image extends \ILIAS\UI\Component\Component {
 	public function getSource();
 
 	/**
-	 * Set the type of the image (currently only 'standard' is supported)
+	 * Set the type of the image.
 	 * @param string $type
 	 * @return \ILIAS\UI\Component\Image\Image
 	 */
 	public function withType($type);
 
 	/**
-	 * Get the type of the image (currently only 'standard' is supported)
+	 * Get the type of the image
 	 * @return string
 	 */
 	public function getType();
 
 	/**
-	 * Set the alternative text for screen readers
+	 * Set the alternative text for screen readers.
 	 * @param string $alt
 	 * @return \ILIAS\UI\Component\Image\Image
 	 */
@@ -49,7 +52,7 @@ interface Image extends \ILIAS\UI\Component\Component {
 
 
 	/**
-	 * Get the alternative text for screen readers
+	 * Get the alternative text for screen readers.
 	 * @return string
 	 */
 	public function getAlt();
