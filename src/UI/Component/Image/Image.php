@@ -19,7 +19,7 @@ interface Image extends \ILIAS\UI\Component\Component {
 
 	/**
 	 * Set the source (path) of the image. The complete path to the image has to be provided.
-	 * @param string
+	 * @param string $source
 	 * @return \ILIAS\UI\Component\Image\Image
 	 */
 	public function withSource($source);
@@ -29,13 +29,6 @@ interface Image extends \ILIAS\UI\Component\Component {
 	 * @return string
 	 */
 	public function getSource();
-
-	/**
-	 * Set the type of the image.
-	 * @param string $type
-	 * @return \ILIAS\UI\Component\Image\Image
-	 */
-	public function withType($type);
 
 	/**
 	 * Get the type of the image

@@ -227,54 +227,6 @@ interface Factory {
 	/**
 	 * ---
 	 * description:
-	 *   purpose: The Image component is used to display images of various sources.
-	 *   composition: An Image is composed of the image and an alternative text for screen readers.
-	 *   effect: Images may be included in interacted components but not interactive on their own.
-	 *
-	 * ---
-	 * @return \ILIAS\UI\Component\Image\Factory
-	 */
-	public function image();
-
-	/**
-	 * ---
-	 * description:
-	 *   purpose: >
-	 *      Links are navigational controls and mainly open a new view.
-	 *      A ‘view’ is a context, a new and different screen compared to where the user clicked the link.
-	 *      Mostly Links trigger interactions that do not leave a permanent change on the system.
-	 *      There are exceptions to this rule. Links are used in Input Pickers for example,
-	 *      which then result in some input for forms to be stored on the backend.
-	 *   composition: >
-	 *      Links are textual elements distinguished from other text by their color.
-	 *      Links appear typically in lists of objects displaying their title and opening the object if clicked on.
-	 *      In ILIAS links that are part of the content are underlined while links that are
-	 *      controls are not underlined but merely colored differently.
-	 *   effect: >
-	 *       The exact effect triggered by clicking on the Link depends on its exact context.
-	 *   rivals:
-	 *      Buttons: Links are strongly related to Buttons. See the Button entry for an explanation about their difference.
-	 *      Glyphs: >
-	 *         Are used if the enclosing Container Collection can not provide enough information for
-	 *         textual information or if such an information would clutter the screen.
-	 *
-	 * rules:
-	 *   composition:
-	 *     1: Links SHOULD only be used for navigational interactions or view changes.
-	 *     2: Links MAY be used for selecting objects for carrying out an action (e.g. Picker).
-	 *   style:
-	 *     1: Links that are part of (user generated) content MUST be underlined, others MUST NOT.
-	 * ---
-	 *
-	 * @param string $href
-	 * @param string $caption
-	 * @return \ILIAS\UI\Component\Link\Link
-	 */
-	public function link($href,$caption="");
-
-	/**
-	 * ---
-	 * description:
 	 *   purpose: >
 	 *     Listings are used to structure itemised textual information.
 	 *   composition: >
@@ -293,29 +245,12 @@ interface Factory {
 	/**
 	 * ---
 	 * description:
-	 *   purpose: >
-	 *     Panels are used to group titled Content.
-	 *   composition: >
-	 *      Panels consist of a header and content section. They form one Gestalt and so build a perceivable
-	 *      cluster of information
-	 *   effect: The effect of interaction with panels heavily depends on their content.
+	 *   purpose: The Image component is used to display images of various sources.
+	 *   composition: An Image is composed of the image and an alternative text for screen readers.
+	 *   effect: Images may be included in interacted components but not interactive on their own.
 	 *
-	 * rules:
-	 *   wording:
-	 *      1: Panels MUST contain a heading.
-	 *      2: Panels MUST
 	 * ---
-	 * @return \ILIAS\UI\Component\Panel\Factory
+	 * @return \ILIAS\UI\Component\Image\Factory
 	 */
-	public function panel();
-
-	/**
-	 * ---
-	 * description:
-	 *   purpose: Generic components are used for the ease of use of the centralized UI components or backwards compability.
-	 * ---
-	 * @return \ILIAS\UI\Component\Generic\Factory
-	 */
-	public function generic();
-
+	public function image();
 }
