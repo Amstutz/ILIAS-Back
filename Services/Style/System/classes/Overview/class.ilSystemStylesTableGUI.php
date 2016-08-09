@@ -90,11 +90,12 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 		// output "other" row for all users, that are not assigned to
 		// any existing style
 		$users_missing_styles = 0;
-		foreach($all_user_styles as $style)
+		foreach($all_user_styles as $skin_style_id)
 		{
-			if (!ilStyleDefinition::styleExists($style))
+			$style_arr = explode(":", $skin_style_id);
+			if (!ilStyleDefinition::styleExists($style_arr[1]))
 			{
-				$style_arr = explode(":", $style);
+
 				$users_missing_styles += ilObjUser::_getNumberOfUsersForStyle($style_arr[0], $style_arr[1]);
 			}
 		}
@@ -127,39 +128,57 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 
 		$this->tpl->setVariable("TITLE", $a_set["title"]);
 		$this->tpl->setVariable("TITLE", $a_set["title"]);
+		$is_substyle = $a_set["substyle_of"] != "";
 
-		// number of users
-		$this->tpl->setVariable("USERS", $a_set["users"]);
+		if(!$is_substyle) {
+			$this->tpl->setVariable("USERS", $a_set["users"]);
+		}else{
+			$this->tpl->setVariable("USERS", "-");
+		}
+
 
 		// activation
 		include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
 
 		if($a_set["id"] != "other"){
 			$this->tpl->setCurrentBlock("default_input");
-			$this->tpl->setVariable("DEFAULT_ID", $a_set["id"]);
-			if ($ilClientIniFile->readVariable("layout","skin") == $a_set["skin_id"] &&
-					$ilClientIniFile->readVariable("layout","style") == $a_set["style_id"])
 
-			{
-				$this->tpl->setVariable("CHECKED_DEFAULT", ' checked="checked" ');
-			}else{
-				$this->tpl->setVariable("CHECKED_DEFAULT", '');
+			if(!$is_substyle) {
+				$this->tpl->setVariable("DEFAULT_ID", $a_set["id"]);
+				if ($ilClientIniFile->readVariable("layout", "skin") == $a_set["skin_id"] &&
+						$ilClientIniFile->readVariable("layout", "style") == $a_set["style_id"]
+				) {
+					$this->tpl->setVariable("CHECKED_DEFAULT", ' checked="checked" ');
+				} else {
+					$this->tpl->setVariable("CHECKED_DEFAULT", '');
+				}
+				$this->tpl->parseCurrentBlock();
 			}
-			$this->tpl->parseCurrentBlock();
 
 			$this->tpl->setCurrentBlock("active_input");
 			$this->tpl->setVariable("ACTIVE_ID", $a_set["id"]);
 
-			if (ilSystemStyleSettings::_lookupActivatedStyle($a_set["skin_id"], $a_set["style_id"])){
-				$this->tpl->setVariable("CHECKED_ACTIVE", ' checked="checked" ');
+			if($is_substyle){
+				$this->tpl->setVariable("DISABLED_ACTIVE", 'disabled');
+
+				if (ilSystemStyleSettings::_lookupActivatedStyle($a_set["skin_id"], $a_set["substyle_of"])){
+					$this->tpl->setVariable("CHECKED_ACTIVE", ' checked="checked" ');
+				}else{
+					$this->tpl->setVariable("CHECKED_ACTIVE", '');
+				}
 			}else{
-				$this->tpl->setVariable("CHECKED_ACTIVE", '');
+				if (ilSystemStyleSettings::_lookupActivatedStyle($a_set["skin_id"], $a_set["style_id"])){
+					$this->tpl->setVariable("CHECKED_ACTIVE", ' checked="checked" ');
+				}else{
+					$this->tpl->setVariable("CHECKED_ACTIVE", '');
+				}
 			}
+
 			$this->tpl->parseCurrentBlock();
 
 		}
 
-		if($a_set["substyle_of"] != ""){
+		if($is_substyle){
 			$this->tpl->setCurrentBlock("substyle");
 			$this->tpl->setVariable("SUB_STYLE_OF", $a_set["substyle_of"]);
 
@@ -203,10 +222,13 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 					$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('delete'));
 					$this->tpl->parseCurrentBlock();
 				}
-				$this->tpl->setCurrentBlock("actions");
-				$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','export'));
-				$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('export'));
-				$this->tpl->parseCurrentBlock();
+				if(!$is_substyle){
+					$this->tpl->setCurrentBlock("actions");
+					$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','export'));
+					$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('export'));
+					$this->tpl->parseCurrentBlock();
+				}
+
 			}
 		}
 	}

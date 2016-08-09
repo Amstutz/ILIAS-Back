@@ -1,6 +1,6 @@
 <?php
 
-require_once 'tests/UI/Factory/AbstractFactoryTest.php';
+require_once 'tests/UI/AbstractFactoryTest.php';
 
 class CounterFactoryTest extends AbstractFactoryTest {
 	public $kitchensink_info_settings = array

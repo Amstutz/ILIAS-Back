@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__."/../../Factory/AbstractFactoryTest.php");
+require_once 'tests/UI/AbstractFactoryTest.php';
 
 class ButtonFactoryTest extends AbstractFactoryTest {
 	public $kitchensink_info_settings = array

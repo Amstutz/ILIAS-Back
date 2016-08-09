@@ -280,11 +280,19 @@ class ilStyleDefinition
 						$ref_ass[$a["ref_id"]] = $a["substyle"];
 					}
 
+					$ref_id = false;
+					if($_GET["ref_id"]){
+						$ref_id = $_GET["ref_id"];
+					}else if($_GET["target"]){
+						$target_arr = explode("_",$_GET["target"] );
+						$ref_id = $target_arr[1];
+					}
+
 					// check whether any ref id assigns a new style
-					if (is_object($tree) && $_GET["ref_id"] > 0 &&
-						$tree->isInTree($_GET["ref_id"]))
+					if (is_object($tree) && $ref_id  && $tree->isInTree($ref_id))
 					{
-						$path = $tree->getPathId((int) $_GET["ref_id"]);
+
+						$path = $tree->getPathId($ref_id);
 						for ($i = count($path) - 1; $i >= 0; $i--)
 						{
 							if (isset($ref_ass[$path[$i]]))

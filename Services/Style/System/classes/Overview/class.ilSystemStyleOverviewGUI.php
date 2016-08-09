@@ -194,26 +194,7 @@ class ilSystemStyleOverviewGUI
     {
         $to = explode(":", $_POST["to_style"]);
 
-        if ($_POST["from_style"] != "other")
-        {
-            $from = explode(":", $_POST["from_style"]);
-            ilObjUser::_moveUsersToStyle($from[0],$from[1],$to[0],$to[1]);
-        }
-        else
-        {
-            // get all user assigned styles
-            $all_user_styles = ilObjUser::_getAllUserAssignedStyles();
-
-
-        }
-
-
-        if ($_POST["from_style"] != "other")
-        {
-            $from = explode(":", $_POST["from_style"]);
-            ilObjUser::_moveUsersToStyle($from[0],$from[1],$to[0],$to[1]);
-        }
-        else
+        if ($_POST["from_style"] == "other")
         {
             // get all user assigned styles
             $all_user_styles = ilObjUser::_getAllUserAssignedStyles();
@@ -222,12 +203,17 @@ class ilSystemStyleOverviewGUI
             // currently existing style
             foreach($all_user_styles as $style)
             {
-                if (ilStyleDefinition::styleExists($style))
+                if (!ilStyleDefinition::styleExists($style))
                 {
                     $style_arr = explode(":", $style);
                     ilObjUser::_moveUsersToStyle($style_arr[0],$style_arr[1],$to[0],$to[1]);
                 }
             }
+        }
+        else
+        {
+            $from = explode(":", $_POST["from_style"]);
+            ilObjUser::_moveUsersToStyle($from[0],$from[1],$to[0],$to[1]);
         }
 
         ilUtil::sendSuccess($this->lng->txt("msg_obj_modified"), true);
@@ -240,24 +226,48 @@ class ilSystemStyleOverviewGUI
      */
     function saveStyleSettings()
     {
-        // check if one style is activated
+        $message_stack = new ilSystemStyleMessageStack();
+
+        if($this->checkStyleSettings($message_stack)){
+            $all_styles = ilStyleDefinition::getAllSkinStyles();
+            foreach ($all_styles as $st)
+            {
+                if (!isset($_POST["st_act"][$st["id"]]))
+                {
+                    ilSystemStyleSettings::_deactivateStyle($st["template_id"], $st["style_id"]);
+                }
+                else
+                {
+                    ilSystemStyleSettings::_activateStyle($st["template_id"], $st["style_id"]);
+                }
+            }
+
+            //set default skin and style
+            if ($_POST["default_skin_style"] != "")
+            {
+                $sknst = explode(":", $_POST["default_skin_style"]);
+                ilSystemStyleSettings::setCurrentDefaultStyle($sknst[0],$sknst[1]);
+            }
+            $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("msg_obj_modified"),ilSystemStyleMessage::TYPE_SUCCESS));
+        }
+        $message_stack->sendMessages(true);
+        $this->ctrl->redirect($this , "edit");
+    }
+
+    protected function checkStyleSettings(ilSystemStyleMessageStack $message_stack){
+
+        $passed = true;
+
         if (count($_POST["st_act"]) < 1)
         {
-            ilUtil::sendFailure($this->lng->txt("at_least_one_style"), true);
-            $this->ctrl->redirect($this, "edit");
+            $passed = false;
+            $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("at_least_one_style"),ilSystemStyleMessage::TYPE_ERROR));
         }
 
         if (!isset($_POST["st_act"][$_POST["default_skin_style"]]))
         {
-            ilUtil::sendFailure($this->lng->txt("cant_deactivate_default_style"), true);
-            $this->ctrl->redirect($this, "edit");
-        }
-
-        //set default skin and style
-        if ($_POST["default_skin_style"] != "")
-        {
-            $sknst = explode(":", $_POST["default_skin_style"]);
-            ilSystemStyleSettings::setCurrentDefaultStyle($sknst[0],$sknst[1]);
+            $passed = false;
+            $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("cant_deactivate_default_style"),ilSystemStyleMessage::TYPE_ERROR));
         }
 
         // check if a style should be deactivated, that still has
@@ -270,28 +280,14 @@ class ilSystemStyleOverviewGUI
             {
                 if (ilObjUser::_getNumberOfUsersForStyle($st["template_id"], $st["style_id"]) > 0)
                 {
-                    ilUtil::sendFailure($this->lng->txt("cant_deactivate_if_users_assigned"), true);
-                    $this->ctrl->redirect($this, "edit");
+                    $passed = false;
+                    $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("cant_deactivate_if_users_assigned"),ilSystemStyleMessage::TYPE_ERROR));
                 }
-                else if (ilSystemStyleSettings::getCurrentDefaultStyle()==$st["style_id"])
-                {
-                    ilUtil::sendFailure($this->lng->txt("cant_deactivate_default_style"), true);
-                    $this->ctrl->redirect($this, "edit");
-                }
-                else
-                {
-                    ilSystemStyleSettings::_deactivateStyle($st["template_id"], $st["style_id"]);
-                }
-            }
-            else
-            {
-                ilSystemStyleSettings::_activateStyle($st["template_id"], $st["style_id"]);
             }
         }
-
-        ilUtil::sendSuccess($this->lng->txt("msg_obj_modified"), true);
-        $this->ctrl->redirect($this , "edit");
+        return $passed;
     }
+
 
     /**
      * create
@@ -503,9 +499,11 @@ class ilSystemStyleOverviewGUI
             $delete_form_table->addStyle($container->getSkin(),$container->getSkin()->getStyle($style_id));
             $this->tpl->setContent($delete_form_table->getDeleteStyleFormHTML());
         }else{
+            $message_stack->prependMessage(new ilSystemStyleMessage($this->lng->txt("style_not_deleted"),ilSystemStyleMessage::TYPE_ERROR));
             $message_stack->sendMessages(true);
+            $this->edit();
         }
-        $this->edit();
+
 
     }
     protected function deleteStyles(){
@@ -529,14 +527,38 @@ class ilSystemStyleOverviewGUI
             }
             $this->tpl->setContent($delete_form_table->getDeleteStyleFormHTML());
         }else{
+            $message_stack->prependMessage(new ilSystemStyleMessage($this->lng->txt("styles_not_deleted"),ilSystemStyleMessage::TYPE_ERROR));
             $message_stack->sendMessages(true);
+            $this->edit();
         }
-        $this->edit();
+
 
     }
 
-    protected function checkDeletable($skin_id,$style_id){
+    protected function checkDeletable($skin_id,$style_id, ilSystemStyleMessageStack $message_stack){
+        $passed = true;
+        if (ilObjUser::_getNumberOfUsersForStyle($skin_id, $style_id) > 0)
+        {
+            $message_stack->addMessage(new ilSystemStyleMessage($style_id.": ".$this->lng->txt("cant_delete_if_users_assigned"),ilSystemStyleMessage::TYPE_ERROR));
+            $passed = false;
+        }
+        if (ilSystemStyleSettings::_lookupActivatedStyle($skin_id, $style_id) > 0)
+        {
+            $message_stack->addMessage(new ilSystemStyleMessage($style_id.": ".$this->lng->txt("cant_delete_activated_style"),ilSystemStyleMessage::TYPE_ERROR));
+            $passed = false;
+        }
+        if (ilSystemStyleSettings::getCurrentDefaultSkin() == $skin_id && ilSystemStyleSettings::getCurrentDefaultSkin() == $style_id)
+        {
+            $message_stack->addMessage(new ilSystemStyleMessage($style_id.": ".$this->lng->txt("cant_delete_default_style"),ilSystemStyleMessage::TYPE_ERROR));
+            $passed = false;
+        }
 
+        if (ilSystemStyleSkinContainer::generateFromId($skin_id)->getSkin()->getSubstylesOfStyle($style_id))
+        {
+            $message_stack->addMessage(new ilSystemStyleMessage($style_id.": ".$this->lng->txt("cant_delete_style_with_substyles"),ilSystemStyleMessage::TYPE_ERROR));
+            $passed = false;
+        }
+        return $passed;
     }
 
     protected function confirmDelete(){
