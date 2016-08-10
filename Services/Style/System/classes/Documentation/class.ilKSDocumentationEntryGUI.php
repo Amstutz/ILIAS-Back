@@ -29,7 +29,7 @@ class ilKSDocumentationEntryGUI
     protected $ctrl;
 
     /**
-     * @var ilKSDocumentationGUI
+     * @var ilSystemStyleDocumentationGUI
      */
     protected $parent;
 
@@ -45,7 +45,7 @@ class ilKSDocumentationEntryGUI
 
     /**
      * ilKSDocumentationEntryGUI constructor.
-     * @param ilKSDocumentationGUI $parent
+     * @param ilSystemStyleDocumentationGUI $parent
      * @param Entry\ComponentEntry $entry
      * @param Entry\ComponentEntries $entries
      */
@@ -66,12 +66,8 @@ class ilKSDocumentationEntryGUI
      * @return string
      */
     public function renderEntry(){
-        /**
-         * Todo: Needs to go away here.
-         * @var ilTemplate $tpl
-         */
-        global $tpl;
 
+        $sub_panels = array();
 
         $start =  microtime (true);
         $feature_wiki_links = array();
@@ -79,24 +75,22 @@ class ilKSDocumentationEntryGUI
             $feature_wiki_links[] = $this->f->link($href);
         }
 
-        $description = $this->f->panel()->block("Description",
-            $this->f->generic()->container(
-                array(
-                    $this->f->listing()->descriptive(
-                        array(
-                            "Purpose" => $this->entry->getDescription()->getProperty("purpose"),
-                            "Composition" => $this->entry->getDescription()->getProperty("composition"),
-                            "Effect" => $this->entry->getDescription()->getProperty("effect"),
-                            "Rivals" => $this->f->listing()->ordered(
-                                $this->entry->getDescription()->getProperty("rivals")
-                            )
+        $sub_panels[] = $this->f->panel()->sub("Description",
+            array(
+                $this->f->listing()->descriptive(
+                    array(
+                        "Purpose" => $this->entry->getDescription()->getProperty("purpose"),
+                        "Composition" => $this->entry->getDescription()->getProperty("composition"),
+                        "Effect" => $this->entry->getDescription()->getProperty("effect"),
+                        "Rivals" => $this->f->listing()->ordered(
+                            $this->entry->getDescription()->getProperty("rivals")
                         )
-                    ),
-                    $this->f->listing()->descriptive(
-                        array(
-                            "Background" => $this->entry->getBackground(),
-                            "Feature Wiki References" => $this->f->listing()->ordered($feature_wiki_links)
-                        )
+                    )
+                ),
+                $this->f->listing()->descriptive(
+                    array(
+                        "Background" => $this->entry->getBackground(),
+                        "Feature Wiki References" => $this->f->listing()->ordered($feature_wiki_links)
                     )
                 )
             )
@@ -117,11 +111,10 @@ class ilKSDocumentationEntryGUI
             $rule_listings[ucfirst($categoery)] = $this->f->listing()->ordered($category_rules);
         }
 
-        $rules = $this->f->panel()->block("Rules",
+        $sub_panels[] = $this->f->panel()->sub("Rules",
             $this->f->listing()->descriptive($rule_listings)
         );
 
-        $example_panels = array();
 
         $start_example = 0;
         $end_example = 0;
@@ -136,20 +129,18 @@ class ilKSDocumentationEntryGUI
                 //$start_example =  microtime (true);
                 $example = "<div class='well'>".$name()."</div>"; //Executes function loaded in file indicated by 'path'
                 //$end_example =  microtime (true);
-                $content_part_1 = $this->f->generic()->html($example);
+                $content_part_1 = $this->f->generic($example);
                 //$example_tot_time = ($end_example-$start_example);
                 //$examples_snippets[] = $this->f->text()->standard("Time to generate and render example: ".$example_tot_time);
                 $code = str_replace("<?php\n","",file_get_contents ($path));
                 $geshi = new GeSHi($code, "php");
-                $content_part_2 = $this->f->generic()->html($geshi->parse_code());
-                $content = $this->f->generic()->container(array($content_part_1,$content_part_2));
-                $example_panels[] = $this->f->panel()->block($title, $content);
+                $content_part_2 = $this->f->generic($geshi->parse_code());
+                $content = array($content_part_1,$content_part_2);
+                $sub_panels[] = $this->f->panel()->sub($title, $content);
             }
         }
 
-        $examples = $this->f->generic()->container($example_panels);
-
-        $relations = $this->f->panel()->block("Relations",
+        $sub_panels[] = $this->f->panel()->sub("Relations",
             $this->f->listing()->descriptive(
                     array(
                         "Parents" => $this->f->listing()->ordered(
@@ -162,9 +153,7 @@ class ilKSDocumentationEntryGUI
             )
         );
 
-        $body = $this->f->generic()->container(array($description,$rules,$examples,$relations));
-
-        $bulletin = $this->f->panel()->report($this->entry->getTitle(),$body);
+        $bulletin = $this->f->panel()->report($this->entry->getTitle(),$sub_panels);
 
         $mid =  microtime (true);
         $html = $this->r->render($bulletin);

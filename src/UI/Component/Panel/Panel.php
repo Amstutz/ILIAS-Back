@@ -18,15 +18,4 @@ interface Panel extends \ILIAS\UI\Component\Component {
 	 * @return string $title Title of the Panel
 	 */
 	public function getTitle();
-
-	/**
-     * @param mixed $content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
-     * @return \ILIAS\UI\Component\Panel\Panel
-	 */
-	public function withContent($content);
-
-	/**
-	 * @return mixed content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
-	 */
-	public function getContent();
 }

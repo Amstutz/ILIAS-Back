@@ -2,7 +2,7 @@
 
 /* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 
-namespace ILIAS\UI\Implementation\Component\Generic\Html;
+namespace ILIAS\UI\Implementation\Component\Generic;
 
 use ILIAS\UI\Implementation\Render\AbstractComponentRenderer;
 use ILIAS\UI\Renderer as RendererInterface;
