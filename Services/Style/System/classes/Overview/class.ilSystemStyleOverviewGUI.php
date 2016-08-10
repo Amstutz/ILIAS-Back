@@ -143,7 +143,7 @@ class ilSystemStyleOverviewGUI
         if($this->isManagementEnabled()){
             // Add Button for adding skins
             $add_skin_btn = ilLinkButton::getInstance();
-            $add_skin_btn->setCaption($this->lng->txt("add_system_stlye"),false);
+            $add_skin_btn->setCaption($this->lng->txt("add_system_style"),false);
             $add_skin_btn->setUrl($this->ctrl->getLinkTarget($this, 'addSystemStyle'));
             $this->toolbar->addButtonInstance($add_skin_btn);
 
