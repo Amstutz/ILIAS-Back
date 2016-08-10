@@ -232,7 +232,7 @@ class ilSystemStyleIconsGUI
         $f = $DIC->ui()->factory();
 
 
-        $blocks = [];
+        $sub_panels = [];
         foreach($this->getIconFolder()->getIconsSortedByFolder() as $folder_name => $icons){
             $cards = [];
 
@@ -250,10 +250,10 @@ class ilSystemStyleIconsGUI
                 }
                 $cards[] = $card;
             }
-            $blocks[] = $f->panel()->block($folder_name,$f->deck($cards));
+            $sub_panels[] = $f->panel()->sub($folder_name,$f->deck($cards));
         }
 
-        $report = $f->panel()->report($this->lng->txt("icons"),$f->generic()->container($blocks));
+        $report = $f->panel()->report($this->lng->txt("icons"),$sub_panels);
 
         return $DIC->ui()->renderer()->render($report);
     }

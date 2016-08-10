@@ -7,7 +7,7 @@ namespace ILIAS\UI\Component\Panel;
 /**
  * This describes how a Report could be modified during construction of UI.
  */
-interface Report extends \ILIAS\UI\Component\Component {
+interface Report extends Panel {
     /**
      * @param string $title Title of the Report
      * @return \ILIAS\UI\Component\Panel\Report

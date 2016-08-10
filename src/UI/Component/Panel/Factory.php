@@ -41,7 +41,7 @@ interface Factory {
 	 *   composition: >
 	 *       Sub Panels consist of a title and a content section. They may contain a Card on their right side to display
 	 *       meta information about the content displayed.
-	 *   rivals: >
+	 *   rivals:
 	 *      Standard Panel: >
 	 *        The Standard Panel might contain a Sub Panel.
 	 *      Card: >
@@ -74,14 +74,14 @@ interface Factory {
 	 *       a card to display information meta information in their first block.
 	 *   effect: >
 	 *       Report Panels are predominantly used for displaying data. They may however comprise links or buttons.
-	 *
-	 * context: >
+	 *   rivals:
 	 *      Standard Panels: >
 	 *        The Report Panels contains one Standard Panel containing the block panels used to structure information.
 	 *
 	 * rules:
 	 *   usage:
-	 *      1: Report Panels SHOULD be used when user generated content of two sources (i.e results, guidelines in a template)
+	 *      1: >
+	 *         Report Panels SHOULD be used when user generated content of two sources (i.e results, guidelines in a template)
      *         is to be displayed alongside each other.
 	 *   interaction:
 	 *      1: Links MAY open new views.
