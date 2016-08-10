@@ -15791,3 +15791,46 @@ rbac#:#grpr_read#:#Read access to Group Reference
 rbac#:#grpr_visible#:#Group reference is visible
 rbac#:#grpr_write#:#User can edit settings of group reference
 rbac#:#rbac_create_grpr#:#Create Group Reference
+style#:#add_system_style#:#Add System Style
+style#:#add_substyle#:#Add Sub Style
+style#:#skin_id#:#Skin ID
+style#:#skin_name#:#Skin Name
+style#:#skin#:#Skin
+style#:#style_id#:#Style ID
+style#:#Style#:#Style
+style#:#style_name#:#Style Name
+style#:#image_dir#:#Image Directory
+style#:#font_dir#:#Font Directory
+style#:#sound_dir#:#Sound Directory
+style#:#system_style_activation#:#System Style Activated
+style#:#personal#:#Personal
+style#:#system_styel_activation#:#Activate System Style
+style#:#sty_substyle_of#:#Substyle
+style#:#less#:#Less
+style#:#icons#:#Icons
+style#:#documentation#:#Documentation
+style#:#less_can_not_be_modified#:#Less cannot be modified
+style#:#no_less_path_set#:#No Less Path set
+style#:#less_less_installation_detected#:#Less installation detected at:
+style#:#less_file_not_included#:#Less File no included
+style#:#grey_colors#:#Gray Colors
+style#:#grey_color#:#Gray Color
+style#:#grey_colors_description#:#Gray Color Description
+style#:#red_colors#:#Red Colors
+style#:#red_color#:#Red Color
+style#:#red_colors_description#:#Red Color Description
+style#:#green_colors#:#Green Colors
+style#:#green_color#:#Green Color
+style#:#green_colors_description#:#Green Color Description
+style#:#blue_colors#:#Blue Colors
+style#:#blue_color#:#Blue Color
+style#:#blue_colors_description#:#Blue Color Description
+style#:#reset_icons#:#Reset Icons
+style#:#update_colors#:#Update Colors
+style#:#style_not_deleted#:#Style has not been deleted
+style#:#cant_delete_activated_style#:#Active Style cannot be deleted
+style#:#style_deleted#:#Deleted Style:
+style#:#dir_preserved_linked#:#Preserved Link:
+style#:#file_deleted#:#Following file has been deleted:
+style#:#skin_deleted#:#Following skin has been deleted:
+style#:#msg_sys_style_update#:#System Styles have been updated
