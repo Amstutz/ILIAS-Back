@@ -191,7 +191,12 @@ class ilSystemStyleIconsGUI
         $style = $this->getStyleContainer()->getSkin()->getStyle($_GET["style_id"]);
         $this->getStyleContainer()->resetImages($style);
         $this->setIconFolder(new ilSystemStyleIconFolder($this->getStyleContainer()->getImagesSkinPath($style->getId())));
-        $this->edit();
+        $message_stack = new ilSystemStyleMessageStack();
+        $message_stack->sendMessages(true);
+        $message_stack->addMessage(new ilSystemStyleMessage(
+            $this->lng->txt("color_reset"),
+            ilSystemStyleMessage::TYPE_SUCCESS));
+        $this->ctrl->redirect($this,"edit");
     }
 
     public function update()
@@ -209,14 +214,16 @@ class ilSystemStyleIconsGUI
                         ilSystemStyleMessage::TYPE_ERROR));
                 }else if($new_color != $old_color->getId()){
                     $color_changes[$old_color->getId()] = $new_color;
-                    $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("color_changed").$old_color->getId(),
+                    $message_stack->addMessage(new ilSystemStyleMessage(
+                        $this->lng->txt("color_changed_from").$old_color->getId().
+                        $this->lng->txt("color_changed_to").$new_color,
                         ilSystemStyleMessage::TYPE_SUCCESS));
                 }
             }
             $this->getIconFolder()->changeIconColors($color_changes);
             $this->setIconFolder(new ilSystemStyleIconFolder($this->getStyleContainer()->getImagesSkinPath($_GET["style_id"])));
-            $message_stack->sendMessages(false);
-            $form = $this->initIconsForm();
+            $message_stack->sendMessages(true);
+            $this->ctrl->redirect($this,"edit");
         }
         $form->setValuesByPost();
         $this->tpl->setContent($form->getHTML());
