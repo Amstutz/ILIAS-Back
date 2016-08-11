@@ -25,20 +25,20 @@ class Panel implements C\Panel\Panel {
 	private  $content;
 
 
-    /**
-     * @param string $title
-     * @param mixed $content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
-     */
+	/**
+	 * @param string $title
+	 * @param mixed $content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
+	 */
 	public function __construct($title,$content) {
 		$this->checkStringArg("title",$title);
-        $content = $this->toArray($content);
-        $types = array(C\Component::class);
-        $this->checkArgListElements("content", $content, $types);
+		$content = $this->toArray($content);
+		$types = [C\Component::class];
+		$this->checkArgListElements("content", $content, $types);
 
 		$this->title = $title;
 		$this->content = $content;
 
-        return $this;
+		return $this;
 	}
 
 	/**
@@ -48,7 +48,7 @@ class Panel implements C\Panel\Panel {
 		$this->checkStringArg("title", $title);
 
 		$clone = clone $this;
-		$this->$title = $title;
+		$clone->title = $title;
 		return $clone;
 	}
 
@@ -63,11 +63,11 @@ class Panel implements C\Panel\Panel {
 	 * @inheritdoc
 	 */
 	public function withContent($content){
-        $content = $this->toArray($content);
-        $types = array(C\Component::class);
-        $this->checkArgListElements("content", $content, $types);
+		$content = $this->toArray($content);
+		$types = [C\Component::class];
+		$this->checkArgListElements("content", $content, $types);
 
-        $clone = clone $this;
+		$clone = clone $this;
 		$clone->content = $content;
 		return $clone;
 	}

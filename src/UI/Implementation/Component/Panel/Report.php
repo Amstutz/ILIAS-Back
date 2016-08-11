@@ -25,15 +25,15 @@ class Report implements C\Panel\Report {
 	private  $sub_panels;
 
 
-    /**
-     * @param string $title
-     * @param \ILIAS\UI\Component\Panel\Sub[]
-     */
+	/**
+	 * @param string $title
+	 * @param \ILIAS\UI\Component\Panel\Sub[]
+	 */
 	public function __construct($title,$sub_panels) {
 		$this->checkStringArg("title",$title);
-        $sub_panels= $this->toArray($sub_panels);
-        $types = array(C\Panel\Sub::class);
-        $this->checkArgListElements("content", $sub_panels, $types);
+		$sub_panels= $this->toArray($sub_panels);
+		$types = [C\Panel\Sub::class];
+		$this->checkArgListElements("content", $sub_panels, $types);
 
 		$this->title = $title;
 		$this->sub_panels = $sub_panels;
@@ -46,7 +46,7 @@ class Report implements C\Panel\Report {
 		$this->checkStringArg("title", $title);
 
 		$clone = clone $this;
-		$this->$title = $title;
+		$clone->title = $title;
 		return $clone;
 	}
 
@@ -61,11 +61,11 @@ class Report implements C\Panel\Report {
 	 * @inheritdoc
 	 */
 	public function withSubPanels($sub_panels){
-        $sub_panels= $this->toArray($sub_panels);
-        $types = array(C\Panel\Sub::class);
-        $this->checkArgListElements("content", $sub_panels, $types);
+		$sub_panels = $this->toArray($sub_panels);
+		$types = [C\Panel\Sub::class];
+		$this->checkArgListElements("content", $sub_panels, $types);
 
-        $clone = clone $this;
+		$clone = clone $this;
 		$clone->sub_panels = $sub_panels;
 		return $clone;
 	}

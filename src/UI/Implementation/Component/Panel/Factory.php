@@ -18,17 +18,17 @@ class Factory implements \ILIAS\UI\Component\Panel\Factory {
 		return new Standard($title,$content);
 	}
 
-    /**
-     * @inheritdoc
-     */
-    public function sub($title,$content) {
-        return new Sub($title,$content);
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function sub($title,$content) {
+		return new Sub($title,$content);
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function report($title,$sub_panels) {
-        return new Report($title,$sub_panels);
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function report($title,$sub_panels) {
+		return new Report($title,$sub_panels);
+	}
 }

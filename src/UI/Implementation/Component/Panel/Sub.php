@@ -15,8 +15,8 @@ class Sub extends Panel implements C\Panel\Sub {
 	use ComponentHelper;
 
 	/**
-     * Card to be displayed on the right of the Sub Panel
-     * @var \ILIAS\UI\Component\Card\Card
+	 * Card to be displayed on the right of the Sub Panel
+	 * @var \ILIAS\UI\Component\Card\Card
 	 */
 	private $card = null;
 
@@ -24,7 +24,7 @@ class Sub extends Panel implements C\Panel\Sub {
 	 * @inheritdoc
 	 */
 	public function withCard($card){
-        $this->checkArgInstanceOf("Card",$card,C\Card\Card::class);
+		$this->checkArgInstanceOf("Card",$card,C\Card\Card::class);
 		$clone = clone $this;
 		$clone->card = $card;
 		return $clone;

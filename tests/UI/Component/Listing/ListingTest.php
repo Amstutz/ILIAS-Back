@@ -89,19 +89,19 @@ class ListingTest extends ILIAS_UI_TestBase {
 
 
 	public function test_render_ordered_listing() {
-		$f = $this->getListingFactory();
-		$r = $this->getDefaultRenderer();
-		$l = $f->ordered(array("1","2"));
+	$f = $this->getListingFactory();
+	$r = $this->getDefaultRenderer();
+	$l = $f->ordered(array("1","2"));
 
-		$html = $this->normalizeHTML($r->render($l));
+	$html = $this->normalizeHTML($r->render($l));
 
-		$expected = "<ol>".
-					"\t\t<li>1</li>".
-					"\t\t<li>2</li>\t".
-					"</ol>";
+	$expected = "<ol>".
+			"\t\t<li>1</li>".
+			"\t\t<li>2</li>\t".
+			"</ol>";
 
-		$this->assertEquals($expected, $html);
-	}
+	$this->assertEquals($expected, $html);
+}
 
 	public function test_ordered_invalid_items() {
 		$f = $this->getListingFactory();

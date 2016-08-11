@@ -18,5 +18,5 @@ class PanelFactoryTest extends AbstractFactoryTest {
 	);
 
 
-	public $factory_title = 'ILIAS\\UI\\Component\\Listing\\Factory';
+	public $factory_title = 'ILIAS\\UI\\Component\\Panel\\Factory';
 }

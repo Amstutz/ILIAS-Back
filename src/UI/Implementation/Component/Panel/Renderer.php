@@ -8,6 +8,10 @@ use ILIAS\UI\Implementation\Render\AbstractComponentRenderer;
 use ILIAS\UI\Renderer as RendererInterface;
 use ILIAS\UI\Component;
 
+/**
+ * Class Renderer
+ * @package ILIAS\UI\Implementation\Component\Panel
+ */
 class Renderer extends AbstractComponentRenderer {
 	/**
 	 * @inheritdocs
@@ -19,12 +23,20 @@ class Renderer extends AbstractComponentRenderer {
 		$this->checkComponent($component);
 
 		if ($component instanceof Component\Panel\Standard) {
+			/**
+			 * @var Component\Panel\Standard $component
+			 */
 			return $this->render_standard($component, $default_renderer);
 		} else if($component instanceof Component\Panel\Sub) {
+			/**
+			 * @var Component\Panel\Sub $component
+			 */
 			return $this->render_sub($component, $default_renderer);
-		} else if($component instanceof Component\Panel\Report){
-			return $this->render_report($component, $default_renderer);
 		}
+		/**
+		 * @var Component\Panel\Report $component
+		 */
+		return $this->render_report($component, $default_renderer);
 	}
 
 	/**
@@ -104,8 +116,6 @@ class Renderer extends AbstractComponentRenderer {
 	 * @inheritdocs
 	 */
 	protected function getComponentInterfaceName() {
-
-
-		return array(Component\Panel\Panel::class);
+		return [Component\Panel\Panel::class];
 	}
 }

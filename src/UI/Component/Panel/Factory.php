@@ -15,9 +15,9 @@ interface Factory {
 	 * description:
 	 *   purpose: >
 	 *      Standard Panels are used in the Center Content section to group content.
-     *   composition: >
-     *      Standard consist of a title and a content section. The structure of this content might be varying from Standard
-     *      Panel to Standard Panel. Standard Panels may contain Sub Panels.
+	 *   composition: >
+	 *      Standard consist of a title and a content section. The structure of this content might be varying from Standard
+	 *      Panel to Standard Panel. Standard Panels may contain Sub Panels.
 	 *   rivals:
 	 *      Cards: >
 	 *        Often Cards are used in Decks to display multiple uniformly structured chunks of Data horizontally and vertically.
@@ -82,7 +82,7 @@ interface Factory {
 	 *   usage:
 	 *      1: >
 	 *         Report Panels SHOULD be used when user generated content of two sources (i.e results, guidelines in a template)
-     *         is to be displayed alongside each other.
+	 *         is to be displayed alongside each other.
 	 *   interaction:
 	 *      1: Links MAY open new views.
 	 *      2: Buttons MAY trigger actions or inline editing.

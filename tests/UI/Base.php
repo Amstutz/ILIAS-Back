@@ -27,7 +27,7 @@ class NoUIFactory implements Factory {
 	public function link($href,$caption="") {}
 	public function panel() {}
 	public function image() {}
-	public function generic() {}
+	public function generic($content) {}
 }
 
 class LoggingRegistry implements ResourceRegistry {
