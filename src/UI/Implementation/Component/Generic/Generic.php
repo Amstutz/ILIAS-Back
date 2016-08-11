@@ -44,7 +44,7 @@ class Generic implements C\Generic\Generic {
 		$this->checkStringArg("content", $content);
 
 		$clone = clone $this;
-		$this->content = $content;
+		$clone->content = $content;
 		return $clone;
 	}
 
