@@ -31,15 +31,14 @@ class Generic implements C\Generic\Generic {
 	}
 
 	/**
-	 * @return string
+	 * @inheritdoc
 	 */
 	public function getContent(){
 		return $this->content;
 	}
 
 	/**
-	 * @param $content
-	 * @return Generic
+	 * @inheritdoc
 	 */
 	public function withContent($content){
 		$this->checkStringArg("content", $content);

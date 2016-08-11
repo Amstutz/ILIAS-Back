@@ -5,6 +5,8 @@
 namespace ILIAS\UI\Component\Generic;
 
 /**
+ * Interface Generic
+ * @package ILIAS\UI\Component\Generic
  */
 interface Generic extends \ILIAS\UI\Component\Component {
 

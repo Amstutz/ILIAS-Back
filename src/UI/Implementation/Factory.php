@@ -44,14 +44,6 @@ class Factory implements \ILIAS\UI\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function link($href,$caption="")
-	{
-		return new Component\Link\Link($href,$caption);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
 	public function image()
 	{
 		return new Component\Image\Factory();
