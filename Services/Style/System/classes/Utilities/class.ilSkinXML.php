@@ -37,11 +37,10 @@ class ilSkinXML implements \Iterator, \Countable{
     /**
      * @param string $path
      * @return ilSkinXML
+     * @throws ilSystemStyleException
      */
     public static function parseFromXML($path = ""){
         global $DIC;
-
-        $DIC->logger()->root()->critical($path);
 
         try{
             $xml = new SimpleXMLElement(file_get_contents($path));

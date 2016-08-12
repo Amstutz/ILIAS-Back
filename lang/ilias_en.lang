@@ -15812,14 +15812,12 @@ style#:#sound_dir#:#Sound Directory
 style#:#system_style_activation#:#System Style Activated
 style#:#personal#:#Personal
 style#:#system_styel_activation#:#Activate System Style
-style#:#sty_substyle_of#:#Substyle
 style#:#less#:#Less
 style#:#icons#:#Icons
 style#:#documentation#:#Documentation
 style#:#less_can_not_be_modified#:#Less cannot be modified
 style#:#no_less_path_set#:#No Less Path set
 style#:#less_less_installation_detected#:#Less installation detected at:
-style#:#less_file_not_included#:#Less File no included
 style#:#grey_colors#:#Gray Colors
 style#:#grey_color#:#Gray Color
 style#:#grey_colors_description#:#Gray Color Description
@@ -15834,10 +15832,45 @@ style#:#blue_color#:#Blue Color
 style#:#blue_colors_description#:#Blue Color Description
 style#:#reset_icons#:#Reset Icons
 style#:#update_colors#:#Update Colors
-style#:#style_not_deleted#:#Style has not been deleted
-style#:#cant_delete_activated_style#:#Active Style cannot be deleted
+style#:#style_not_deleted#:#The style could not be deleted for the following reasons:
+style#:#styles_not_deleted#:#The styles could not have been deleted for the following reasons:
+style#:#cant_delete_activated_style#:#Active Styles cannot be deleted.
 style#:#style_deleted#:#Deleted Style:
 style#:#dir_preserved_linked#:#Preserved Link:
 style#:#file_deleted#:#Following file has been deleted:
 style#:#skin_deleted#:#Following skin has been deleted:
 style#:#msg_sys_style_update#:#System Styles have been updated
+common#:#set_style_does_not_exist#:#Your selected system style does not exist anymore. You may change your style in the personal settings or contact your administrator. Current selection:
+common#:#set_skin_does_not_exist#:#Your selected skin does not exist anymore. You may change your style in the personal settings or contact your administrator. Current selection:
+style#:#cant_deactivate_default_style#:#Default styles cannot be deactivated.
+style#:#cant_delete_if_users_assigned#:#Styles can not be deleted if users are still assigned.
+style#:#default_style_set_to#:#The default system style has been set to:
+style#:#personal_style_set_to#:#Your personal style has been set to:
+style#:#refresh_entries#:#Refresh Entries
+style#:#entries_reloaded#:#All entries have been reloaded
+style#:#msg_sub_style_created#:#The substyle has been created
+style#:#style#:#Style
+style#:#sub_style_settings#:#Substyle Assignment
+style#:#parent#:#Parent Style
+style#:#sty_substyle_of#:#Substyle of
+style#:#assignment#:#Assignment
+style#:#remove_assignment#:#Remove Assignment
+style#:#reset_variables#:#Reset Variables
+style#:#update_variables#:#Update Variables
+style#:#less_file_updated#:#The less variables have been updated.
+style#:#settings_of_substyle#:#Manage sub style
+style#:#settings_of_style#:#Manage style
+style#:#of_parent#:#of parent
+style#:#from_skin#:#of skin:
+style#:#dir_copied_from#:#The directory has been copied to from:
+style#:#to#:#to:
+style#:#dir_deleted#:#The following directory has been deleted:
+style#:#sty_create_new_system_style#:#Create a new system style
+style#:#sty_create_new_system_sub_style#:#Create a new system sub style
+style#:#sty_import_system_style#:#Import an existing system style as zip
+style#:#sty_copy_other_system_style#:#Clone an existing system style
+style#:#sub_style_id#:#Sub style ID
+style#:#sub_style_name#:#Sub style name
+style#:#less_variables_file_not_included#:#The less variables file:
+style#:#in_main_less_file#:#is not imported inside the system styles main less file:
+style#:#can_not_read_less_file#:#Cannot read less file. Path:

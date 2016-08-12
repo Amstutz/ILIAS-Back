@@ -58,13 +58,18 @@ class ilSystemStyleSettingsGUI
      */
     function executeCommand()
     {
-        $cmd = $this->ctrl->getCmd();
+        $cmd = $this->ctrl->getCmd() ? $this->ctrl->getCmd():"edit";
 
         $skin = ilSkinXML::parseFromXML(ilStyleDefinition::CUSTOMIZING_SKINS_PATH.$_GET["skin_id"]."/template.xml");
         $style = $skin->getStyle($_GET["style_id"]);
 
         if($style->isSubstyle()){
-            $this->setSubStyleSubTabs($cmd);
+            if($cmd == "edit"|| $cmd == "view"){
+                $this->setSubStyleSubTabs("edit");
+            }else{
+                $this->setSubStyleSubTabs("assignStyle");
+            }
+
         }
 
         switch ($cmd)
@@ -97,8 +102,8 @@ class ilSystemStyleSettingsGUI
 
     protected function setSubStyleSubTabs($active = "") {
 
-        $this->tabs->addSubTab('settings', $this->lng->txt('settings'), $this->ctrl->getLinkTargetByClass('ilsystemstylesettingsgui'));
-        $this->tabs->addSubTab('assignment', $this->lng->txt('assignment'), $this->ctrl->getLinkTargetByClass('ilsystemstylesettingsgui',"assignStyle"));
+        $this->tabs->addSubTab('edit', $this->lng->txt('settings'), $this->ctrl->getLinkTargetByClass('ilsystemstylesettingsgui'));
+        $this->tabs->addSubTab('assignStyle', $this->lng->txt('assignment'), $this->ctrl->getLinkTargetByClass('ilsystemstylesettingsgui',"assignStyle"));
 
         $this->tabs->activateSubTab($active);
     }
@@ -151,14 +156,13 @@ class ilSystemStyleSettingsGUI
     protected function save(){
         $form = $this->editSystemStyleForm();
 
-        if ($form->checkInput() )
+        $message_stack = new ilSystemStyleMessageStack();
+        if ($form->checkInput())
         {
 
             try{
                 $skin = ilSkinXML::parseFromXML(ilStyleDefinition::CUSTOMIZING_SKINS_PATH.$_GET["skin_id"]."/template.xml");
                 $style = $skin->getStyle($_GET["style_id"]);
-
-                $message_stack = new ilSystemStyleMessageStack();
 
                 if($style->isSubstyle()){
                     $this->saveSubStyle($message_stack);
@@ -172,13 +176,16 @@ class ilSystemStyleSettingsGUI
             }catch(ilSystemStyleException $e){
                 ilUtil::sendFailure($e->getMessage(), true);
             }
-        }
+        }else
+
+        $message_stack->sendMessages();
 
         $form->setValuesByPost();
         $this->tpl->setContent($form->getHTML());
     }
 
-    protected function saveStyle($message_stack){
+
+    protected function saveStyle(ilSystemStyleMessageStack $message_stack){
         global $DIC;
 
         $container = ilSystemStyleSkinContainer::generateFromId($_GET['skin_id'],$message_stack);
@@ -215,14 +222,30 @@ class ilSystemStyleSettingsGUI
             $_POST["default"] = 0;
         }
 
+        //If style has been unset as personal style
         if(!$_POST["personal"] && $DIC->user()->getPref("skin") == $new_skin->getId()){
-            ilSystemStyleSettings::setCurrentUserPrefStyle(
-                ilStyleDefinition::DEFAULT_SKIN_ID,ilStyleDefinition::DEFAULT_STYLE_ID
+            //Reset to default if possible, else change to delos
+            if(!$_POST["default"] ){
+                ilSystemStyleSettings::setCurrentUserPrefStyle(
+                    ilSystemStyleSettings::getCurrentDefaultSkin(),ilSystemStyleSettings::getCurrentDefaultStyle()
+                );
+            }else{
+                ilSystemStyleSettings::setCurrentUserPrefStyle(
+                    ilStyleDefinition::DEFAULT_SKIN_ID,ilStyleDefinition::DEFAULT_STYLE_ID
+                );
+            }
+            $message_stack->addMessage(new ilSystemStyleMessage(
+                $this->lng->txt("personal_style_set_to")." ".ilSystemStyleSettings::getCurrentUserPrefSkin().":".ilSystemStyleSettings::getCurrentUserPrefStyle(),
+                ilSystemStyleMessage::TYPE_SUCCESS)
             );
         }
         if(!$_POST["default"] && ilSystemStyleSettings::getCurrentDefaultSkin() == $new_skin->getId()){
             ilSystemStyleSettings::setCurrentDefaultStyle(
                 ilStyleDefinition::DEFAULT_SKIN_ID,ilStyleDefinition::DEFAULT_STYLE_ID
+            );
+            $message_stack->addMessage(new ilSystemStyleMessage(
+                    $this->lng->txt("default_style_set_to")." ".ilStyleDefinition::DEFAULT_SKIN_ID.": ".ilStyleDefinition::DEFAULT_STYLE_ID,
+                    ilSystemStyleMessage::TYPE_SUCCESS)
             );
         }
         $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$new_skin->getId());
@@ -252,7 +275,6 @@ class ilSystemStyleSettingsGUI
     protected function editSystemStyleForm(){
         $form = new ilPropertyFormGUI();
 
-        //Todo bad here, redo
         $skin = ilSkinXML::parseFromXML(ilStyleDefinition::CUSTOMIZING_SKINS_PATH.$_GET["skin_id"]."/template.xml");
         $style = $skin->getStyle($_GET["style_id"]);
 

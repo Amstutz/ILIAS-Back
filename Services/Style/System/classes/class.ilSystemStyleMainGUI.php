@@ -51,6 +51,11 @@ class ilSystemStyleMainGUI
 	protected $ref_id;
 
 	/**
+	 * @var ilTemplate
+	 */
+	protected $tpl;
+
+	/**
 	 * Constructor
 	 */
 	function __construct()
@@ -61,6 +66,7 @@ class ilSystemStyleMainGUI
 		$this->lng = $DIC->language();
 		$this->tabs = $DIC->tabs();
 		$this->rbacsystem = $DIC->rbac()->system();
+		$this->tpl = $DIC["tpl"];
 
 		$this->ref_id = (int) $_GET["ref_id"];
 	}
@@ -89,6 +95,7 @@ class ilSystemStyleMainGUI
 				case "ilsystemstylesettingsgui":
 					$this->checkPermission("sty_management");
 					$this->setUnderworldTabs('settings');
+					$this->setUnderworldTitle();
 					include_once("Settings/class.ilSystemStyleSettingsGUI.php");
 					$system_styles_settings = new ilSystemStyleSettingsGUI();
 					$this->ctrl->forwardCommand($system_styles_settings);
@@ -96,6 +103,7 @@ class ilSystemStyleMainGUI
 				case "ilsystemstylelessgui":
 					$this->checkPermission("sty_management");
 					$this->setUnderworldTabs('less');
+					$this->setUnderworldTitle();
 					include_once("Less/class.ilSystemStyleLessGUI.php");
 					$system_styles_less = new ilSystemStyleLessGUI();
 					$this->ctrl->forwardCommand($system_styles_less);
@@ -103,6 +111,7 @@ class ilSystemStyleMainGUI
 				case "ilsystemstyleiconsgui":
 					$this->checkPermission("sty_management");
 					$this->setUnderworldTabs('icons');
+					$this->setUnderworldTitle();
 					include_once("Icons/class.ilSystemStyleIconsGUI.php");
 					$system_styles_icons = new ilSystemStyleIconsGUI();
 					$this->ctrl->forwardCommand($system_styles_icons);
@@ -110,6 +119,7 @@ class ilSystemStyleMainGUI
 				case "ilsystemstyledocumentationgui":
 					$this->checkPermission("sty_management");
 					$this->setUnderworldTabs('documentation');
+					$this->setUnderworldTitle();
 					include_once("Documentation/class.ilSystemStyleDocumentationGUI.php");
 					$system_styles_documentation = new ilSystemStyleDocumentationGUI();
 					$this->ctrl->forwardCommand($system_styles_documentation);
@@ -134,9 +144,8 @@ class ilSystemStyleMainGUI
 	}
 
 	/**
-	 * Check permission
-	 *
-	 * @param string $a_perm permission(s)
+	 * @param $a_perm
+	 * @param bool|true $a_throw_exc
 	 * @return bool
 	 * @throws ilObjectException
 	 */
@@ -167,6 +176,9 @@ class ilSystemStyleMainGUI
 		return $has_perm;
 	}
 
+	/**
+	 * @param string $active
+	 */
 	protected function setUnderworldTabs($active = "") {
 		$this->tabs->clearTargets();
 
@@ -177,5 +189,26 @@ class ilSystemStyleMainGUI
 		$this->tabs->addTab('documentation', $this->lng->txt('documentation'), $this->ctrl->getLinkTargetByClass('ilsystemstyledocumentationgui'));
 
 		$this->tabs->activateTab($active);
+	}
+
+
+	protected function setUnderworldTitle() {
+		$skin_id = $_GET["skin_id"];
+		$style_id = $_GET["style_id"];
+
+		$skin = ilSystemStyleSkinContainer::generateFromId($skin_id)->getSkin();
+		$style = $skin->getStyle($style_id);
+
+		$this->tpl->setTitle($style->getName());
+		if($style->isSubstyle()){
+			$this->tpl->setDescription($this->lng->txt("settings_of_substyle")." '".$style->getName()."' ".
+					$this->lng->txt("of_parent")." '".$skin->getStyle($style->getSubstyleOf())->getName()."' ".
+					$this->lng->txt("from_skin")." ".$skin->getName()
+			);
+		}else{
+			$this->tpl->setDescription($this->lng->txt("settings_of_style")." '".$style->getName()."' ".
+					$this->lng->txt("from_skin")." '".$skin->getName()."'"
+			);
+		}
 	}
 }

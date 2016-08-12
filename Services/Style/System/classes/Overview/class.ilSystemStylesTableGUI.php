@@ -124,7 +124,7 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 	 */
 	protected function fillRow($a_set)
 	{
-		global $ilClientIniFile, $DIC;
+		global $DIC;
 
 		$this->tpl->setVariable("TITLE", $a_set["title"]);
 		$this->tpl->setVariable("TITLE", $a_set["title"]);
@@ -136,17 +136,13 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 			$this->tpl->setVariable("USERS", "-");
 		}
 
-
-		// activation
-		include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
-
 		if($a_set["id"] != "other"){
 			$this->tpl->setCurrentBlock("default_input");
 
 			if(!$is_substyle) {
 				$this->tpl->setVariable("DEFAULT_ID", $a_set["id"]);
-				if ($ilClientIniFile->readVariable("layout", "skin") == $a_set["skin_id"] &&
-						$ilClientIniFile->readVariable("layout", "style") == $a_set["style_id"]
+				if (ilSystemStyleSettings::getCurrentDefaultSkin() == $a_set["skin_id"] &&
+						ilSystemStyleSettings::getCurrentDefaultStyle() == $a_set["style_id"]
 				) {
 					$this->tpl->setVariable("CHECKED_DEFAULT", ' checked="checked" ');
 				} else {

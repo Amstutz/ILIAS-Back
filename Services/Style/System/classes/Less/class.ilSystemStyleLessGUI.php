@@ -98,29 +98,34 @@ class ilSystemStyleLessGUI
 
 
     protected function checkRequirements(){
-        $pass = true;
-
         $style_id = $_GET['style_id'];
         $less_path = $this->getStyleContainer()->getLessFilePath($style_id);
 
         $pass = $this->checkLessInstallation();
 
         if(file_exists($less_path)){
+            $less_variables_name = $this->getStyleContainer()->getLessVariablesName($style_id);
+            $content = "";
             try{
-                $less_variables_path = $this->getStyleContainer()->getLessVariablesFilePath($style_id);
-                $reg_exp = "/@import \"".preg_quote ($less_variables_path,"/")."\"/";
-                if(!preg_match($reg_exp,file_get_contents($less_path))){
-                    $this->getMessageStack()->addMessage(
-                        new ilSystemStyleMessage($this->lng->txt("less_file_not_included"),ilSystemStyleMessage::TYPE_ERROR)
-                    );
-                    $pass = false;
-                }
+                $content = file_get_contents($less_path);
             }catch(Exception $e){
                 $this->getMessageStack()->addMessage(
-                    new ilSystemStyleMessage($this->lng->txt("can_not_read_less_file"),ilSystemStyleMessage::TYPE_ERROR)
+                    new ilSystemStyleMessage($this->lng->txt("can_not_read_less_file")." ".$less_path,ilSystemStyleMessage::TYPE_ERROR)
                 );
                 $pass = false;
             }
+            if($content){
+                $reg_exp = "/".preg_quote ($less_variables_name,"/")."/";
+
+                if(!preg_match($reg_exp,$content)){
+                    $this->getMessageStack()->addMessage(
+                        new ilSystemStyleMessage($this->lng->txt("less_variables_file_not_included")." ".$less_variables_name
+                            ." ".$this->lng->txt("in_main_less_file")." ".$less_path,ilSystemStyleMessage::TYPE_ERROR)
+                    );
+                    $pass = false;
+                }
+            }
+
 
         }else{
             $this->getMessageStack()->addMessage(
@@ -211,6 +216,7 @@ class ilSystemStyleLessGUI
         if($modify){
             $form->addCommandButton("reset", $this->lng->txt("reset_variables"));
             $form->addCommandButton("update", $this->lng->txt("update_variables"));
+            $form->addCommandButton("edit", $this->lng->txt("cancel"));
         }
 
 

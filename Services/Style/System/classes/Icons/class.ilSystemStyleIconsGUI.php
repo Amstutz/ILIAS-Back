@@ -160,6 +160,7 @@ class ilSystemStyleIconsGUI
 
         $form->addCommandButton("reset", $this->lng->txt("reset_icons"));
         $form->addCommandButton("update", $this->lng->txt("update_colors"));
+        $form->addCommandButton("cancel", $this->lng->txt("cancel"));
 
         $form->setFormAction($this->ctrl->getFormAction($this));
 

@@ -6,6 +6,8 @@
  *  
  *
  * @author Alex Killing <alex.killing@gmx.de>
+ * @author Timon Amstutz <timon.amstutz@ilub.unibe.ch>
+ *
  * @version $Id$
  * @ingroup ServicesStyle
  *
@@ -15,6 +17,10 @@ class ilSystemStyleSettings
 	/**
 	 * SYSTEM
 	 * lookup if a style is activated
+	 *
+	 * @param $a_skin
+	 * @param $a_style
+	 * @return bool
 	 */
 	static function _lookupActivatedStyle($a_skin, $a_style)
 	{
@@ -38,8 +44,10 @@ class ilSystemStyleSettings
 	}
 
 	/**
-	 * * SYSTEM
 	 * deactivate style
+	 *
+	 * @param $a_skin
+	 * @param $a_style
 	 */
 	static function _deactivateStyle($a_skin, $a_style)
 	{
@@ -55,8 +63,10 @@ class ilSystemStyleSettings
 	}
 
 	/**
-	 * * SYSTEM
 	 * activate style
+	 *
+	 * @param $a_skin
+	 * @param $a_style
 	 */
 	static function _activateStyle($a_skin, $a_style)
 	{
@@ -80,44 +90,54 @@ class ilSystemStyleSettings
 	{
 		global $ilDB;
 
-		$assignments = array();
+		$assignments = [];
 		$set = $ilDB->query("SELECT substyle, category_ref_id FROM syst_style_cat ".
 				" WHERE skin_id = ".$ilDB->quote($a_skin_id, "text").
 				" AND style_id = ".$ilDB->quote($a_style_id, "text")
 		);
-		while ($rec = $ilDB->fetchAssoc($set))
+		while (($rec = $ilDB->fetchAssoc($set)))
 		{
-			$assignments[] = array(
+			$assignments[] = [
 					"substyle" => $rec["substyle"],
-					"ref_id" => $rec["category_ref_id"]);
+					"ref_id" => $rec["category_ref_id"]
+			];
 		}
 		return $assignments;
 	}
 
+	/**
+	 * @param $a_skin_id
+	 * @param $a_style_id
+	 * @param $a_sub_style_id
+	 * @return array
+	 */
 	static function getSubStyleCategoryAssignments($a_skin_id, $a_style_id, $a_sub_style_id)
 	{
 		global $ilDB;
 
-		$assignmnts = array();
+		$assignmnts = [];
 
 		$set = $ilDB->query("SELECT substyle, category_ref_id FROM syst_style_cat ".
 				" WHERE skin_id = ".$ilDB->quote($a_skin_id, "text").
 				" AND substyle = ".$ilDB->quote($a_sub_style_id, "text").
 				" AND style_id = ".$ilDB->quote($a_style_id, "text")
 		);
-		while ($rec = $ilDB->fetchAssoc($set))
+		while (($rec = $ilDB->fetchAssoc($set)))
 		{
-			$assignmnts[] = array(
+			$assignmnts[] = [
 					"substyle" => $rec["substyle"],
-					"ref_id" => $rec["category_ref_id"]);
+					"ref_id" => $rec["category_ref_id"]
+			];
 		}
 		return $assignmnts;
 	}
+
 	/**
 	 * @param $a_skin_id
 	 * @param $a_style_id
 	 * @param $a_substyle
 	 * @param $a_ref_id
+	 * @throws ilSystemStyleException
 	 */
 	static function writeSystemStyleCategoryAssignment($a_skin_id, $a_style_id,
 													   $a_substyle, $a_ref_id)
@@ -186,6 +206,24 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * @return bool
+	 */
+	static function getCurrentUserPrefSkin(){
+		global $DIC;
+
+		return $DIC->user()->getPref("skin");
+	}
+
+	/**
+	 * @return bool
+	 */
+	static function getCurrentUserPrefStyle(){
+		global $DIC;
+
+		return $DIC->user()->getPref("style");
+	}
+
+	/**
 	 * @param $skin_id
 	 * @param $style_id
 	 */
@@ -195,17 +233,40 @@ class ilSystemStyleSettings
 		$DIC['ilias']->ini->setVariable("layout","skin", $skin_id);
 		$DIC['ilias']->ini->setVariable("layout","style",$style_id);
 		$DIC['ilias']->ini->write();
+		self::_activateStyle($skin_id, $style_id);
+
 	}
 
+	static function resetDefaultToDelos(){
+		self::setCurrentDefaultStyle(ilStyleDefinition::DEFAULT_SKIN_ID,ilStyleDefinition::DEFAULT_STYLE_ID);
+	}
+
+	/**
+	 * @return string
+	 */
 	static function getCurrentDefaultSkin(){
 		global $DIC;
-		return $DIC['ilias']->ini->readVariable("layout","skin");
+		$skin_id = $DIC['ilias']->ini->readVariable("layout","skin");
+
+		if(!ilStyleDefinition::skinExists($skin_id)){
+			self::resetDefaultToDelos();
+			$skin_id = $DIC['ilias']->ini->readVariable("layout","skin");
+		}
+		return $skin_id;
 	}
 
+	/**
+	 * @return string
+	 */
 	static function getCurrentDefaultStyle(){
 		global $DIC;
-		return $DIC['ilias']->ini->readVariable("layout","style");
+		$skin_id = $DIC['ilias']->ini->readVariable("layout","skin");
+		$style_id = $DIC['ilias']->ini->readVariable("layout","style");
+
+		if(!ilStyleDefinition::styleExistsForSkinId($skin_id,$style_id)){
+			self::resetDefaultToDelos();
+			$style_id = $DIC['ilias']->ini->readVariable("layout","style");
+		}
+		return $style_id;
 	}
 }
-
-?>

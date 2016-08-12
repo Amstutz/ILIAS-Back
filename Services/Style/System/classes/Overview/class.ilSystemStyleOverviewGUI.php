@@ -151,6 +151,9 @@ class ilSystemStyleOverviewGUI
             $add_substyle_btn = ilLinkButton::getInstance();
             $add_substyle_btn->setCaption($this->lng->txt("add_substyle"),false);
             $add_substyle_btn->setUrl($this->ctrl->getLinkTarget($this, 'addSubStyle'));
+            if(count(ilStyleDefinition::getAllSkins()) ==1){
+                $add_substyle_btn->setDisabled(true);
+            }
             $this->toolbar->addButtonInstance($add_substyle_btn);
 
             $this->toolbar->addSeparator();
@@ -163,8 +166,7 @@ class ilSystemStyleOverviewGUI
         $si = new ilSelectInputGUI($this->lng->txt("sty_move_user_styles").": ".$this->lng->txt("sty_from"), "from_style");
 
         $options = array();
-        foreach(ilStyleDefinition::getAllSkinStyles() as $id => $skin_style)
-        {
+        foreach(ilStyleDefinition::getAllSkinStyles() as $id => $skin_style) {
             $options[$id] = $skin_style['title'];
         }
         $si->setOptions($options + array("other" => $this->lng->txt("other")));
@@ -618,7 +620,7 @@ class ilSystemStyleOverviewGUI
 
         $DIC->tabs()->clearTargets();
         $ilHelp->setScreenIdComponent("sty");
-        $ilHelp->setDefaultScreenId(ilHelpGUI::ID_PART_SCREEN, "system_style_create");
+        $ilHelp->setDefaultScreenId(ilHelpGUI::ID_PART_SCREEN, "system_sub_style_create");
 
         $form = $this->addSubStyleForms();
 
@@ -633,7 +635,7 @@ class ilSystemStyleOverviewGUI
     {
         $form = new ilPropertyFormGUI();
         $form->setFormAction($this->ctrl->getFormAction($this));
-        $form->setTitle($this->lng->txt("sty_create_new_system_style"));
+        $form->setTitle($this->lng->txt("sty_create_new_system_sub_style"));
 
 
         $ti = new ilTextInputGUI($this->lng->txt("sub_style_id"), "sub_style_id");
