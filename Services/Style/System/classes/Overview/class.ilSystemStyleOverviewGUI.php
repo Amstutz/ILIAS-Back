@@ -305,6 +305,7 @@ class ilSystemStyleOverviewGUI
 
         if ($form->checkInput() )
         {
+            $message_stack = new ilSystemStyleMessageStack();
             if(ilStyleDefinition::skinExists($_POST["skin_id"])){
                 ilUtil::sendFailure($this->lng->txt("skin_id_exists"));
             }
@@ -314,15 +315,20 @@ class ilSystemStyleOverviewGUI
                     $style = new ilSkinStyleXML($_POST["style_id"],$_POST["style_name"]);
                     $skin->addStyle($style);
                     $container = new ilSystemStyleSkinContainer($skin);
-                    $container->create();
+                    $container->create($message_stack);
                     $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$skin->getId());
                     $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$style->getId());
-                    ilUtil::sendSuccess($this->lng->txt("msg_sys_style_created"), true);
+                    if($message_stack->hasMessages()){
+                        $message_stack->sendMessages(true);
+                    }else{
+                        ilUtil::sendSuccess($this->lng->txt("msg_sys_style_created"), true);
+                    }
                     $this->ctrl->redirectByClass("ilSystemStyleSettingsGUI");
                 }catch(ilSystemStyleException $e){
-                    ilUtil::sendFailure($e->getMessage(), true);
+                    $message_stack->addMessage(new ilSystemStyleMessage($e->getMessage()),ilSystemStyleMessage::TYPE_ERROR);
                 }
             }
+            $message_stack->sendMessages();
         }
 
         // display only this form to correct input

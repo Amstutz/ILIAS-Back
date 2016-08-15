@@ -69,10 +69,15 @@ class ilSystemStyleSkinContainer {
 
     }
 
-    public function create(){
+    /**
+     * @param ilSystemStyleMessageStack $message_stack
+     * @throws ilSystemStyleException
+     */
+    public function create(ilSystemStyleMessageStack $message_stack){
         if(file_exists($this->getSkinDirectory())){
             throw new ilSystemStyleException(ilSystemStyleException::SKIN_ALREADY_EXISTS,$this->getSkinDirectory());
         }
+
 
         mkdir($this->getSkinDirectory(),0777,true);
 
@@ -80,7 +85,12 @@ class ilSystemStyleSkinContainer {
             $this->createResourceDirectory(ilStyleDefinition::DEFAULT_IMAGES_PATH,$style->getImageDirectory());
             $this->createResourceDirectory(ilStyleDefinition::DEFAULT_SOUNDS_PATH,$style->getSoundDirectory());
             $this->createResourceDirectory(ilStyleDefinition::DEFAULT_FONTS_PATH,$style->getFontDirectory());
-            $this->createLessStructure($style);
+            try{
+                $this->createLessStructure($style);
+            }catch(Exception $e){
+                $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("less_compile_failed")." ".$e->getMessage(),ilSystemStyleMessage::TYPE_ERROR));
+            }
+
         }
         $this->writeSkinToXML();
 
@@ -511,7 +521,7 @@ class ilSystemStyleSkinContainer {
      * @throws ilSystemStyleException
      */
     public function compileLess($style_id){
-        $output = shell_exec(PATH_TO_LESSC." ".$this->getLessFilePath($style_id));
+        $output = shell_exec("dfgsdfg ".$this->getLessFilePath($style_id));
         if(!$output){
             $less_error = shell_exec(PATH_TO_LESSC." ".$this->getLessFilePath($style_id)." 2>&1");
             if(!$less_error){

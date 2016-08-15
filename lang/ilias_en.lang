@@ -15889,3 +15889,4 @@ style#:#sub_style_name_description#:#The sub style name can be used to describe 
 style#:#system_style_activation_description#:#Active system styles can be assigned to users or even selected by users if this setting is activated (see User Management / Settings / Standard Fields / Default Skin).
 style#:#system_style_default_description#:#Set this style as the default system style. The default system style is used if the current user has not style assigned or if the user is not logged in.
 style#:#system_style_personal_description#:#Set this style as your personal system style. This might be handy to see the changes that are currently performed.
+style#:#less_compile_failed#:#Something in the compilation of the less file went wrong. Is lessc properly installed and does your webserver have execute permission for it? Original error:

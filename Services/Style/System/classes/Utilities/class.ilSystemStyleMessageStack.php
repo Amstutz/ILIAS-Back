@@ -63,4 +63,11 @@ class ilSystemStyleMessageStack{
         $this->messages = $messages;
     }
 
+    /**
+     * @return bool
+     */
+    public function hasMessages(){
+        return count($this->getMessages()) > 0;
+    }
+
 }
