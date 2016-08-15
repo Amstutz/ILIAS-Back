@@ -33,21 +33,26 @@ class SkinXMLTest extends PHPUnit_Framework_TestCase {
     protected $skins_path = "Services/Style/System/tests/fixtures/skins/";
 
     protected function setUp(){
-        $this->skin = new ilSkinXML("skin1");
+        $this->skin = new ilSkinXML("skin1", "skin 1");
 
         $this->style1 = new ilSkinStyleXML("style1", "Style 1");
         $this->style1->setCssFile("style1css");
         $this->style1->setImageDirectory("style1image");
         $this->style1->setSoundDirectory("style1sound");
+        $this->style1->setFontDirectory("style1font");
 
         $this->style2 = new ilSkinStyleXML("style2", "Style 2");
         $this->style2->setCssFile("style2css");
         $this->style2->setImageDirectory("style2image");
         $this->style2->setSoundDirectory("style2sound");
+        $this->style2->setFontDirectory("style2font");
+
     }
 
-    public function testSkinName() {
-        $this->assertEquals("skin1", $this->skin->getName());
+    public function testSkinNameAndId() {
+        $this->assertEquals("skin1", $this->skin->getId());
+        $this->assertEquals("skin 1", $this->skin->getName());
+
     }
 
     public function testAddStyle() {
