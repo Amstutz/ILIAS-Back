@@ -127,7 +127,7 @@ class ilSystemStyleOverviewGUI
     }
 
     protected function view(){
-        $table = new ilSystemStylesTableGUI($this, "editSystemStyles",true);
+        $table = new ilSystemStylesTableGUI($this, "edit",true);
         $this->tpl->setContent($table->getHTML());
     }
 
@@ -183,7 +183,7 @@ class ilSystemStyleOverviewGUI
         $this->toolbar->addButtonInstance($move_skin_btn);
         $this->toolbar->setFormAction($this->ctrl->getLinkTarget($this, 'moveUserStyles'));
 
-        $table = new ilSystemStylesTableGUI($this, "editSystemStyles");
+        $table = new ilSystemStylesTableGUI($this, "edit");
         $table->addActions($this->isManagementEnabled());
         $this->tpl->setContent($table->getHTML());
 
@@ -357,24 +357,28 @@ class ilSystemStyleOverviewGUI
         $form->setTitle($this->lng->txt("sty_create_new_system_style"));
 
         $ti = new ilTextInputGUI($this->lng->txt("skin_id"), "skin_id");
+        $ti->setInfo($this->lng->txt("skin_id_description"));
         $ti->setMaxLength(128);
         $ti->setSize(40);
         $ti->setRequired(true);
         $form->addItem($ti);
 
         $ti = new ilTextInputGUI($this->lng->txt("skin_name"), "skin_name");
+        $ti->setInfo($this->lng->txt("skin_name_description"));
         $ti->setMaxLength(128);
         $ti->setSize(40);
         $ti->setRequired(true);
         $form->addItem($ti);
 
         $ti = new ilTextInputGUI($this->lng->txt("style_id"), "style_id");
+        $ti->setInfo($this->lng->txt("style_id_description"));
         $ti->setMaxLength(128);
         $ti->setSize(40);
         $ti->setRequired(true);
         $form->addItem($ti);
 
         $ti = new ilTextInputGUI($this->lng->txt("style_name"), "style_name");
+        $ti->setInfo($this->lng->txt("style_name_description"));
         $ti->setMaxLength(128);
         $ti->setSize(40);
         $ti->setRequired(true);
@@ -639,12 +643,14 @@ class ilSystemStyleOverviewGUI
 
 
         $ti = new ilTextInputGUI($this->lng->txt("sub_style_id"), "sub_style_id");
+        $ti->setInfo($this->lng->txt("sub_style_id_description"));
         $ti->setMaxLength(128);
         $ti->setSize(40);
         $ti->setRequired(true);
         $form->addItem($ti);
 
         $ti = new ilTextInputGUI($this->lng->txt("sub_style_name"), "sub_style_name");
+        $ti->setInfo($this->lng->txt("sub_style_name_description"));
         $ti->setMaxLength(128);
         $ti->setSize(40);
         $ti->setRequired(true);
@@ -653,10 +659,11 @@ class ilSystemStyleOverviewGUI
         // source
         $ti = new ilSelectInputGUI($this->lng->txt("parent"), "parent_style");
         $ti->setRequired(true);
+        $ti->setInfo($this->lng->txt("sub_style_parent_style_description"));
         $styles = ilStyleDefinition::getAllSkinStyles();
         $options = array();
         foreach($styles as $id => $style){
-            if($style["skin_id"]!=ilStyleDefinition::DEFAULT_SKIN_ID && !$style["parents"]){
+            if($style["skin_id"]!=ilStyleDefinition::DEFAULT_SKIN_ID && !$style["substyle_of"]){
                 $options[$id] = $style['title'];
             }
         }

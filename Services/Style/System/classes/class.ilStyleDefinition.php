@@ -8,7 +8,29 @@ include_once("Services/Style/System/classes/class.ilSystemStyleSettings.php");
 
 
 /**
- * parses the template.xml that defines all styles of the current template
+ * ilStyleDefinition acts as a wrapper of style related actions. Use this class to get the systems current style.
+ * It also holds all system style related constants.
+ * Currently some of the logic is not clearly separated from ilSystemStyleSettings. This is due to legacy reasons.
+ * In a future refactoring, this class might be completely merged with ilSystemStyleSettings.
+ *
+ * The following terminology is used:
+ *
+ * (system) style:
+ *    A style that can be set as system style for the complete ILIAS installations. This includes, less
+ *    css, fonts, icons and sounds as well as possible html tpl files to overide ILIAS templates.
+ * (stystem) sub style:
+ *    A sub style can be assigned to exactly one system style to be displayed for a set of categories.
+ * skin:
+ *    A skin can hold multiple style. A skin is defined by it's folder carrying the name of the skin and the
+ *    template.xml in this exact folder, listing the skins styles and substyles. Mostly a skin caries exactly one style.
+ *    Through the GUI in the administration it is not possible to define multiple style per skin. It is however possible
+ *    to define multiple sub styles for one style stored in one skin.
+ * template:
+ *    The template is the xml file of the skin storing the skin styles and sub styles information.
+ *
+ *
+ *
+ * Skins, styles ans stubstyles are always used globally (not client specific).
  *
  * @author Alex Killing <alex.killing@gmx.de>
  * @author Timon Amstutz <timon.amstutz@ilub.unibe.ch>
@@ -41,7 +63,6 @@ class ilStyleDefinition
 	 * @var string
 	 */
 	const DEFAULT_VARIABLES_PATH = "./templates/default/less/variables.less";
-
 
 	/**
 	 * @var string
@@ -342,7 +363,9 @@ class ilStyleDefinition
 	}
 
 	/**
-	 * Get all skins/styles
+	 * Get all skins/styles as array (convenient for tables)
+	 * Attention: tempalte_name/template_id in this array is only used for legacy reasons an might be removed in future.
+	 *
 	 * @return array|null
 	 */
 	public static function getAllSkinStyles()
@@ -367,11 +390,13 @@ class ilStyleDefinition
 
 					// default selection list
 					$all_styles[$skin->getId().":".$style->getId()] = [
-									"title" => $skin->getId()." / ".$style->getId(),
+									"title" => $skin->getName()." / ".$style->getName(),
 									"id" => $skin->getId().":". $style->getId(),
+									"skin_id" => $skin->getId(),
 									"template_id" => $skin->getId(),
 									"skin_id" => $skin->getId(),
 									"style_id" =>  $style->getId(),
+									"skin_name" => $skin->getName(),
 									"template_name" => $skin->getName(),
 									"substyle_of" => $style->getSubstyleOf(),
 									"style_name" => $style->getName(),

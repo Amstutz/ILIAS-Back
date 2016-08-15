@@ -7,6 +7,8 @@
  * such as activated or default system styles etc, be it in database or inifile.
  * Do not use this class to get the current system style, use ilStyleDefinition insteaed.
  *
+ * Semantics of terms style, sub style, skin, template --> see ilStyleDefinition
+ *
  * @author Alex Killing <alex.killing@gmx.de>
  * @author Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  *
@@ -262,6 +264,8 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Gets default Skin of the System
+	 *
 	 * @return string
 	 */
 	static function getCurrentDefaultSkin(){
@@ -276,6 +280,7 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Gets default style of the system
 	 * @return string
 	 */
 	static function getCurrentDefaultStyle(){

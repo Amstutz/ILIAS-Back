@@ -56,12 +56,15 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 
 		$this->setLimit(9999);
 		$this->addColumn($this->lng->txt(""));
-		$this->addColumn($this->lng->txt("title"));
+		$this->addColumn($this->lng->txt("style_name"),"style_name");
+		$this->addColumn($this->lng->txt("skin_name"),"style_id");
 		$this->addColumn($this->lng->txt("default"));
 		$this->addColumn($this->lng->txt("active"));
-		$this->addColumn($this->lng->txt("users"));
+		$this->addColumn($this->lng->txt("users"),"users");
 		$this->addColumn($this->lng->txt("sty_substyle_of"));
 		$this->setRowTemplate("tpl.sys_styles_row.html", "Services/Style/System");
+		$this->setEnableHeader(true);
+
 
 	}
 
@@ -109,7 +112,7 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 					"template_id" => "",
 					"skin_id" => "other",
 					"style_id" => "",
-					"template_name" => "",
+					"skin_name" => "other",
 					"style_name" => "",
 					"users" => $users_missing_styles
 					);
@@ -126,8 +129,8 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 	{
 		global $DIC;
 
-		$this->tpl->setVariable("TITLE", $a_set["title"]);
-		$this->tpl->setVariable("TITLE", $a_set["title"]);
+		$this->tpl->setVariable("STYLE_NAME", $a_set["style_name"]);
+		$this->tpl->setVariable("SKIN_NAME", $a_set["skin_name"]);
 		$is_substyle = $a_set["substyle_of"] != "";
 
 		if(!$is_substyle) {

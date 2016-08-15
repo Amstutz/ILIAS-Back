@@ -829,7 +829,7 @@ class ilPersonalSettingsGUI
 		// skin/style
 		if ($this->userSettingVisible("skin_style"))
 		{
-			$templates = $styleDefinition->getAllTemplates();
+			$templates = $styleDefinition->getAllSkins();
 			if (is_array($templates))
 			{ 
 				$si = new ilSelectInputGUI($this->lng->txt("skin_style"), "skin_style");
@@ -840,7 +840,7 @@ class ilPersonalSettingsGUI
 					foreach($template->getStyles() as $style)
 					{
 						include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
-						if (!ilSystemStyleSettings::_lookupActivatedStyle($template->getId(),$style->getId()))
+						if (!ilSystemStyleSettings::_lookupActivatedStyle($template->getId(),$style->getId()) || $style->isSubstyle())
 						{
 							continue;
 						}

@@ -264,8 +264,9 @@ class ilSystemStyleSettingsGUI
         $new_substyle->setImageDirectory($_POST["image_dir"]);
         $new_substyle->setSoundDirectory($_POST["sound_dir"]);
         $new_substyle->setFontDirectory($_POST["font_dir"]);
-        $new_substyle->setSubstyleOf($_POST["parent_style"]);
+        $new_substyle->setSubstyleOf($old_substyle->getSubstyleOf());
 
+        $container->updateSkin($skin);
         $container->updateStyle($new_substyle->getId(),$old_substyle);
 
         $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$skin->getId());
@@ -279,52 +280,65 @@ class ilSystemStyleSettingsGUI
         $style = $skin->getStyle($_GET["style_id"]);
 
         $form->setFormAction($this->ctrl->getFormActionByClass("ilsystemstylesettingsgui"));
-        $form->setTitle($this->lng->txt("skin"));
+
 
         if(!$style->isSubstyle()){
+            $form->setTitle($this->lng->txt("skin"));
+
             $ti = new ilTextInputGUI($this->lng->txt("skin_id"), "skin_id");
             $ti->setMaxLength(128);
             $ti->setSize(40);
             $ti->setRequired(true);
+            $ti->setInfo($this->lng->txt("skin_id_description"));
             $form->addItem($ti);
 
             $ti = new ilTextInputGUI($this->lng->txt("skin_name"), "skin_name");
+            $ti->setInfo($this->lng->txt("skin_name_description"));
             $ti->setMaxLength(128);
             $ti->setSize(40);
             $ti->setRequired(true);
             $form->addItem($ti);
+
+            $section = new ilFormSectionHeaderGUI();
+            $section->setTitle($this->lng->txt("style"));
+            $form->addItem($section);
+        }else{
+            $form->setTitle($this->lng->txt("sub_style"));
         }
 
 
-        $section = new ilFormSectionHeaderGUI();
-        $section->setTitle($this->lng->txt("style"));
-        $form->addItem($section);
+
 
         $ti = new ilTextInputGUI($this->lng->txt("style_id"), "style_id");
         $ti->setMaxLength(128);
         $ti->setSize(40);
         $ti->setRequired(true);
+        $ti->setInfo($this->lng->txt("style_id_description"));
         $form->addItem($ti);
 
         $ti = new ilTextInputGUI($this->lng->txt("style_name"), "style_name");
         $ti->setMaxLength(128);
         $ti->setSize(40);
         $ti->setRequired(true);
+        $ti->setInfo($this->lng->txt("style_name_description"));
         $form->addItem($ti);
 
         $ti = new ilTextInputGUI($this->lng->txt("image_dir"), "image_dir");
         $ti->setMaxLength(128);
         $ti->setSize(40);
+        $ti->setInfo($this->lng->txt("image_dir_description"));
         $form->addItem($ti);
 
         $ti = new ilTextInputGUI($this->lng->txt("font_dir"), "font_dir");
         $ti->setMaxLength(128);
         $ti->setSize(40);
+        $ti->setInfo($this->lng->txt("font_dir_description"));
         $form->addItem($ti);
 
         $ti = new ilTextInputGUI($this->lng->txt("sound_dir"), "sound_dir");
         $ti->setMaxLength(128);
         $ti->setSize(40);
+        $ti->setInfo($this->lng->txt("sound_dir_description"));
         $form->addItem($ti);
 
         if(!$style->isSubstyle()){
@@ -333,34 +347,19 @@ class ilSystemStyleSettingsGUI
             $form->addItem($section);
 
             $active = new ilCheckboxInputGUI($this->lng->txt("system_style_activation"), "active");
+            $active->setInfo($this->lng->txt("system_style_activation_description"));
 
             $set_default = new ilCheckboxInputGUI($this->lng->txt("default"), "default");
+            $set_default->setInfo($this->lng->txt("system_style_default_description"));
             $active->addSubItem($set_default);
 
             $set_personal = new ilCheckboxInputGUI($this->lng->txt("personal"), "personal");
+            $set_personal->setInfo($this->lng->txt("system_style_personal_description"));
             $active->addSubItem($set_personal);
 
 
             $form->addItem($active);
-        }else{
-            $section = new ilFormSectionHeaderGUI();
-            $section->setTitle($this->lng->txt("sub_style_settings"));
-            $form->addItem($section);
-
-            $ti = new ilSelectInputGUI($this->lng->txt("parent"), "parent_style");
-            $ti->setRequired(true);
-            $styles = $skin->getStyles();
-            $options = array();
-            foreach($styles as $style){
-                if(!$style->isSubstyle()){
-                    $options[$style->getId()] = $style->getName();
-                }
-            }
-            $ti->setOptions($options);
-
-            $form->addItem($ti);
         }
-
 
         $form->addCommandButton("save", $this->lng->txt("save"));
         $form->addCommandButton("cancel", $this->lng->txt("cancel"));
