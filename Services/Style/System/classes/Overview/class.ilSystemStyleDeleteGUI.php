@@ -46,11 +46,13 @@ class ilSystemStyleDeleteGUI
     }
 
     public function getDeleteStyleFormHTML() {
+        ilUtil::sendQuestion($this->lng->txt("info_delete_sure"),true);
+
         $table_form = new ilConfirmationTableGUI(true);
         $table_form->setFormName("delete_style");
 
-        $table_form->addCommandButton('confirmDelete', $this->lng ->txt('confirm'));
-        $table_form->addCommandButton('cancel', $this->lng ->txt('cancel'));
+        $table_form->addCommandButton('confirmDelete', $this->lng->txt('confirm'));
+        $table_form->addCommandButton('cancel', $this->lng->txt('cancel'));
         $table_form->setFormAction($this->ctrl->getFormActionByClass("ilSystemStyleOverviewGUI"));
         $table_form->setData($this->getStyles());
         return $table_form->getHTML();

@@ -41,6 +41,8 @@ class ilSystemStyleLessGUI
      * @var ilSystemStyleMessageStack
      */
     protected $message_stack;
+
+
     /**
      * Constructor
      */
@@ -96,7 +98,9 @@ class ilSystemStyleLessGUI
     }
 
 
-
+    /**
+     * @return bool
+     */
     protected function checkRequirements(){
         $style_id = $_GET['style_id'];
         $less_path = $this->getStyleContainer()->getLessFilePath($style_id);
@@ -136,6 +140,9 @@ class ilSystemStyleLessGUI
         return $pass;
     }
 
+    /**
+     * @return bool
+     */
     protected function checkLessInstallation(){
         $pass = true;
 
@@ -186,12 +193,16 @@ class ilSystemStyleLessGUI
 
     }
 
+    /**
+     * @param bool|true $modify
+     * @return ilPropertyFormGUI
+     */
     public function initSystemStyleLessForm($modify = true)
     {
         $form = new ilPropertyFormGUI();
 
-        $form->setTitle("Adapt Less Variables");
-
+        $form->setTitle($this->lng->txt("adapt_less"));
+        $form->setDescription($this->lng->txt("adapt_less_description"));
         $focus_variable = $_GET['id_less_variable'];
         if($focus_variable){
             $this->tpl->addOnLoadCode("setTimeout(function() { $('#".$focus_variable."').focus();}, 100);");
@@ -231,7 +242,7 @@ class ilSystemStyleLessGUI
      */
     function getVariablesValues(ilPropertyFormGUI $form)
     {
-        $values = array();
+        $values = [];
         foreach($this->getLessFile()->getCategories() as $category){
             foreach($this->getLessFile()->getVariablesPerCategory($category->getName()) as $variable){
                 $values[$variable->getName()] = $variable->getValue();
@@ -277,7 +288,7 @@ class ilSystemStyleLessGUI
         }
 
         $form->setValuesByPost();
-        $this->tpl->setContent($form->getHtml());
+        $this->tpl->setContent($form->getHTML());
 
     }
 

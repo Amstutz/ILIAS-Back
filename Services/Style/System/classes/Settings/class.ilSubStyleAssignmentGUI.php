@@ -65,9 +65,8 @@ class ilSubStyleAssignmentGUI
 
     /**
      * Assign styles to categories
-     *
-     * @param
-     * @return
+     * @param ilSkinXML $skin
+     * @param ilSkinStyleXML $substyle
      */
     function assignStyle(ilSkinXML $skin,ilSkinStyleXML $substyle)
     {
@@ -85,11 +84,8 @@ class ilSubStyleAssignmentGUI
 
     /**
      * Add style category assignment
-     *
-     * @param
-     * @return
      */
-    function addAssignment(ilSkinXML $skin,ilSkinStyleXML $substyle)
+    function addAssignment()
     {
 
         include_once 'Services/Search/classes/class.ilSearchRootSelector.php';
@@ -99,7 +95,7 @@ class ilSubStyleAssignmentGUI
         $exp->setExpandTarget($this->ctrl->getLinkTarget($this->getParentGui(),'addStyleCatAssignment'));
         $exp->setTargetClass(get_class($this->getParentGui()));
         $exp->setCmd('saveAssignment');
-        $exp->setClickableTypes(array("cat"));
+        $exp->setClickableTypes(["cat"]);
 
         $exp->setOutput(0);
         $this->tpl->setContent($exp->getOutput());
@@ -109,8 +105,8 @@ class ilSubStyleAssignmentGUI
     /**
      * Save style category assignment
      *
-     * @param
-     * @return
+     * @param ilSkinXML $skin
+     * @param ilSkinStyleXML $substyle
      */
     function saveAssignment(ilSkinXML $skin,ilSkinStyleXML $substyle)
     {
@@ -130,6 +126,9 @@ class ilSubStyleAssignmentGUI
 
     /**
      * Delete system style to category assignments
+     *
+     * @param ilSkinXML $skin
+     * @param ilSkinStyleXML $substyle
      */
     function deleteAssignments(ilSkinXML $skin,ilSkinStyleXML $substyle)
     {
@@ -145,6 +144,8 @@ class ilSubStyleAssignmentGUI
                     $id_arr[0], $id_arr[1]);
             }
             ilUtil::sendSuccess($this->lng->txt("msg_obj_modified"), true);
+        }else{
+            ilUtil::sendFailure($this->lng->txt("no_style_selected"), true);
         }
 
         $this->ctrl->redirect($this->getParentGui(), "assignStyle");

@@ -1,5 +1,6 @@
 //== Colors
-
+//
+//## ILIAS works with a base color scheme consisting of six main colors and ...
 /*		Color scheme
 		Dark BLue: #0f2152;
 		Mid Blue: #4c6586;
@@ -11,12 +12,24 @@
 		ILIAS 4 MainMenu Color: #c8e6ff;
 */
 
+//** brand-primary is used as main colors for links and buttons.
 @brand-primary:         #4c6586;
 @brand-secondary:       #6ea03c;
 @brand-success:         #6ea03c;
 @brand-info:            #dcb496;
 @brand-warning:         #fa8228;
 @brand-danger:          #fa8228;
+
+@mid-gray: #434343;
+@il-primary-container-bg: #FFFFFF;
+@il-secondary-container-bg: #F9F9F9;
+
+@il-highlight-bg: #FFFFD0;
+/* @il-highlight-bg: saturate(lighten(@brand-warning, 34%), 80%); */
+/* @il-highlight-bg: lighten(@brand-secondary, 44%); */
+/* @il-highlight-bg: lighten(#21c5d8, 40%); */
+@il-brand-3rd: #21c5d8;
+
 
 /** if left unchanged, you have to copy all the background images to your skin/images folder.
 * To use the delos background images in your skin,
@@ -29,17 +42,6 @@
 * please change this value (in custom less data or variables.less of your custom skin) to "../../../../templates/default/fonts/"
 */
 @web-font-path: "fonts/";
-
-@mid-gray: #434343;
-@il-primary-container-bg: #FFFFFF;
-@il-secondary-container-bg: #F9F9F9;
-
-@il-highlight-bg: #FFFFD0;
-/* @il-highlight-bg: saturate(lighten(@brand-warning, 34%), 80%); */
-/* @il-highlight-bg: lighten(@brand-secondary, 44%); */
-/* @il-highlight-bg: lighten(#21c5d8, 40%); */
-@il-brand-3rd: #21c5d8;
-
 
 //== Scaffolding
 @body-bg:               #f0f0f0;

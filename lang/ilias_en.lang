@@ -15890,3 +15890,9 @@ style#:#system_style_activation_description#:#Active system styles can be assign
 style#:#system_style_default_description#:#Set this style as the default system style. The default system style is used if the current user has not style assigned or if the user is not logged in.
 style#:#system_style_personal_description#:#Set this style as your personal system style. This might be handy to see the changes that are currently performed.
 style#:#less_compile_failed#:#Something in the compilation of the less file went wrong. Is lessc properly installed and does your webserver have execute permission for it? Original error:
+style#:#zip_export_failed#:#The ZIP export failed. The following error occured:
+style#:#no_style_selected#:#No sub style to delete has been selected.
+style#:#adapt_less#:#Adapt Less
+style#:#adapt_less_description#:#This is a direct representation of all less variables from the variables.less file used in the selected skin. Variable names and descriptions are drawn directly from this file and are therefore only available in their original language. The selected style will be recompiled completely by updating/reseting the variables. Resetting variables will create a exact copy of the default delos style.
+style#:#adapt_icons_description#:#All icons that could be found in svg icons in the skins images folder are listed here. If one color is changed, it will be changed in all icons containing this colors at once.
+style#:#adapt_icons#:#Adapt Icon Colors

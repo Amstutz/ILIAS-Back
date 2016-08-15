@@ -38,8 +38,6 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 	 * ilSystemStylesTableGUI constructor.
 	 * @param int $a_parent_obj
 	 * @param string $a_parent_cmd
-	 * @param string $read_only
-	 * @param $test
 	 */
 	function __construct($a_parent_obj, $a_parent_cmd)
 	{

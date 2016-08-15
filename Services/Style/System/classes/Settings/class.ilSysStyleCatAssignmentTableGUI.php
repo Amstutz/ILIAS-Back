@@ -15,7 +15,12 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
 class ilSysStyleCatAssignmentTableGUI extends ilTable2GUI
 {
 	/**
-	 * Constructor
+	 * ilSysStyleCatAssignmentTableGUI constructor.
+	 * @param int $a_parent_obj
+	 * @param string $a_parent_cmd
+	 * @param string $skin_id
+	 * @param $style_id
+	 * @param $sub_style_id
 	 */
 	function __construct($a_parent_obj, $a_parent_cmd,$skin_id,$style_id, $sub_style_id)
 	{
@@ -33,9 +38,8 @@ class ilSysStyleCatAssignmentTableGUI extends ilTable2GUI
 			$this->skin_id."/".$this->style_id);
 		
 		$this->addColumn("", "", "1");
-		$this->addColumn($this->lng->txt("sty_substyle"));
 		$this->addColumn($this->lng->txt("obj_cat"));
-		
+
 		$this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
 		$this->setRowTemplate("tpl.sty_cat_ass_row.html", "Services/Style/System");
 
@@ -59,10 +63,8 @@ class ilSysStyleCatAssignmentTableGUI extends ilTable2GUI
 	 */
 	protected function fillRow($a_set)
 	{
-		global $lng;
 
 		$this->tpl->setVariable("REF_ID", $a_set["ref_id"]);
-		$this->tpl->setVariable("SUBSTYLE", $a_set["substyle"]);
 		$this->tpl->setVariable("CATEGORY",
 			ilObject::_lookupTitle(ilObject::_lookupObjId($a_set["ref_id"])));
 	}

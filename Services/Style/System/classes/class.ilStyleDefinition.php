@@ -393,13 +393,12 @@ class ilStyleDefinition
 									"title" => $skin->getName()." / ".$style->getName(),
 									"id" => $skin->getId().":". $style->getId(),
 									"skin_id" => $skin->getId(),
+									"skin_name" => $skin->getId(),
 									"template_id" => $skin->getId(),
-									"skin_id" => $skin->getId(),
-									"style_id" =>  $style->getId(),
-									"skin_name" => $skin->getName(),
 									"template_name" => $skin->getName(),
-									"substyle_of" => $style->getSubstyleOf(),
+									"style_id" =>  $style->getId(),
 									"style_name" => $style->getName(),
+									"substyle_of" => $style->getSubstyleOf(),
 									"users" => $num_users
 							];
 				}

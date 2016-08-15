@@ -470,6 +470,9 @@ class ilSystemStyleSkinContainer {
 
     }
 
+    /**
+     * Exports the complete skin to an zip file.
+     */
     public function export(){
         $rel_tmp_zip = "../".$this->getSkin()->getId().".zip";
         $temp_zip = rtrim($this->getSkinDirectory(),"/").".zip";

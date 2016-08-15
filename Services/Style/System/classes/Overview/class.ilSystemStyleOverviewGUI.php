@@ -167,7 +167,9 @@ class ilSystemStyleOverviewGUI
 
         $options = array();
         foreach(ilStyleDefinition::getAllSkinStyles() as $id => $skin_style) {
-            $options[$id] = $skin_style['title'];
+            if(!$skin_style['substyle_of']){
+                $options[$id] = $skin_style['title'];
+            }
         }
         $si->setOptions($options + array("other" => $this->lng->txt("other")));
 
@@ -396,6 +398,9 @@ class ilSystemStyleOverviewGUI
         return $form;
     }
 
+    /**
+     * @return ilPropertyFormGUI
+     */
     protected function importSystemStyleForm(){
         $form = new ilPropertyFormGUI();
         $form->setFormAction($this->ctrl->getFormAction($this));
@@ -413,6 +418,9 @@ class ilSystemStyleOverviewGUI
         return $form;
     }
 
+    /**
+     * @return ilPropertyFormGUI
+     */
     protected function cloneSystemStyleForm(){
         $form = new ilPropertyFormGUI();
         $form->setFormAction($this->ctrl->getFormAction($this));
@@ -547,6 +555,13 @@ class ilSystemStyleOverviewGUI
 
     }
 
+    /**
+     * @param $skin_id
+     * @param $style_id
+     * @param ilSystemStyleMessageStack $message_stack
+     * @return bool
+     * @throws ilSystemStyleException
+     */
     protected function checkDeletable($skin_id,$style_id, ilSystemStyleMessageStack $message_stack){
         $passed = true;
         if (ilObjUser::_getNumberOfUsersForStyle($skin_id, $style_id) > 0)
@@ -617,7 +632,12 @@ class ilSystemStyleOverviewGUI
     protected function export(){
         $skin_id = $_GET["skin_id"];
         $container = ilSystemStyleSkinContainer::generateFromId($skin_id);
-        $container->export();
+        try{
+            $container->export();
+        }catch(Exception $e){
+            ilUtil::sendFailure($this->lng->txt("zip_export_failed")." ".$e->getMessage());
+        }
+
     }
 
 

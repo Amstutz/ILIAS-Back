@@ -119,7 +119,8 @@ class ilSystemStyleIconsGUI
     {
         $form = new ilPropertyFormGUI();
 
-        $form->setTitle("Adapt Icon Colors");
+        $form->setTitle($this->lng->txt("adapt_icons"));
+        $form->setDescription($this->lng->txt("adapt_icons_description"));
 
         foreach($this->getIconFolder()->getColorSet()->getColorsSorted() as $type => $colors){
             $section = new ilFormSectionHeaderGUI();

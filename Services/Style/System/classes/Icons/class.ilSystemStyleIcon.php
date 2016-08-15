@@ -45,8 +45,7 @@ class ilSystemStyleIcon
 
 
     /**
-     * @param ilSystemStyleIconColorSet $old_colors
-     * @param ilSystemStyleIconColorSet $new_colors
+     * @param array $color_changes
      */
     public function changeColor(array $color_changes){
         if($this->getType() == "svg"){
