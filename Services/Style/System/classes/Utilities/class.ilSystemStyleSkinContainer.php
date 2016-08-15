@@ -82,6 +82,8 @@ class ilSystemStyleSkinContainer {
             $this->createResourceDirectory(ilStyleDefinition::DEFAULT_FONTS_PATH,$style->getFontDirectory());
             $this->createLessStructure($style);
         }
+        $this->writeSkinToXML();
+
 
     }
 

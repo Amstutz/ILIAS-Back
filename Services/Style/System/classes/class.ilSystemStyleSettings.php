@@ -3,7 +3,9 @@
 /* Copyright (c) 1998-2014 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 /**
- *  
+ * This class acts as Model for all system styles settings related settings
+ * such as activated or default system styles etc, be it in database or inifile.
+ * Do not use this class to get the current system style, use ilStyleDefinition insteaed.
  *
  * @author Alex Killing <alex.killing@gmx.de>
  * @author Timon Amstutz <timon.amstutz@ilub.unibe.ch>
@@ -15,7 +17,6 @@
 class ilSystemStyleSettings
 {
 	/**
-	 * SYSTEM
 	 * lookup if a style is activated
 	 *
 	 * @param $a_skin
@@ -44,7 +45,7 @@ class ilSystemStyleSettings
 	}
 
 	/**
-	 * deactivate style
+	 * deactivate system style
 	 *
 	 * @param $a_skin
 	 * @param $a_style
@@ -63,7 +64,7 @@ class ilSystemStyleSettings
 	}
 
 	/**
-	 * activate style
+	 * activate system style
 	 *
 	 * @param $a_skin
 	 * @param $a_style
@@ -80,11 +81,12 @@ class ilSystemStyleSettings
 	}
 
 	/**
-	 * Get all system style category assignments
+	 * Get all system sub styles category assignments. This is used to check wheter a system sub style is to be used
+	 * in a particular category.
 	 *
 	 * @param string $a_skin_id skin id
 	 * @param string $a_style_id style id
-	 * @return array ref ids
+	 * @return array ('substyle' => substyle_id, 'ref id' => cat_ref_id)
 	 */
 	static function getSystemStyleCategoryAssignments($a_skin_id, $a_style_id)
 	{
@@ -106,6 +108,9 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Get all system category assignments of exactly one substyle. This is used to check wheter a system sub style is to be used
+	 * in a particular category.
+	 *
 	 * @param $a_skin_id
 	 * @param $a_style_id
 	 * @param $a_sub_style_id
@@ -133,6 +138,8 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Sets a substyle category assignment.
+	 *
 	 * @param $a_skin_id
 	 * @param $a_style_id
 	 * @param $a_substyle
@@ -161,6 +168,9 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Deletes all sub style category assignment of a system style. This is used if a system style is deleted
+	 * completely
+	 *
 	 * @param $a_skin_id
 	 * @param $a_style_id
 	 * @param $a_substyle
@@ -179,6 +189,8 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Delets a sub styles category assignment.
+	 *
 	 * @param $a_skin_id
 	 * @param $a_style_id
 	 * @param $a_substyle
@@ -194,6 +206,8 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Sets a users preferred system skin/style by using the user object.
+	 *
 	 * @param $skin_id
 	 * @param $style_id
 	 */
@@ -206,6 +220,8 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Gets a users preferred skin by using the user object.
+	 *
 	 * @return bool
 	 */
 	static function getCurrentUserPrefSkin(){
@@ -215,6 +231,8 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Gets a users preferred style by using the user object.
+	 *
 	 * @return bool
 	 */
 	static function getCurrentUserPrefStyle(){
@@ -224,6 +242,8 @@ class ilSystemStyleSettings
 	}
 
 	/**
+	 * Sets the default style of the system
+	 *
 	 * @param $skin_id
 	 * @param $style_id
 	 */
