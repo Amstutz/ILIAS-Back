@@ -159,9 +159,6 @@ class ilSystemStyleOverviewGUI
             $this->toolbar->addSeparator();
         }
 
-
-
-
         // from styles selector
         $si = new ilSelectInputGUI($this->lng->txt("sty_move_user_styles").": ".$this->lng->txt("sty_from"), "from_style");
 

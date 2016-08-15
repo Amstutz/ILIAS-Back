@@ -1,6 +1,7 @@
 <?php
 include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
-/* Copyright (c) 1998-2012 ILIAS open source, Extended GPL, see docs/LICENSE */
+include_once("./Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php");
+
 
 include_once("./Services/Table/classes/class.ilTable2GUI.php");
 
@@ -8,6 +9,8 @@ include_once("./Services/Table/classes/class.ilTable2GUI.php");
  * TableGUI class for system styles
  *
  * @author Alex Killing <alex.killing@gmx.de>
+ * @author Timon Amstutz <timon.amstutz@ilub.unibe.ch>
+
  * @version $Id$
  *
  * @ingroup ServicesStyle
@@ -204,27 +207,22 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 				$this->ctrl->setParameterByClass('ilSystemStyleOverviewGUI','skin_id',$a_set["skin_id"]);
 				$this->ctrl->setParameterByClass('ilSystemStyleOverviewGUI','style_id',$a_set["style_id"]);
 
+				$selection_list = new ilAdvancedSelectionListGUI();
+				$selection_list->setId("id_action_list_" . $a_set["id"]);
+				$selection_list->setListTitle($this->lng->txt("actions"));
+
 				if($this->isManagementEnabled()){
 					$this->tpl->setCurrentBlock("multi_actions");
 					$this->tpl->setVariable("MULTI_ACTIONS_ID", $a_set["id"]);
 					$this->tpl->parseCurrentBlock();
 
-					$this->tpl->setCurrentBlock("actions");
-					$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleSettingsGUI'));
-					$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('edit'));
-					$this->tpl->parseCurrentBlock();
-
-					$this->tpl->setCurrentBlock("actions");
-					$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','deleteStyle'));
-					$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('delete'));
-					$this->tpl->parseCurrentBlock();
+					$selection_list->addItem($this->lng->txt('edit'),'edit',$this->ctrl->getLinkTargetByClass('ilSystemStyleSettingsGUI'));
+					$selection_list->addItem($this->lng->txt('delete'),'delete',$this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','deleteStyle'));
 				}
 				if(!$is_substyle){
-					$this->tpl->setCurrentBlock("actions");
-					$this->tpl->setVariable("ACTION_TARGET", $this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','export'));
-					$this->tpl->setVariable("TXT_ACTION", $this->lng->txt('export'));
-					$this->tpl->parseCurrentBlock();
+					$selection_list->addItem($this->lng->txt('export'),'export',$this->ctrl->getLinkTargetByClass('ilSystemStyleOverviewGUI','export'));
 				}
+				$this->tpl->setVariable("ACTIONS", $selection_list->getHTML());
 
 			}
 		}
