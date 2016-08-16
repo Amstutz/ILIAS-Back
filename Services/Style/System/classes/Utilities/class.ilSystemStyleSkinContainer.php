@@ -17,7 +17,6 @@ include_once("Services/Style/System/classes/Less/class.ilSystemStyleLessFile.php
  */
 class ilSystemStyleSkinContainer {
 
-
     /**
      * @var ilLanguage
      */

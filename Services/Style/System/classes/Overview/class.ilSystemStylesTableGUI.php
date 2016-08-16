@@ -59,10 +59,10 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 		$this->addColumn($this->lng->txt(""));
 		$this->addColumn($this->lng->txt("style_name"),"style_name");
 		$this->addColumn($this->lng->txt("skin_name"),"style_id");
+		$this->addColumn($this->lng->txt("sty_substyle_of"));
 		$this->addColumn($this->lng->txt("default"));
 		$this->addColumn($this->lng->txt("active"));
 		$this->addColumn($this->lng->txt("users"),"users");
-		$this->addColumn($this->lng->txt("sty_substyle_of"));
 		$this->setRowTemplate("tpl.sys_styles_row.html", "Services/Style/System");
 		$this->setEnableHeader(true);
 
