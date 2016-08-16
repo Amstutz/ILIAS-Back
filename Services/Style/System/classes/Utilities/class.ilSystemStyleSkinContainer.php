@@ -5,6 +5,7 @@ include_once("Services/Style/System/classes/Exceptions/class.ilSystemStyleExcept
 include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessageStack.php");
 include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessage.php");
 include_once("Services/Style/System/classes/Less/class.ilSystemStyleLessFile.php");
+include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleConfig.php");
 
 /**
  * This class is responsible for all file system related actions related actions of a skin such as copying files and folders,
@@ -33,11 +34,16 @@ class ilSystemStyleSkinContainer {
     protected static $message_stack = null;
 
     /**
+     * @var ilSystemStyleConfig
+     */
+    protected $system_styles_conf;
+
+    /**
      * ilSystemStyleSkinContainer constructor.
      * @param ilSkinXML $skin
      * @param ilSystemStyleMessageStack|null $message_stack
      */
-    public function __construct(ilSkinXML $skin, ilSystemStyleMessageStack $message_stack = null)
+    public function __construct(ilSkinXML $skin, ilSystemStyleMessageStack $message_stack = null, ilSystemStyleConfig $system_styles_conf)
     {
         global $DIC;
 
@@ -50,24 +56,35 @@ class ilSystemStyleSkinContainer {
         }else{
             $this->setMessageStack($message_stack);
         }
+
+        if(!$system_styles_conf){
+            $this->system_styles_conf = new ilSystemStyleConfig();
+        }else{
+            $this->setSystemStylesConf($system_styles_conf);
+        }
     }
 
     /**
      * @param $skin_id
      * @param ilSystemStyleMessageStack|null $message_stack
+     * @param ilSystemStyleConfig $system_styles_conf
      * @return ilSystemStyleSkinContainer
      * @throws ilSystemStyleException
      */
-    static function generateFromId($skin_id,ilSystemStyleMessageStack $message_stack = null){
+    static function generateFromId($skin_id,ilSystemStyleMessageStack $message_stack = null, ilSystemStyleConfig $system_styles_conf = null){
         if(!$skin_id){
             throw new ilSystemStyleException(ilSystemStyleException::NO_SKIN_ID);
         }
 
+        if(!$system_styles_conf){
+            $system_styles_conf = new ilSystemStyleConfig();
+        }
+
         if ($skin_id != "default")
         {
-            return new self(ilSkinXML::parseFromXML(ilStyleDefinition::CUSTOMIZING_SKINS_PATH.$skin_id."/template.xml"), $message_stack);
+            return new self(ilSkinXML::parseFromXML($system_styles_conf->getCustomizingSkinPath().$skin_id."/template.xml"), $message_stack, $system_styles_conf);
         }else{
-            return new self(ilSkinXML::parseFromXML(ilStyleDefinition::DEFAULT_TEMPLATE_PATH), $message_stack);
+            return new self(ilSkinXML::parseFromXML($system_styles_conf->getDefaultTemplatePath()), $message_stack, $system_styles_conf);
         }
 
     }
@@ -631,4 +648,19 @@ class ilSystemStyleSkinContainer {
         $this->getSkin()->writeToXMLFile($this->getSkinDirectory()."template.xml");
     }
 
+    /**
+     * @return ilSystemStyleConfig
+     */
+    public function getSystemStylesConf()
+    {
+        return $this->system_styles_conf;
+    }
+
+    /**
+     * @param ilSystemStyleConfig $system_styles_conf
+     */
+    public function setSystemStylesConf($system_styles_conf)
+    {
+        $this->system_styles_conf = $system_styles_conf;
+    }
 }
