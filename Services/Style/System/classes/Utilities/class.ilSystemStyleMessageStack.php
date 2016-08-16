@@ -13,14 +13,29 @@ class ilSystemStyleMessageStack{
      */
     protected $messages = array();
 
+    /**
+     * Add a message to be displayed before all others
+     *
+     * @param ilSystemStyleMessage $message
+     */
     public function prependMessage(ilSystemStyleMessage $message){
         array_unshift($this->messages , $message);
     }
 
+    /**
+     * Add a message to be displayed by the stack
+     *
+     * @param ilSystemStyleMessage $message
+     */
     public function addMessage(ilSystemStyleMessage $message){
         $this->messages[] = $message;
     }
 
+    /**
+     * Send messages via ilUtil to be displayed
+     *
+     * @param bool|false $keep
+     */
     public function sendMessages($keep = false){
         foreach($this->getJoinedMessages() as $type => $joined_message){
             switch($type){
@@ -37,6 +52,11 @@ class ilSystemStyleMessageStack{
         }
     }
 
+    /**
+     * Return an array containing a string with all messages for each type
+     *
+     * @return string[]
+     */
     public function getJoinedMessages(){
         $joined_messages = array();
         foreach($this->getMessages() as $message){
@@ -47,6 +67,7 @@ class ilSystemStyleMessageStack{
         }
         return $joined_messages;
     }
+
     /**
      * @return ilSystemStyleMessage[]
      */
@@ -64,6 +85,8 @@ class ilSystemStyleMessageStack{
     }
 
     /**
+     * Return wheter there are any message at all stored in the stack
+     *
      * @return bool
      */
     public function hasMessages(){

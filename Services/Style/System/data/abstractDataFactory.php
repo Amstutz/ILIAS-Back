@@ -1,6 +1,9 @@
 <?php
 /**
-* ---
+ * This is the starting point for parsing all UI Components related data out of the respective factories. The
+ * component described here is the root node in the tree of UI Components and named UIComponent
+ *
+ * ---
  * description:
  *   purpose: What is to be done by this control
  *   composition: What happens if the control is operated

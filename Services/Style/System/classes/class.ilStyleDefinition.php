@@ -30,7 +30,9 @@ include_once("Services/Style/System/classes/class.ilSystemStyleSettings.php");
  *
  *
  *
- * Skins, styles ans stubstyles are always used globally (not client specific).
+ * Skins, styles ans stub styles are always used globally (not client specific).
+ *
+ * This class is currently also used as global $styleDefinition.
  *
  * @author Alex Killing <alex.killing@gmx.de>
  * @author Timon Amstutz <timon.amstutz@ilub.unibe.ch>
@@ -117,11 +119,14 @@ class ilStyleDefinition
 	static $skins = [];
 
 	/**
+	 * Sets the current skin. This is used by the global instance of this class.
+	 *
 	 * @var ilSkinXML
 	 */
 	protected $skin;
 
 	/**
+	 * Used for caching.
 	 * @var array|null
 	 */
 	protected static $cached_all_styles_information = null;
@@ -271,7 +276,7 @@ class ilStyleDefinition
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated due to bad naming.
 	 * @return ilSkinXML[]
 	 */
 	public static function getAllTemplates(){
@@ -306,7 +311,7 @@ class ilStyleDefinition
 	}
 	
 	/**
-	 * get the current style
+	 * get the current style or sub style
 	 *
 	 * use always this function instead of getting the account's style
 	 * the current style may be changed on the fly by setCurrentStyle()

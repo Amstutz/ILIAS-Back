@@ -1725,25 +1725,28 @@ class ilObjUserGUI extends ilObjectGUI
 		{
 			$sk = new ilSelectInputGUI($lng->txt("skin_style"),
 				'skin_style');
-			$templates = $styleDefinition->getAllTemplates();
+			/**
+			 * @var ilStyleDefinition $styleDefinition
+			 */
+			$skins = $styleDefinition->getAllSkins();
 
 			$options = array();
-			if (is_array($templates))
+			if (is_array($skins))
 			{
 				$sk = new ilSelectInputGUI($this->lng->txt("skin_style"), "skin_style");
 
 				$options = array();
-				foreach($templates as $template)
+				foreach($skins as $skin)
 				{
-					foreach($template->getStyles() as $style)
+					foreach($skins->getStyles() as $style)
 					{
 						include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
-						if (!ilSystemStyleSettings::_lookupActivatedStyle($template->getId(),$style->getId()))
+						if (!ilSystemStyleSettings::_lookupActivatedStyle($skin->getId(),$style->getId()))
 						{
 							continue;
 						}
 
-						$options[$template->getId().":".$style->getId()] = $template->getName()." / ".$style->getName();
+						$options[$skin->getId().":".$style->getId()] = $skin->getName()." / ".$style->getName();
 					}
 				}
 			}

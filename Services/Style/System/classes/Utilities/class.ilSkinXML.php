@@ -3,6 +3,10 @@ include_once("Services/Style/System/classes/Exceptions/class.ilSystemStyleExcept
 include_once("Services/Style/System/classes/Utilities/class.ilSkinStyleXML.php");
 
 /**
+ * ilSkinXml holds an manages the basic data of a skin as provide by the template of the skin. This class is also
+ * responsible to read this data from the xml and, after manipulations transfer the data back to xml.
+ *
+ * To read a skin from xml do not use this class, us ilSkinContainer instead.
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$*
@@ -10,15 +14,21 @@ include_once("Services/Style/System/classes/Utilities/class.ilSkinStyleXML.php")
 class ilSkinXML implements \Iterator, \Countable{
 
     /**
+     * ID of the skin, equals the name of the folder this skin is stored in
      * @var string
      */
     protected $id = "";
+
+
     /**
+     * Name of the skin, as provided in the template
      * @var string
      */
     protected $name = "";
 
     /**
+     * Styles that the xml of this string provides.
+     *
      * @var ilSkinStyleXML[]
      */
     protected $styles = array();
@@ -58,7 +68,7 @@ class ilSkinXML implements \Iterator, \Countable{
         foreach($xml->children() as $style_xml){
             $style = ilSkinStyleXML::parseFromXMLElement($style_xml);
 
-            if($style_xml->getName() == "substyle") {
+            if($style->getName() == "substyle") {
                 if(!$last_style){
                     throw new ilSystemStyleException(ilSystemStyleException::NO_PARENT_STYLE, $style->getId());
                 }
@@ -71,6 +81,11 @@ class ilSkinXML implements \Iterator, \Countable{
         return $skin;
     }
 
+    /**
+     * Stores the skin and all it's styles as xml.
+     *
+     * @return string
+     */
     public function asXML(){
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><template/>');
         $xml->addAttribute("xmlns","http://www.w3.org");
@@ -95,6 +110,12 @@ class ilSkinXML implements \Iterator, \Countable{
         return $dom->saveXML();
     }
 
+    /**
+     * Used to generate the xml for styles contained by the skin
+     *
+     * @param SimpleXMLElement $xml
+     * @param ilSkinStyleXML $style
+     */
     protected function addChildToXML(SimpleXMLElement $xml,ilSkinStyleXML $style){
         $xml_style = null;
         if($style->isSubstyle()){
@@ -111,6 +132,9 @@ class ilSkinXML implements \Iterator, \Countable{
         $xml_style->addAttribute("font_directory", $style->getFontDirectory());
     }
 
+    /**
+     * @param $path
+     */
     public function writeToXMLFile($path){
         file_put_contents($path, $this->asXML());
     }
@@ -149,11 +173,9 @@ class ilSkinXML implements \Iterator, \Countable{
     }
 
     /**
-     * @param $id
-     * @return ilSkinStyleXML
+     * @return mixed
      */
     public function getDefaultStyle(){
-        //Todo there might be a better option than this to select the default style
         return array_values($this->styles)[0];
     }
 
@@ -266,6 +288,11 @@ class ilSkinXML implements \Iterator, \Countable{
         return $substyles;
     }
 
+    /**
+     * Returns wheter a given style has substyles
+     * @param $style_id
+     * @return bool
+     */
     public function hasStyleSubstyles($style_id){
         if($this->getStyle($style_id)){
             foreach($this->getStyles() as $style){

@@ -7,6 +7,10 @@ include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessage
 include_once("Services/Style/System/classes/Less/class.ilSystemStyleLessFile.php");
 
 /**
+ * This class is responsible for all file system related actions related actions of a skin such as copying files and folders,
+ * generating a new skin, deleting a skin etc..
+ *
+ * It contains exactly one skin containing several styles. Use this class to parse a skin from xml.
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$*
