@@ -39,58 +39,79 @@ include_once("Services/Style/System/classes/class.ilSystemStyleSettings.php");
  */
 class ilStyleDefinition
 {
+    /**
+     * Default skin ID in ILIAS
+     *
+     * @var string
+     */
+    const DEFAULT_SKIN_ID = "default";
+
+    /**
+     * Default system style ID in ILIAS
+     *
+     * @var string
+     */
+    const DEFAULT_STYLE_ID = "delos";
+
 	/**
+     * Path to default template of ILIAS (skin default, style delos)
+     *
 	 * @var string
 	 */
 	const DEFAULT_TEMPLATE_PATH = "./templates/default/template.xml";
 
+    /**
+     * Path to delos css and less files
+     *
+     * @var string
+     */
+    const DELOS_PATH = "./templates/default/delos";
+
 
 	/**
-	 * @var string
-	 */
-	const DELOS_PATH = "./templates/default/delos";
-
-	/**
-	 * @var string
-	 */
-	const DEFAULT_SKIN_ID = "default";
-
-	/**
-	 * @var string
-	 */
-	const DEFAULT_STYLE_ID = "delos";
-	/**
+     * Path to variables less file of delos
+     *
 	 * @var string
 	 */
 	const DEFAULT_VARIABLES_PATH = "./templates/default/less/variables.less";
 
 	/**
+     * Path to images directory of delos
+     *
 	 * @var string
 	 */
 	const DEFAULT_IMAGES_PATH = "./templates/default/images/";
 
 	/**
+     * Path to fonts directory of delos
+     *
 	 * @var string
 	 */
 	const DEFAULT_FONTS_PATH = "./templates/default/fonts/";
 
 	/**
+     * Path to sounds directory of delos (currently none given)
+     *
 	 * @var string
 	 */
 	const DEFAULT_SOUNDS_PATH = "";
 
 	/**
+     * Customizing skin path to place folders for custom skins into
+     *
 	 * string
 	 */
 	const CUSTOMIZING_SKINS_PATH = "./Customizing/global/skin/";
 
 	/**
-	 * currently selected style
+	 * currently selected style, used for caching
+     *
 	 * @var bool
 	 */
 	static $current_style = false;
 
 	/**
+     * Skins available, used for caching
 	 * @var ilSkinXML[]
 	 */
 	static $skins = [];

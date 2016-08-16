@@ -4,7 +4,8 @@ include_once("Services/Object/exceptions/class.ilObjectException.php");
 /* Copyright (c) 1998-2016 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 /**
- * Settings UI class for system styles
+ * Settings UI class for system styles. Acts as main router for the systems styles and handles permissions checks,
+ * sets tabs and title as well as description of the content section.
  *
  * @author Alex Killing <alex.killing@gmx.de>
  * @author Timon Amstutz <timon.amstutz@ilub.unibe.ch>
@@ -72,9 +73,12 @@ class ilSystemStyleMainGUI
 	}
 
 
-	/**
-	 * Execute command
-	 */
+    /**
+     * Main routing of the system styles. Resets ilCtrl Parameter for all subsequent generation of links.
+     *
+     * @throws ilCtrlException
+     * @throws ilObjectException
+     */
 	function executeCommand()
 	{
 		$next_class = $this->ctrl->getNextClass($this);
@@ -144,6 +148,9 @@ class ilSystemStyleMainGUI
 	}
 
 	/**
+     * Checks permission for system styles. Permissions work on two levels, ordinary rbac and the
+     * 'enable_system_styles_management' setting in the tools section of the ilias.ini.php
+     *
 	 * @param $a_perm
 	 * @param bool|true $a_throw_exc
 	 * @return bool
@@ -177,6 +184,8 @@ class ilSystemStyleMainGUI
 	}
 
 	/**
+     * Sets the tab correctly if one system style is open (navigational underworld opened)
+     *
 	 * @param string $active
 	 */
 	protected function setUnderworldTabs($active = "") {
@@ -192,6 +201,11 @@ class ilSystemStyleMainGUI
 	}
 
 
+    /**
+     * Sets title correctly if one system style is opened
+     *
+     * @throws ilSystemStyleException
+     */
 	protected function setUnderworldTitle() {
 		$skin_id = $_GET["skin_id"];
 		$style_id = $_GET["style_id"];
