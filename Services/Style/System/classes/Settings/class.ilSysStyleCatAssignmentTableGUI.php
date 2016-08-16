@@ -34,8 +34,7 @@ class ilSysStyleCatAssignmentTableGUI extends ilTable2GUI
 
 		
 		$this->getStyleCatAssignments();
-		$this->setTitle($lng->txt("sty_cat_assignments").", ".
-			$this->skin_id."/".$this->style_id);
+		$this->setTitle($lng->txt("sty_cat_assignments"));
 		
 		$this->addColumn("", "", "1");
 		$this->addColumn($this->lng->txt("obj_cat"));
@@ -45,13 +44,8 @@ class ilSysStyleCatAssignmentTableGUI extends ilTable2GUI
 
 		$this->addMultiCommand("deleteAssignments", $lng->txt("remove_assignment"));
 	}
-	
-	/**
-	 * Get style assignments
-	 *
-	 * @param
-	 * @return
-	 */
+
+
 	function getStyleCatAssignments()
 	{
 		$this->setData(ilSystemStyleSettings::getSubStyleCategoryAssignments($this->skin_id, $this->style_id,$this->sub_style_id));

@@ -92,7 +92,7 @@ class ilSubStyleAssignmentGUI
         $exp = new ilSearchRootSelector(
             $this->ctrl->getLinkTarget($this->getParentGui(),'addStyleCatAssignment'));
         $exp->setExpand($_GET["search_root_expand"] ? $_GET["search_root_expand"] : $this->tree->readRootId());
-        $exp->setExpandTarget($this->ctrl->getLinkTarget($this->getParentGui(),'addStyleCatAssignment'));
+        $exp->setExpandTarget($this->ctrl->getLinkTarget($this->getParentGui(),'addAssignment'));
         $exp->setTargetClass(get_class($this->getParentGui()));
         $exp->setCmd('saveAssignment');
         $exp->setClickableTypes(["cat"]);
@@ -141,7 +141,7 @@ class ilSubStyleAssignmentGUI
             {
                 $id_arr = explode(":", $id);
                 ilSystemStyleSettings::deleteSystemStyleCategoryAssignment($skin->getId(), $style->getId(),
-                    $id_arr[0], $id_arr[1]);
+                    $substyle->getId(), $id_arr[1]);
             }
             ilUtil::sendSuccess($this->lng->txt("msg_obj_modified"), true);
         }else{

@@ -414,17 +414,22 @@ class ilStyleDefinition
 				{
 					$num_users = ilObjUser::_getNumberOfUsersForStyle($skin->getId(), $style->getId());
 
+					if($style->getSubstyleOf()){
+						$parent_name = $skin->getStyle($style->getSubstyleOf())->getName();
+					}
+
 					// default selection list
 					$all_styles[$skin->getId().":".$style->getId()] = [
 									"title" => $skin->getName()." / ".$style->getName(),
 									"id" => $skin->getId().":". $style->getId(),
 									"skin_id" => $skin->getId(),
-									"skin_name" => $skin->getId(),
+									"skin_name" => $skin->getName(),
 									"template_id" => $skin->getId(),
 									"template_name" => $skin->getName(),
 									"style_id" =>  $style->getId(),
 									"style_name" => $style->getName(),
 									"substyle_of" => $style->getSubstyleOf(),
+									"substyle_of_name" => $parent_name,
 									"users" => $num_users
 							];
 				}
