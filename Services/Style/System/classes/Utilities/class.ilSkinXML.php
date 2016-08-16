@@ -66,9 +66,13 @@ class ilSkinXML implements \Iterator, \Countable{
 
 
         foreach($xml->children() as $style_xml){
+
             $style = ilSkinStyleXML::parseFromXMLElement($style_xml);
 
-            if($style->getName() == "substyle") {
+            /**
+             * @var SimpleXMLElement $style_xml
+             */
+            if($style_xml->getName() == "substyle") {
                 if(!$last_style){
                     throw new ilSystemStyleException(ilSystemStyleException::NO_PARENT_STYLE, $style->getId());
                 }
