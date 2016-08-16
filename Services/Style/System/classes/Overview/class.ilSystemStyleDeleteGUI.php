@@ -36,6 +36,10 @@ class ilSystemStyleDeleteGUI
         $this->ctrl = $DIC->ctrl();
     }
 
+    /**
+     * @param ilSkinXML $skin
+     * @param ilSkinStyleXML $style
+     */
     function addStyle(ilSkinXML $skin,ilSkinStyleXML $style){
         $this->styles[] = array(
             "var" => "style_".$skin->getId().":".$style->getId(),
@@ -45,6 +49,9 @@ class ilSystemStyleDeleteGUI
         );
     }
 
+    /**
+     * @return string
+     */
     public function getDeleteStyleFormHTML() {
         ilUtil::sendQuestion($this->lng->txt("info_delete_sure"),true);
 

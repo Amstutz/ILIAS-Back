@@ -6,7 +6,6 @@
  * ilSystemStyleConfig wraps all 'constants' to ensure the testability of all classes using those 'constants'.
  * This class is injected in all other classes using this dependency.
  *
- * @author Alex Killing <alex.killing@gmx.de>
  * @author Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version $Id$
  *
