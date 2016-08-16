@@ -17,17 +17,17 @@ class Panel implements C\Panel\Panel {
 	/**
 	 * @var string
 	 */
-	private  $title;
+	protected  $title;
 
 	/**
-	 * @var mixed content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
+	 * @var \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
 	 */
 	private  $content;
 
 
 	/**
 	 * @param string $title
-	 * @param mixed $content \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component
+	 * @param \ILIAS\UI\Component\Component[] | \ILIAS\UI\Component\Component $content
 	 */
 	public function __construct($title,$content) {
 		$this->checkStringArg("title",$title);
@@ -37,19 +37,6 @@ class Panel implements C\Panel\Panel {
 
 		$this->title = $title;
 		$this->content = $content;
-
-		return $this;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function withTitle($title){
-		$this->checkStringArg("title", $title);
-
-		$clone = clone $this;
-		$clone->title = $title;
-		return $clone;
 	}
 
 	/**
@@ -57,19 +44,6 @@ class Panel implements C\Panel\Panel {
 	 */
 	public function getTitle() {
 		return $this->title;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function withContent($content){
-		$content = $this->toArray($content);
-		$types = [C\Component::class];
-		$this->checkArgListElements("content", $content, $types);
-
-		$clone = clone $this;
-		$clone->content = $content;
-		return $clone;
 	}
 
 	/**

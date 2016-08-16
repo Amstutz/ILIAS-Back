@@ -227,18 +227,6 @@ interface Factory {
 	/**
 	 * ---
 	 * description:
-	 *   purpose: The Image component is used to display images of various sources.
-	 *   composition: An Image is composed of the image and an alternative text for screen readers.
-	 *   effect: Images may be included in interacted components but not interactive on their own.
-	 *
-	 * ---
-	 * @return \ILIAS\UI\Component\Image\Factory
-	 */
-	public function image();
-
-	/**
-	 * ---
-	 * description:
 	 *   purpose: >
 	 *     Listings are used to structure itemised textual information.
 	 *   composition: >
@@ -257,6 +245,39 @@ interface Factory {
 	/**
 	 * ---
 	 * description:
+	 *   purpose: The Image component is used to display images of various sources.
+	 *   composition: An Image is composed of the image and an alternative text for screen readers.
+	 *   effect: Images may be included in interacted components but not interactive on their own.
+	 *
+	 * ---
+	 * @return \ILIAS\UI\Component\Image\Factory
+	 */
+	public function image();
+
+	/**
+	 * ---
+	 * description:
+	 *   purpose: >
+	 *     This component is used to wrap an existing ILIAS UI element into a UI component. This is useful if a container
+	 *     of the UI components needs to contain content that is not yet implement in the centralized UI components.
+	 *   composition: >
+	 *     The legacy component contains html or any other content as string.
+	 *
+	 * rules:
+	 *   usage:
+	 *      1: >
+	 *          This component MUST only be used to ensure backwards compatibility with existing UI elements in ILIAS,
+	 *          therefore it SHOULD only contain Elements which cannot be generated using other UI Components from the UI Service.
+	 * ---
+	 *
+	 * @param   string $content
+	 * @return  \ILIAS\UI\Component\Legacy\Legacy
+	 */
+	public function legacy($content);
+
+	/**
+	 * ---
+	 * description:
 	 *   purpose: >
 	 *     Panels are used to group titled content.
 	 *   composition: >
@@ -266,29 +287,9 @@ interface Factory {
 	 *
 	 * rules:
 	 *   wording:
-	 *      1: Panels MUST contain a heading.
+	 *      1: Panels MUST contain a title.
 	 * ---
 	 * @return \ILIAS\UI\Component\Panel\Factory
 	 */
 	public function panel();
-
-	/**
-	 * ---
-	 * description:
-	 *   purpose: >
-	 *     This component is used to wrap an existing ILIAS UI element into a UI component. This is useful if a container
-	 *     of the UI components needs to contain content that is not yet implement in the centralized UI components.
-	 *   composition: >
-	 *     The generic component contains html or any other content as string.
-	 *
-	 * rules:
-	 *   wording:
-	 *      1: This component MUST only be used to ensure backwards compatibility with existing UI elements in ILIAS.
-	 * ---
-	 *
-	 * @param   string $content
-	 * @return  \ILIAS\UI\Component\Generic\Generic
-	 */
-	public function generic($content);
-
 }
