@@ -84,7 +84,9 @@ class SystemStyleSkinContainerTest extends PHPUnit_Framework_TestCase {
 		$container->getSkin()->setId("newSkin2");
 		$container->updateSkin($old_skin);
 		$this->assertTrue(is_dir($this->system_style_config->getCustomizingSkinPath()."newSkin2"));
-		$container->delete();
+		$old_skin = clone $container->getSkin();
+		$container->getSkin()->setId($this->skin->getId());
+		$container->updateSkin($old_skin);
 		$this->assertFalse(is_dir($this->system_style_config->getCustomizingSkinPath()."newSkin2"));
 	}
 
