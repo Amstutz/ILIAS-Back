@@ -16014,3 +16014,5 @@ style#:#invalid_less_path#:#The provided lessc path is not valid.
 style#:#provided_less_path#:#Provided lessc path:
 style#:#used_colors#:#Used Colors:
 style#:#style_imported#:#Style has been successfully imported into:
+style#:#style_copied#:#Style has been successfully copied.
+style#:#directory_created#:#Directory created:
