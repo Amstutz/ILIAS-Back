@@ -217,8 +217,8 @@ class ilSystemStyleIconsGUI
                 }else if($new_color != $old_color->getId()){
                     $color_changes[$old_color->getId()] = $new_color;
                     $message_stack->addMessage(new ilSystemStyleMessage(
-                        $this->lng->txt("color_changed_from").$old_color->getId().
-                        $this->lng->txt("color_changed_to").$new_color,
+                        $this->lng->txt("color_changed_from")." ".$old_color->getId()." ".
+                        $this->lng->txt("color_changed_to")." ".$new_color,
                         ilSystemStyleMessage::TYPE_SUCCESS));
                 }
             }

@@ -26,32 +26,32 @@ class ilSystemStyleConfigMock extends ilSystemStyleConfig
     /**
      * @var string
      */
-    protected $default_template_path = "./Services/Style/System/tests/fixtures/skins/defaultSkin/template.xml";
+    protected $default_template_path = "./Services/Style/System/test/fixtures/skins_temp/defaultSkin/template.xml";
 
     /**
      * @var string
      */
-    protected $delos_path = "./Services/Style/System/tests/fixtures/skins/defaultSkin/defaultStyle";
+    protected $delos_path = "./Services/Style/System/test/fixtures/skins_temp/defaultSkin/defaultStyle";
 
 
     /**
      * @var string
      */
-    protected $default_variables_path = "./Services/Style/System/tests/fixtures/skins/defaultSkin/less/variables.less";
+    protected $default_variables_path = "./Services/Style/System/test/fixtures/skins_temp/defaultSkin/less/variables.less";
 
     /**
      * Path to images directory of delos
      *
      * @var string
      */
-    protected $default_images_path = "./Services/Style/System/tests/fixtures/skins/defaultSkin/images/";
+    protected $default_images_path = "./Services/Style/System/test/fixtures/skins_temp/defaultSkin/images/";
 
     /**
      * Path to fonts directory of delos
      *
      * @var string
      */
-    protected $default_fonts_path = "./Services/Style/System/tests/fixtures/skins/defaultSkin/fonts/";
+    protected $default_fonts_path = "./Services/Style/System/test/fixtures/skins_temp/defaultSkin/fonts/";
 
     /**
      * Path to sounds directory of delos (currently none given)
@@ -65,5 +65,9 @@ class ilSystemStyleConfigMock extends ilSystemStyleConfig
      *
      * string
      */
-    protected $customizing_skin_path = "./Services/Style/System/tests/fixtures/skins/customSkins/";
+    protected $customizing_skin_path = "./Services/Style/System/test/fixtures/skins_temp/customSkins/";
+
+    public $test_skin_original_path = "./Services/Style/System/test/fixtures/skins/";
+    public $test_skin_temp_path = "./Services/Style/System/test/fixtures/skins_temp/";
+
 }

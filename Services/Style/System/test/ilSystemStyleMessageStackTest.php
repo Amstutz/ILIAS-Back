@@ -9,7 +9,7 @@ include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessage
  * @author            Tomasz Kolonko <thomas.kolonko@ilub.unibe.ch>
  * @version           $Id$*
  */
-class SystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
+class ilSystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
 
     /*
      *
@@ -138,6 +138,7 @@ class SystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
     public function testHasMessages() {
         $this->createTestEnvironment();
 
-        $this->assertTrue();
+
+        //$this->assertTrue();
     }
 }

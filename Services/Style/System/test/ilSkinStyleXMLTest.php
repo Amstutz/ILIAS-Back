@@ -1,14 +1,13 @@
 <?php
-/* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 
-include_once("Services/Style/System/classes/Utilities/class.ilSkinStyleXML.php");
+include_once("./Services/Style/System/classes/Utilities/class.ilSkinStyleXML.php");
 
 /**
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$*
  */
-class SkinStyleXMLTest extends PHPUnit_Framework_TestCase {
+class ilSkinStyleXMLTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @var ilSkinStyleXML

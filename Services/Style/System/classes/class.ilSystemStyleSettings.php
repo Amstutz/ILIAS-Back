@@ -260,7 +260,9 @@ class ilSystemStyleSettings
 	}
 
 	static function resetDefaultToDelos(){
-		self::setCurrentDefaultStyle(ilStyleDefinition::DEFAULT_SKIN_ID,ilStyleDefinition::DEFAULT_STYLE_ID);
+		$system_style_conf = new ilSystemStyleConfig();
+
+		self::setCurrentDefaultStyle($system_style_conf->getDefaultSkinId(),$system_style_conf->getDefaultSkinId());
 	}
 
 	/**

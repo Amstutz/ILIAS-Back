@@ -1,16 +1,17 @@
 <?php
 /* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 
-include_once("Services/Style/System/classes/Utilities/class.ilSkinStyleXML.php");
-include_once("Services/Style/System/classes/Utilities/class.ilSkinXML.php");
-include_once("Services/Style/System/tests/fixtures/mocks/ilSystemStyleConfigMock.php");
+include_once("./Services/Style/System/classes/Utilities/class.ilSkinStyleXML.php");
+include_once("./Services/Style/System/classes/Utilities/class.ilSkinXML.php");
+include_once("./Services/Style/System/test/fixtures/mocks/ilSystemStyleConfigMock.php");
+include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleSkinContainer.php");
 
 /**
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$*
  */
-class SkinXMLTest extends PHPUnit_Framework_TestCase {
+class ilSkinXMLTest extends PHPUnit_Framework_TestCase {
 
 
     /**
@@ -50,6 +51,12 @@ class SkinXMLTest extends PHPUnit_Framework_TestCase {
 
         $this->system_style_config = new ilSystemStyleConfigMock();
 
+        mkdir($this->system_style_config->test_skin_temp_path);
+        ilSystemStyleSkinContainer::xCopy($this->system_style_config->test_skin_original_path,$this->system_style_config->test_skin_temp_path);
+    }
+
+    protected function tearDown(){
+        ilSystemStyleSkinContainer::recursiveRemoveDir($this->system_style_config->test_skin_temp_path);
     }
 
     public function testSkinNameAndId() {
@@ -65,11 +72,11 @@ class SkinXMLTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(count($this->skin),1);
         $this->assertEquals(count($this->skin->getStyles()),1);
         $this->skin->addStyle($this->style1);
-        $this->assertEquals(count($this->skin),1);
-        $this->assertEquals(count($this->skin->getStyles()),1);
-        $this->skin->addStyle($this->style2);
         $this->assertEquals(count($this->skin),2);
         $this->assertEquals(count($this->skin->getStyles()),2);
+        $this->skin->addStyle($this->style2);
+        $this->assertEquals(count($this->skin),3);
+        $this->assertEquals(count($this->skin->getStyles()),3);
     }
 
     public function testGetStyles() {
@@ -88,8 +95,23 @@ class SkinXMLTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(count($this->skin),1);
         $this->skin->removeStyle("style2");
         $this->assertEquals(count($this->skin),0);
+    }
+
+    public function testRemoveTestTwice() {
+        $this->skin->addStyle($this->style1);
+        $this->skin->addStyle($this->style2);
+        $this->assertEquals(count($this->skin),2);
+        $this->skin->removeStyle("style1");
+        $this->assertEquals(count($this->skin),1);
         $this->skin->removeStyle("style2");
         $this->assertEquals(count($this->skin),0);
+        try{
+            $this->skin->removeStyle("style2");
+            $this->assertTrue(false);
+        }catch(ilSystemStyleException $e){
+            $this->assertEquals($e->getCode(),ilSystemStyleException::INVALID_ID);
+        }
+
     }
 
     public function testAsXML() {

@@ -8,7 +8,7 @@ include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessage
  * @author            Tomasz Kolonko <thomas.kolonko@ilub.unibe.ch>
  * @version           $Id$*
  */
-class SystemStyleMessageTest extends PHPUnit_Framework_TestCase {
+class ilSystemStyleMessageTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @var ilSystemStyleMessage

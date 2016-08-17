@@ -9,7 +9,6 @@ include_once("Services/Style/System/classes/class.ilSystemStyleSettings.php");
 
 /**
  * ilStyleDefinition acts as a wrapper of style related actions. Use this class to get the systems current style.
- * It also holds all system style related constants.
  * Currently some of the logic is not clearly separated from ilSystemStyleSettings. This is due to legacy reasons.
  * In a future refactoring, this class might be completely merged with ilSystemStyleSettings.
  *
@@ -41,70 +40,6 @@ include_once("Services/Style/System/classes/class.ilSystemStyleSettings.php");
  */
 class ilStyleDefinition
 {
-    /**
-     * Default skin ID in ILIAS
-     *
-     * @var string
-     */
-    const DEFAULT_SKIN_ID = "default";
-
-    /**
-     * Default system style ID in ILIAS
-     *
-     * @var string
-     */
-    const DEFAULT_STYLE_ID = "delos";
-
-	/**
-     * Path to default template of ILIAS (skin default, style delos)
-     *
-	 * @var string
-	 */
-	const DEFAULT_TEMPLATE_PATH = "./templates/default/template.xml";
-
-    /**
-     * Path to delos css and less files
-     *
-     * @var string
-     */
-    const DELOS_PATH = "./templates/default/delos";
-
-
-	/**
-     * Path to variables less file of delos
-     *
-	 * @var string
-	 */
-	const DEFAULT_VARIABLES_PATH = "./templates/default/less/variables.less";
-
-	/**
-     * Path to images directory of delos
-     *
-	 * @var string
-	 */
-	const DEFAULT_IMAGES_PATH = "./templates/default/images/";
-
-	/**
-     * Path to fonts directory of delos
-     *
-	 * @var string
-	 */
-	const DEFAULT_FONTS_PATH = "./templates/default/fonts/";
-
-	/**
-     * Path to sounds directory of delos (currently none given)
-     *
-	 * @var string
-	 */
-	const DEFAULT_SOUNDS_PATH = "";
-
-	/**
-     * Customizing skin path to place folders for custom skins into
-     *
-	 * string
-	 */
-	const CUSTOMIZING_SKINS_PATH = "./Customizing/global/skin/";
-
 	/**
 	 * currently selected style, used for caching
      *
@@ -131,23 +66,37 @@ class ilStyleDefinition
 	 */
 	protected static $cached_all_styles_information = null;
 
+	/**
+	 * Used to wire this component up with the correct paths into the customizing directory.
+	 * This is dynamic and not constant for this class to remain testable
+	 *
+	 * @var ilSystemStyleConfigMock
+	 */
+	protected $system_style_config;
 
 	/**
 	 * ilStyleDefinition constructor.
 	 * @param string $skin_id
+	 * @param ilSystemStyleConfig|null $system_style_config
 	 */
-	function __construct($skin_id = "")
+	function __construct($skin_id = "", ilSystemStyleConfig $system_style_config = null)
 	{
 		if($skin_id == ""){
 			$skin_id = self::getCurrentSkin();
 		}
 
-		if ($skin_id != self::DEFAULT_SKIN_ID)
+		if(!$system_style_config){
+			$this->setSystemStylesConf(new ilSystemStyleConfig());
+		}else{
+			$this->setSystemStylesConf($system_style_config);
+		}
+
+		if ($skin_id != $this->getSystemStylesConf()->getDefaultSkinId())
 		{
-			$this->setSkin(ilSkinXML::parseFromXML(self::CUSTOMIZING_SKINS_PATH.$skin_id."/template.xml"));
+			$this->setSkin(ilSkinXML::parseFromXML($this->getSystemStylesConf()->getCustomizingSkinPath().$skin_id."/template.xml"));
 
 		}else{
-			$this->setSkin(ilSkinXML::parseFromXML(self::DEFAULT_TEMPLATE_PATH));
+			$this->setSkin(ilSkinXML::parseFromXML($this->getSystemStylesConf()->getDefaultTemplatePath()));
 		}
 	}
 
@@ -243,20 +192,25 @@ class ilStyleDefinition
 
 
 	/**
+	 * @param ilSystemStyleConfig|null $system_style_config
 	 * @return ilSkinXML[]
 	 * @throws ilSystemStyleException
 	 */
-	public static function getAllSkins(){
+	public static function getAllSkins(ilSystemStyleConfig $system_style_config = null){
 		if(!self::$skins){
+			if(!$system_style_config){
+				$system_style_config = new ilSystemStyleConfig();
+			}
+
 			/**
 			 * @var $skins ilSkinXML[]
 			 */
 			$skins = [];
-			$skins[self::DEFAULT_SKIN_ID] = ilSkinXML::parseFromXML(self::DEFAULT_TEMPLATE_PATH);
+			$skins[$system_style_config->getDefaultSkinId()] = ilSkinXML::parseFromXML($system_style_config->getDefaultTemplatePath());
 
 
-			if(is_dir(self::CUSTOMIZING_SKINS_PATH)){
-				$cust_skins_directory = new RecursiveDirectoryIterator(self::CUSTOMIZING_SKINS_PATH,FilesystemIterator::SKIP_DOTS);
+			if(is_dir($system_style_config->getCustomizingSkinPath())){
+				$cust_skins_directory = new RecursiveDirectoryIterator($system_style_config->getCustomizingSkinPath(),FilesystemIterator::SKIP_DOTS);
 				foreach ($cust_skins_directory as $skin_folder) {
 					if($skin_folder->isDir()){
 						$template_path = $skin_folder->getRealPath()."/template.xml";
@@ -283,26 +237,28 @@ class ilStyleDefinition
 		return self::getAllSkins();
 	}
 
-
 	/**
-	* Check whether a skin exists. Not using array_key_exists($skin_id,self::getAllSkins()); for performance reasons
-	*
-	* @param	string	$skin_id
-	*
-	* @return	boolean
-	*/
-	public static function skinExists($skin_id)
+	 * Check whether a skin exists. Not using array_key_exists($skin_id,self::getAllSkins()); for performance reasons
+	 * @param	string	$skin_id
+	 * @param ilSystemStyleConfig|null $system_style_config
+	 * @return bool
+	 */
+	public static function skinExists($skin_id, ilSystemStyleConfig $system_style_config = null)
 	{
-		if ($skin_id == self::DEFAULT_SKIN_ID)
+		if(!$system_style_config){
+			$system_style_config = new ilSystemStyleConfig();
+		}
+
+		if ($skin_id == $system_style_config->getDefaultSkinId())
 		{
-			if (is_file(self::DEFAULT_TEMPLATE_PATH))
+			if (is_file($system_style_config->getDefaultTemplatePath()))
 			{
 				return true;
 			}
 		}
 		else
 		{
-			if (is_file(self::CUSTOMIZING_SKINS_PATH.$skin_id."/template.xml"))
+			if (is_file($system_style_config->getCustomizingSkinPath().$skin_id."/template.xml"))
 			{
 				return true;
 			}
@@ -339,37 +295,31 @@ class ilStyleDefinition
 
 		self::setCurrentStyle($ilias->account->prefs['style']);
 
-		if (is_object($styleDefinition))
-		{
-			if ($styleDefinition->getSkin()->hasStyleSubstyles(self::$current_style))
-			{
+		if (is_object($styleDefinition) && self::styleExistsForCurrentSkin(self::$current_style)) {
+
+			if ($styleDefinition->getSkin()->hasStyleSubstyles(self::$current_style)) {
 				// read assignments, if given
 				$assignments = ilSystemStyleSettings::getSystemStyleCategoryAssignments(self::getCurrentSkin(), self::$current_style);
-				if (count($assignments) > 0)
-				{
+				if (count($assignments) > 0) {
 					$ref_ass = [];
-					foreach ($assignments as $a)
-					{
+					foreach ($assignments as $a) {
 						$ref_ass[$a["ref_id"]] = $a["substyle"];
 					}
 
 					$ref_id = false;
-					if($_GET["ref_id"]){
+					if ($_GET["ref_id"]) {
 						$ref_id = $_GET["ref_id"];
-					}else if($_GET["target"]){
-						$target_arr = explode("_",$_GET["target"] );
+					} else if ($_GET["target"]) {
+						$target_arr = explode("_", $_GET["target"]);
 						$ref_id = $target_arr[1];
 					}
 
 					// check whether any ref id assigns a new style
-					if (is_object($tree) && $ref_id  && $tree->isInTree($ref_id))
-					{
+					if (is_object($tree) && $ref_id && $tree->isInTree($ref_id)) {
 
 						$path = $tree->getPathId($ref_id);
-						for ($i = count($path) - 1; $i >= 0; $i--)
-						{
-							if (isset($ref_ass[$path[$i]]))
-							{
+						for ($i = count($path) - 1; $i >= 0; $i--) {
+							if (isset($ref_ass[$path[$i]])) {
 								self::$current_style = $ref_ass[$path[$i]];
 								return self::$current_style;
 							}
@@ -381,8 +331,9 @@ class ilStyleDefinition
 
 		if(!self::styleExistsForCurrentSkin(self::$current_style)){
 			ilUtil::sendFailure($DIC->language()->txt("set_style_does_not_exist")." ".self::$current_style);
-			self::setCurrentSkin(self::DEFAULT_SKIN_ID);
-			self::setCurrentStyle(self::DEFAULT_STYLE_ID);
+			$system_style_config = new ilSystemStyleConfig();
+			self::setCurrentSkin($system_style_config->getDefaultSkinId());
+			self::setCurrentStyle($system_style_config->getDefaultStyleId());
 		}
 
 		return self::$current_style;
@@ -556,5 +507,19 @@ class ilStyleDefinition
 		self::$cached_all_styles_information = $cached_all_styles_information;
 	}
 
+	/**
+	 * @return ilSystemStyleConfig
+	 */
+	public function getSystemStylesConf()
+	{
+		return $this->system_styles_conf;
+	}
 
+	/**
+	 * @param ilSystemStyleConfig $system_styles_conf
+	 */
+	public function setSystemStylesConf($system_styles_conf)
+	{
+		$this->system_styles_conf = $system_styles_conf;
+	}
 }

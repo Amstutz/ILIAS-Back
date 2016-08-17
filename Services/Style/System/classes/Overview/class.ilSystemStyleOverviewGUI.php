@@ -429,7 +429,8 @@ class ilSystemStyleOverviewGUI
         $styles = ilStyleDefinition::getAllSkinStyles();
         $options = array();
         foreach($styles as $id => $style){
-            if($style["skin_id"]!=ilStyleDefinition::DEFAULT_SKIN_ID){
+            $system_style_conf = new ilSystemStyleConfig();
+            if($style["skin_id"]!=$system_style_conf->getDefaultSkinId()){
                 $options[$id] = $style['title'];
             }
         }
@@ -607,6 +608,10 @@ class ilSystemStyleOverviewGUI
         $message_stack->sendMessages(true);
         $this->ctrl->redirect($this);
     }
+
+    /**
+     *
+     */
     protected function importStyle(){
         $form = $this->importSystemStyleForm();
 
@@ -686,7 +691,8 @@ class ilSystemStyleOverviewGUI
         $styles = ilStyleDefinition::getAllSkinStyles();
         $options = array();
         foreach($styles as $id => $style){
-            if($style["skin_id"]!=ilStyleDefinition::DEFAULT_SKIN_ID && !$style["substyle_of"]){
+            $system_style_conf = new ilSystemStyleConfig();
+            if($style["skin_id"]!=$system_style_conf->getDefaultSkinId() && !$style["substyle_of"]){
                 $options[$id] = $style['title'];
             }
         }
@@ -704,30 +710,25 @@ class ilSystemStyleOverviewGUI
 
         if ($form->checkInput() )
         {
-            if(false){
-                //Todo do check if style_id exists
-            }
-            else{
-                try{
-                    $imploded_parent_skin_style_id = explode(":", $_POST['parent_style']);
-                    $parent_skin_id = $imploded_parent_skin_style_id[0];
-                    $parent_style_id = $imploded_parent_skin_style_id[1];
+            try{
+                $imploded_parent_skin_style_id = explode(":", $_POST['parent_style']);
+                $parent_skin_id = $imploded_parent_skin_style_id[0];
+                $parent_style_id = $imploded_parent_skin_style_id[1];
 
-                    $container = ilSystemStyleSkinContainer::generateFromId($parent_skin_id);
+                $container = ilSystemStyleSkinContainer::generateFromId($parent_skin_id);
 
-                    $sub_style_id = $_POST['sub_style_id'];
+                $sub_style_id = $_POST['sub_style_id'];
 
-                    $style = new ilSkinStyleXML($_POST['sub_style_id'], $_POST['sub_style_name']);
-                    $style->setSubstyleOf($parent_style_id);
-                    $container->addStyle($style);
+                $style = new ilSkinStyleXML($_POST['sub_style_id'], $_POST['sub_style_name']);
+                $style->setSubstyleOf($parent_style_id);
+                $container->addStyle($style);
 
-                    $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$parent_skin_id);
-                    $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$sub_style_id);
-                    ilUtil::sendSuccess($this->lng->txt("msg_sub_style_created"), true);
-                    $this->ctrl->redirectByClass("ilSystemStyleSettingsGUI");
-                }catch(ilSystemStyleException $e){
-                    ilUtil::sendFailure($e->getMessage(), true);
-                }
+                $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$parent_skin_id);
+                $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$sub_style_id);
+                ilUtil::sendSuccess($this->lng->txt("msg_sub_style_created"), true);
+                $this->ctrl->redirectByClass("ilSystemStyleSettingsGUI");
+            }catch(ilSystemStyleException $e){
+                ilUtil::sendFailure($e->getMessage(), true);
             }
         }
 

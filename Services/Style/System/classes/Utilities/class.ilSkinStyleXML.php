@@ -7,44 +7,62 @@
 class ilSkinStyleXML
 {
     /**
+     * Id of the skin. Currently css and less files are named accordingely
      * @var string
      */
     protected $id = "";
 
     /**
+     * Name of the style visible in all UI elements
+     *
      * @var string
      */
     protected $name = "";
 
     /**
+     * Directory to store sound files into
+     *
      * @var string
      */
     protected $sound_directory = "";
 
     /**
+     * Directory to store image files into
+     *
      * @var string
      */
     protected $image_directory = "";
 
     /**
+     * Directory to store fonts into
+     *
      * @var string
      */
     protected $font_directory = "";
 
     /**
+     * Css file name of the skin
+     *
      * @var string
      */
     protected $css_file = "";
 
     /**
+     * Parent of the skin if set
+     *
      * @var string
      */
     protected $substyle_of = "";
 
     /**
      * ilSkinStyleXML constructor.
-     * @param string $id
-     * @param string $name
+     * @param $id
+     * @param $name
+     * @param string $css_file
+     * @param string $image_directory
+     * @param string $font_directory
+     * @param string $sound_directory
+     * @param string $parent_style
      */
     public function __construct($id, $name, $css_file = "", $image_directory = "", $font_directory = "", $sound_directory = "",$parent_style = "")
     {
@@ -191,6 +209,8 @@ class ilSkinStyleXML
     }
 
     /**
+     * Returns the parent style of this style if set
+     *
      * @return string
      */
     public function getSubstyleOf()
@@ -199,6 +219,8 @@ class ilSkinStyleXML
     }
 
     /**
+     * Sets style as sub style of another
+     *
      * @param string $substyle_of
      */
     public function setSubstyleOf($substyle_of)
@@ -206,10 +228,21 @@ class ilSkinStyleXML
         $this->substyle_of = $substyle_of;
     }
 
+    /**
+     * Return wheter this style is a substyle of another
+     *
+     * @return bool
+     */
     public function isSubstyle(){
         return $this->getSubstyleOf() != "";
     }
 
+    /**
+     * Checks if a resource (folder) relative to the style is referenced by this style. Used to decide if folder can be deleted.
+     *
+     * @param $resource
+     * @return bool
+     */
     public function referencesResource($resource){
         return $this->getCssFile() == $resource
             || $this->getImageDirectory() == $resource

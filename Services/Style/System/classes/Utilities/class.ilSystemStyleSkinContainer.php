@@ -66,7 +66,7 @@ class ilSystemStyleSkinContainer {
         }
 
         if(!$system_styles_conf){
-            $this->system_styles_conf = new ilSystemStyleConfig();
+            $this->setSystemStylesConf(new ilSystemStyleConfig());
         }else{
             $this->setSystemStylesConf($system_styles_conf);
         }
@@ -185,6 +185,8 @@ class ilSystemStyleSkinContainer {
             }
         }
 
+
+
         if(file_exists($this->getSkinDirectory().$old_style->getCssFile().".less")){
             rename($this->getSkinDirectory().$old_style->getCssFile().".less", $this->getLessFilePath($style->getId()));
         }else{
@@ -218,6 +220,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Checks if a given resource (folder) is still referenced by a style of the containers skin
+     *
      * @param $resource
      * @return array
      */
@@ -233,6 +237,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Creates a resource directory (sound, images or fonts) by copying from the source (mostly delos)
+     *
      * @param $source
      * @param $target
      * @throws ilSystemStyleException
@@ -252,6 +258,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Alters the name/path of a resource directory
+     *
      * @param $new_dir
      * @param $old_dir
      * @throws ilSystemStyleException
@@ -277,7 +285,7 @@ class ilSystemStyleSkinContainer {
                     ilSystemStyleMessage::TYPE_SUCCESS
                 ));
             if(count($this->resourcesStyleReferences($old_dir))==0){
-                $this->recursiveRemoveDir($this->getSkinDirectory().$old_dir);
+                self::recursiveRemoveDir(self::getSkinDirectory().$old_dir);
                 $this->getMessageStack()->addMessage(
                     new ilSystemStyleMessage($this->lng->txt("dir_deleted")." ".$absolut_old_dir,
                         ilSystemStyleMessage::TYPE_SUCCESS
@@ -292,6 +300,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Deletes a resource directory
+     *
      * @param $dir
      */
     protected function removeResourceDirectory($dir){
@@ -299,7 +309,7 @@ class ilSystemStyleSkinContainer {
 
         if(file_exists($absolut_dir)) {
             if (count($this->resourcesStyleReferences($dir)) == 0) {
-                $this->recursiveRemoveDir($this->getSkinDirectory() . $dir);
+                self::recursiveRemoveDir($this->getSkinDirectory() . $dir);
                 $this->getMessageStack()->addMessage(
                     new ilSystemStyleMessage($this->lng->txt("dir_deleted")." ". $dir,
                         ilSystemStyleMessage::TYPE_SUCCESS
@@ -314,6 +324,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Creates the less/css structure of a style
+     *
      * @param ilSkinStyleXML $style
      * @throws ilSystemStyleException
      */
@@ -325,6 +337,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Creates the main less file
+     *
      * @param ilSkinStyleXML $style
      */
     public function createMainLessFile(ilSkinStyleXML $style){
@@ -337,6 +351,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Copies (resets) the variables file from delos
+     *
      * @param ilSkinStyleXML $style
      * @return ilSystemStyleLessFile
      */
@@ -348,14 +364,18 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Copies (resets) the images from delos
+     *
      * @param ilSkinStyleXML $style
      */
     public function resetImages(ilSkinStyleXML $style){
-        $this->recursiveRemoveDir($this->getSkinDirectory().$style->getImageDirectory());
+        self::recursiveRemoveDir($this->getSkinDirectory().$style->getImageDirectory());
         $this->createResourceDirectory($this->getSystemStylesConf()->getDefaultImagesPath(),$style->getImageDirectory());
     }
 
     /**
+     * Copies (resets) the images from delos
+     *
      * @param ilSkinStyleXML $style
      */
     public function copyCSSFromDefault(ilSkinStyleXML $style){
@@ -363,6 +383,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Recursive copy of a folder
+     *
      * @param $src
      * @param $dest
      * @throws ilSystemStyleException
@@ -397,15 +419,17 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Recursive delete of a folder
+     *
      * @param $dir
      */
-    public function recursiveRemoveDir($dir){
+    static function recursiveRemoveDir($dir){
         if (is_dir($dir)) {
             $objects = scandir($dir);
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
                     if (is_dir($dir."/".$object))
-                        $this->recursiveRemoveDir($dir."/".$object);
+                        self::recursiveRemoveDir($dir."/".$object);
                     else
                         unlink($dir."/".$object);
                 }
@@ -416,6 +440,8 @@ class ilSystemStyleSkinContainer {
 
 
     /**
+     * Returns the main less default content if a new style is created
+     *
      * @param ilSkinStyleXML $style
      * @return string
      */
@@ -428,6 +454,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Used to move a complete directory of a skin
+     *
      * @param $from
      * @param $to
      */
@@ -436,8 +464,11 @@ class ilSystemStyleSkinContainer {
     }
 
 
+    /**
+     * Deletes the container of a skin completely
+     */
     public function delete(){
-        $this->recursiveRemoveDir($this->getSkinDirectory());
+        self::recursiveRemoveDir(self::getSkinDirectory());
         $this->getMessageStack()->addMessage(
             new ilSystemStyleMessage($this->lng->txt("skin_deleted").$this->getSkinDirectory(),
                 ilSystemStyleMessage::TYPE_SUCCESS
@@ -445,6 +476,8 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Deletes a given file in the container
+     *
      * @param $path
      */
     protected function deleteFile($path){
@@ -458,18 +491,11 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Deletes a style completely
+     *
      * @param ilSkinStyleXML $style
      */
     public function deleteStyle(ilSkinStyleXML $style){
-
-        $this->removeResourceDirectory($style->getImageDirectory());
-        $this->removeResourceDirectory($style->getFontDirectory());
-        $this->removeResourceDirectory($style->getSoundDirectory());
-
-        $this->deleteFile($this->getLessFilePath($style->getId()));
-        $this->deleteFile($this->getSkinDirectory().$style->getId().".css");
-        $this->deleteFile($this->getLessVariablesFilePath($style->getId()));
-
         if($style->isSubstyle()){
             ilSystemStyleSettings::deleteSubStyleCategoryAssignments($this->getSkin()->getId(),$style->getSubstyleOf(),$style->getId());
             $this->getMessageStack()->prependMessage(
@@ -478,7 +504,16 @@ class ilSystemStyleSkinContainer {
                 ));
         }
 
+        $this->deleteFile($this->getLessFilePath($style->getId()));
+        $this->deleteFile($this->getCSSFilePath($style->getId()));
+        $this->deleteFile($this->getLessVariablesFilePath($style->getId()));
+
         $this->getSkin()->removeStyle($style->getId());
+
+        $this->removeResourceDirectory($style->getImageDirectory());
+        $this->removeResourceDirectory($style->getFontDirectory());
+        $this->removeResourceDirectory($style->getSoundDirectory());
+
         $this->writeSkinToXML();
         $this->getMessageStack()->prependMessage(
             new ilSystemStyleMessage($this->lng->txt("style_deleted")." ".$style->getName(),
@@ -487,13 +522,15 @@ class ilSystemStyleSkinContainer {
     }
 
     /**
+     * Copies a complete Skin
+     *
      * @return ilSystemStyleSkinContainer
      * @throws ilSystemStyleException
      */
     public function copy(){
         $new_skin_id_addon = "";
 
-        while(ilStyleDefinition::skinExists($this->getSkin()->getId().$new_skin_id_addon)){
+        while(ilStyleDefinition::skinExists($this->getSkin()->getId().$new_skin_id_addon, $this->getSystemStylesConf())){
             $new_skin_id_addon .= "Copy";
         }
 
@@ -502,7 +539,7 @@ class ilSystemStyleSkinContainer {
         mkdir($new_skin_path,0777,true);
         $this->xCopy($this->getSkinDirectory(),$new_skin_path);
         $this->getMessageStack()->addMessage(new ilSystemStyleMessage($this->lng->txt("directory_created")." ".$new_skin_path,ilSystemStyleMessage::TYPE_SUCCESS));
-        return self::generateFromId($this->getSkin()->getId().$new_skin_id_addon);
+        return self::generateFromId($this->getSkin()->getId().$new_skin_id_addon,null,$this->getSystemStylesConf());
 
     }
 
@@ -510,36 +547,50 @@ class ilSystemStyleSkinContainer {
      * Exports the complete skin to an zip file.
      */
     public function export(){
+        ilFileDelivery::deliverFileAttached($this->createTempZip(), $this->getSkin()->getId().".zip",null, true);
+    }
+
+    /**
+     * Creates a temp zip file
+     *
+     * @return string $temp_path
+     */
+    public function createTempZip(){
         $rel_tmp_zip = "../".$this->getSkin()->getId().".zip";
-        $temp_zip = rtrim($this->getSkinDirectory(),"/").".zip";
         ilUtil::zip($this->getSkinDirectory(),$rel_tmp_zip,true);
-        ilFileDelivery::deliverFileAttached($temp_zip, $this->getSkin()->getId().".zip",null, true);
+        return rtrim($this->getSkinDirectory(),"/").".zip";
     }
 
 
     /**
+     * Imports a skin from zip
+     *
      * @param $import_zip_path
      * @param $name
      * @param ilSystemStyleMessageStack|null $message_stack
      * @return ilSystemStyleSkinContainer
      * @throws ilSystemStyleException
      */
-    public static function import($import_zip_path, $name, ilSystemStyleMessageStack $message_stack = null, $system_styles_conf = null){
+    public static function import($import_zip_path, $name, ilSystemStyleMessageStack $message_stack = null, $system_styles_conf = null,$uploaded = true){
         if(!$system_styles_conf){
             $system_styles_conf = new ilSystemStyleConfig();
         }
 
         $skin_id = preg_replace('/[^A-Za-z0-9\-_]/', '', rtrim($name,".zip"));
 
-        while(ilStyleDefinition::skinExists($skin_id)){
-            $skin_id .= "Duplicate";
+        while(ilStyleDefinition::skinExists($skin_id,$system_styles_conf)){
+            $skin_id .= "Copy";
         }
 
         $skin_path = $system_styles_conf->getCustomizingSkinPath().$skin_id;
         mkdir($skin_path,0777,true);
 
         $temp_zip_path = $skin_path."/".$name;
-        move_uploaded_file ( $import_zip_path ,$temp_zip_path );
+        if($uploaded){
+            move_uploaded_file ( $import_zip_path ,$temp_zip_path );
+        }else{
+            rename( $import_zip_path ,$temp_zip_path );
+        }
         ilUtil::unzip($temp_zip_path);
         unlink($temp_zip_path);
 

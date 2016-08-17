@@ -146,26 +146,35 @@ class ilSkinXML implements \Iterator, \Countable{
      * @param ilSkinStyleXML $style
      */
     public function addStyle(ilSkinStyleXML $style){
-        try{
-            $this->styles[$style->getId()] = $style;
-        }catch(Exception $e){
-            //Todo
-        }
+        $this->styles[] = $style;
     }
 
     /**
-     * @param string $id
+     * @param $id
+     * @throws ilSystemStyleException
      */
     public function removeStyle($id){
-        unset($this->styles[$id]);
+        foreach($this->getStyles() as $index => $style){
+            if($style->getId() == $id){
+                unset($this->styles[$index]);
+                return;
+            }
+        }
+        throw new ilSystemStyleException(ilSystemStyleException::INVALID_ID,$id);
     }
 
     /**
      * @param $id
      * @return ilSkinStyleXML
+     * @throws ilSystemStyleException
      */
     public function getStyle($id){
-        return $this->styles[$id];
+        foreach($this->getStyles() as $style){
+            if($style->getId() == $id){
+                return $style;
+            }
+        }
+        throw new ilSystemStyleException(ilSystemStyleException::INVALID_ID,$id);
     }
 
     /**
@@ -173,7 +182,12 @@ class ilSkinXML implements \Iterator, \Countable{
      * @return bool
      */
     public function hasStyle($id){
-        return array_key_exists($id,$this->getStyles());
+        foreach($this->getStyles() as $style){
+            if($style->getId() == $id){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
