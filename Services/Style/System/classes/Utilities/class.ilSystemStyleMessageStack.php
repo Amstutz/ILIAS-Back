@@ -58,9 +58,9 @@ class ilSystemStyleMessageStack{
      * @return string[]
      */
     public function getJoinedMessages(){
-        $joined_messages = array();
+        $joined_messages = [];
         foreach($this->getMessages() as $message){
-            if(!is_string($joined_messages[$message->getTypeId()])){
+            if(!array_key_exists($message->getTypeId(),$joined_messages)){
                 $joined_messages[$message->getTypeId()] = "";
             }
             $joined_messages[$message->getTypeId()] .= $message->getMessageOutput();
