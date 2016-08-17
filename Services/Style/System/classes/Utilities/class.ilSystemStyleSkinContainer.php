@@ -51,7 +51,7 @@ class ilSystemStyleSkinContainer {
      * @param ilSystemStyleMessageStack|null $message_stack
      * @param ilSystemStyleConfig $system_styles_conf
      */
-    public function __construct(ilSkinXML $skin, ilSystemStyleMessageStack $message_stack = null, ilSystemStyleConfig $system_styles_conf)
+    public function __construct(ilSkinXML $skin, ilSystemStyleMessageStack $message_stack = null, ilSystemStyleConfig $system_styles_conf = null)
     {
         global $DIC;
 
