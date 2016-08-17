@@ -53,7 +53,6 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 
 		parent::__construct($a_parent_obj, $a_parent_cmd);
 		$this->getStyles();
-//		$this->setTitle($lng->txt(""));
 
 		$this->setLimit(9999);
 		$this->addColumn($this->lng->txt(""));
@@ -180,7 +179,7 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 
 		if($is_substyle){
 			$this->tpl->setCurrentBlock("substyle");
-			$this->tpl->setVariable("SUB_STYLE_OF", $a_set["substyle_of"]);
+			$this->tpl->setVariable("SUB_STYLE_OF", $a_set["substyle_of_name"]);
 
 			$assignments = ilSystemStyleSettings::getSubStyleCategoryAssignments(
 					$a_set["skin_id"],

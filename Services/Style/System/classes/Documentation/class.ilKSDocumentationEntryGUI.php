@@ -129,12 +129,12 @@ class ilKSDocumentationEntryGUI
                 //$start_example =  microtime (true);
                 $example = "<div class='well'>".$name()."</div>"; //Executes function loaded in file indicated by 'path'
                 //$end_example =  microtime (true);
-                $content_part_1 = $this->f->generic($example);
+                $content_part_1 = $this->f->legacy($example);
                 //$example_tot_time = ($end_example-$start_example);
                 //$examples_snippets[] = $this->f->text()->standard("Time to generate and render example: ".$example_tot_time);
                 $code = str_replace("<?php\n","",file_get_contents ($path));
                 $geshi = new GeSHi($code, "php");
-                $content_part_2 = $this->f->generic($geshi->parse_code());
+                $content_part_2 = $this->f->legacy($geshi->parse_code());
                 $content = array($content_part_1,$content_part_2);
                 $sub_panels[] = $this->f->panel()->sub($title, $content);
             }

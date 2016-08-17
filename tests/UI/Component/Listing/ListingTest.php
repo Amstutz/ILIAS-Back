@@ -96,15 +96,12 @@ class ListingTest extends ILIAS_UI_TestBase {
 		$html = $this->normalizeHTML($r->render($l));
 
 		$expected = "<ol>".
-				"\t\t<li>1</li>".
-				"\t\t<li>2</li>\t".
-				"</ol>";
+					"\t\t<li>1</li>".
+					"\t\t<li>2</li>\t".
+					"</ol>";
 
 		$this->assertEquals($expected, $html);
 	}
-
-
-
 
 	public function test_descriptive_invalid_items2() {
 		$f = $this->getListingFactory();

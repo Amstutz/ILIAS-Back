@@ -24,10 +24,9 @@ class NoUIFactory implements Factory {
 	public function card($title, \ILIAS\UI\Component\Image\Image $image = null) {}
 	public function deck(array $cards) {}
 	public function listing() {}
-	public function link($href,$caption="") {}
-	public function panel() {}
 	public function image() {}
-	public function generic($content) {}
+	public function legacy($content) {}
+	public function panel() {}
 }
 
 class LoggingRegistry implements ResourceRegistry {

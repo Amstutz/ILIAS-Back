@@ -3,6 +3,7 @@
 
 include_once("Services/Style/System/classes/Utilities/class.ilSkinStyleXML.php");
 include_once("Services/Style/System/classes/Utilities/class.ilSkinXML.php");
+include_once("Services/Style/System/tests/fixtures/mocks/ilSystemStyleConfigMock.php");
 
 /**
  *
@@ -28,9 +29,9 @@ class SkinXMLTest extends PHPUnit_Framework_TestCase {
     protected $style2 = null;
 
     /**
-     * @var string
+     * @var ilSystemStyleConfigMock
      */
-    protected $skins_path = "Services/Style/System/tests/fixtures/skins/";
+    protected $system_style_config;
 
     protected function setUp(){
         $this->skin = new ilSkinXML("skin1", "skin 1");
@@ -46,6 +47,8 @@ class SkinXMLTest extends PHPUnit_Framework_TestCase {
         $this->style2->setImageDirectory("style2image");
         $this->style2->setSoundDirectory("style2sound");
         $this->style2->setFontDirectory("style2font");
+
+        $this->system_style_config = new ilSystemStyleConfigMock();
 
     }
 
@@ -92,20 +95,20 @@ class SkinXMLTest extends PHPUnit_Framework_TestCase {
     public function testAsXML() {
         $this->skin->addStyle($this->style1);
         $this->skin->addStyle($this->style2);
-        $this->assertEquals($this->skin->asXML(),file_get_contents($this->skins_path."/skin1/skin1.xml"));
+        $this->assertEquals($this->skin->asXML(),file_get_contents($this->system_style_config->getCustomizingSkinPath()."skin1/template.xml"));
     }
 
     public function testWriteXML() {
         $this->skin->addStyle($this->style1);
         $this->skin->addStyle($this->style2);
-        $this->skin->writeToXMLFile($this->skins_path."/skin1/skin1-copy.xml");
-        $this->assertEquals(file_get_contents($this->skins_path."/skin1/skin1-copy.xml")
-            ,file_get_contents($this->skins_path."/skin1/skin1.xml"));
-        unlink ($this->skins_path."/skin1/skin1-copy.xml");
+        $this->skin->writeToXMLFile($this->system_style_config->getCustomizingSkinPath()."skin1/template-copy.xml");
+        $this->assertEquals(file_get_contents($this->system_style_config->getCustomizingSkinPath()."skin1/template-copy.xml")
+            ,file_get_contents($this->system_style_config->getCustomizingSkinPath()."skin1/template.xml"));
+        unlink ($this->system_style_config->getCustomizingSkinPath()."skin1/template-copy.xml");
     }
 
     public function testReadXML() {
-        $skin = ilSkinXML::parseFromXML($this->skins_path."/skin1/skin1.xml");
-        $this->assertEquals($skin->asXML(),file_get_contents($this->skins_path."/skin1/skin1.xml"));
+        $skin = ilSkinXML::parseFromXML($this->system_style_config->getCustomizingSkinPath()."skin1/template.xml");
+        $this->assertEquals($skin->asXML(),file_get_contents($this->system_style_config->getCustomizingSkinPath()."skin1/template.xml"));
     }
 }
