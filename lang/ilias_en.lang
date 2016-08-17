@@ -16013,3 +16013,4 @@ style#:#adapt_icons#:#Adapt Icon Colors
 style#:#invalid_less_path#:#The provided lessc path is not valid.
 style#:#provided_less_path#:#Provided lessc path:
 style#:#used_colors#:#Used Colors:
+style#:#style_imported#:#Style has been successfully imported into:

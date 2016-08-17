@@ -616,7 +616,7 @@ class ilSystemStyleOverviewGUI
             $imported_container = ilSystemStyleSkinContainer::import($_POST['importfile']['tmp_name'],$_POST['importfile']['name'],$message_stack);
             $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$imported_container->getSkin()->getId());
             $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$imported_container->getSkin()->getDefaultStyle()->getId());
-            $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("style_imported".$imported_container->getSkinDirectory()),ilSystemStyleMessage::TYPE_SUCCESS));
+            $message_stack->addMessage(new ilSystemStyleMessage($this->lng->txt("style_imported") . " " . $imported_container->getSkinDirectory(),ilSystemStyleMessage::TYPE_SUCCESS));
 
             $message_stack->sendMessages(true);
             $this->ctrl->redirectByClass("ilSystemStyleSettingsGUI");
