@@ -95,6 +95,25 @@ class SystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testJoinedMessages() {
+        $this->createTestEnvironment();
+
+        $this->assertTrue(count($this->ilSystemStyleMessageStack->getJoinedMessages()) === 3);
+        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[0] === $this->messageStringOne . "</br>");
+        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[1] === $this->messageStringTwo .
+            "</br>" . "Another SUCCESS message" . "</br>");
+        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[2] === $this->messageStringThree .
+            "</br>" . "Another ERROR message" . "</br>" . "YET another ERROR message" . "</br>");
+    }
+
+    public function testGetAndSetMessages() {
+        $this->createTestEnvironment();
+
+        $this->assertTrue($this->ilSystemStyleMessageStack->getMessages()[1]->getMessage() === $this->messageStringTwo);
+        $this->ilSystemStyleMessageStack->getMessages()[1]->setMessage("Godzilla has NOT taken over the world.");
+        $this->assertTrue($this->ilSystemStyleMessageStack->getMessages()[1]->getMessage() === "Godzilla has NOT taken over the world.");
+    }
+
+    protected function createTestEnvironment() {
         $this->ilSystemStyleMessage = new ilSystemStyleMessage($this->messageStringOne, ilSystemStyleMessage::TYPE_INFO);
         $this->ilSystemStyleMessageStack = new ilSystemStyleMessageStack();
 
@@ -114,14 +133,11 @@ class SystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
 
         $this->ilSystemStyleMessage = new ilSystemStyleMessage("YET another ERROR message", ilSystemStyleMessage::TYPE_ERROR);
         $this->ilSystemStyleMessageStack->addMessage($this->ilSystemStyleMessage);
-
-        $this->assertTrue(count($this->ilSystemStyleMessageStack->getJoinedMessages()) === 3);
-        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[0] === $this->messageStringOne . "</br>");
-        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[1] === $this->messageStringTwo .
-            "</br>" . "Another SUCCESS message" . "</br>");
-        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[2] === $this->messageStringThree .
-            "</br>" . "Another ERROR message" . "</br>" . "YET another ERROR message" . "</br>");
     }
 
+    public function testHasMessages() {
+        $this->createTestEnvironment();
 
+        $this->assertTrue();
+    }
 }
