@@ -1738,7 +1738,7 @@ class ilObjUserGUI extends ilObjectGUI
 				$options = array();
 				foreach($skins as $skin)
 				{
-					foreach($skins->getStyles() as $style)
+					foreach($skin->getStyles() as $style)
 					{
 						include_once("./Services/Style/System/classes/class.ilSystemStyleSettings.php");
 						if (!ilSystemStyleSettings::_lookupActivatedStyle($skin->getId(),$style->getId()))
