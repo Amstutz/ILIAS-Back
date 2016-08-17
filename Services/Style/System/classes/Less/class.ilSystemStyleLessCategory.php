@@ -63,9 +63,11 @@ class ilSystemStyleLessCategory extends ilSystemStyleLessItem
         $this->comment = $comment;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return "//== ".$this->getName()."\n//\n//## ".$this->getComment()."\n";
     }
 }
-?>

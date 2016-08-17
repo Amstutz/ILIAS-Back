@@ -39,10 +39,12 @@ class ilSystemStyleLessComment extends ilSystemStyleLessItem
         $this->comment = $comment;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getComment();
     }
 
 }
-?>

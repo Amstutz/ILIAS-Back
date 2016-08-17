@@ -10,4 +10,3 @@ abstract class ilSystemStyleLessItem
 {
     abstract function __toString();
 }
-?>

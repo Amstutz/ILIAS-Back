@@ -105,7 +105,7 @@ class ilSystemStyleLessFile
             }
             fclose($handle);
         } else {
-            throw new ilSystemStyleLessException(ilSystemStyleException::FILE_OPENING_FAILED);
+            throw new ilSystemStyleException(ilSystemStyleException::FILE_OPENING_FAILED);
         }
     }
 
@@ -113,6 +113,9 @@ class ilSystemStyleLessFile
         file_put_contents($this->getLessVariablesFile(),$this->getContent());
     }
 
+    /**
+     * @return string
+     */
     public function getContent(){
         $output = "";
 
@@ -171,6 +174,10 @@ class ilSystemStyleLessFile
         return $variables;
     }
 
+    /**
+     * @param $id
+     * @return ilSystemStyleLessVariable
+     */
     public function getItemById($id){
         return $this->items[$id];
     }
@@ -204,7 +211,4 @@ class ilSystemStyleLessFile
     {
         $this->less_variables_file = $less_variables_file;
     }
-
-
 }
-?>

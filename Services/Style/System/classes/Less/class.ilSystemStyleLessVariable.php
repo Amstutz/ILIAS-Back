@@ -130,6 +130,9 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
         $this->comment = $comment;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         $content = "";
@@ -171,7 +174,4 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
     {
         $this->references = $references;
     }
-
-
 }
-?>
