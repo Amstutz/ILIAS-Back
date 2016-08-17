@@ -1,7 +1,8 @@
 <?php
-/* Copyright (c) 1998-2011 ILIAS open source, Extended GPL, see docs/LICENSE */
+/* Copyright (c) 1998-2016 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 require_once 'Services/Exceptions/classes/class.ilException.php';
+require_once 'class.ilSystemStyleExceptionBase.php';
 
 /**
  * Class for advanced editing exception handling in ILIAS.
@@ -10,10 +11,8 @@ require_once 'Services/Exceptions/classes/class.ilException.php';
  * @version $Id$
  *
  */
-class ilSystemStyleException extends ilException
+class ilSystemStyleException extends ilSystemStyleExceptionBase
 {
-	const UNKNONW_EXCEPTION = -1;
-
 	const PARSING_JSON_FAILED = 1;
 
 	const EMPTY_ENTRY   = 1001;
@@ -45,37 +44,6 @@ class ilSystemStyleException extends ilException
 	const SKIN_ALREADY_EXISTS = 6001;
 
 	const SUBSTYLE_ASSIGNMENT_EXISTS = 7001;
-
-	/**
-	 * @var string
-	 */
-	protected $message = "";
-
-	/**
-	 * @var int
-	 */
-	protected $code = -1;
-
-	/**
-	 * @var string
-	 */
-	protected $add_info = "";
-
-	/**
-	 * ilSystemStyleException constructor.
-	 * @param int $exception_code
-	 * @param string $exception_info
-	 */
-	public function __construct($exception_code = -1, $exception_info = "")
-	{
-
-
-		$this->code = $exception_code;
-		$this->add_info = $exception_info;
-		$this->assignMessageToCode();
-		parent::__construct($this->message, $this->code);
-
-	}
 
 	protected function assignMessageToCode()
 	{
@@ -160,14 +128,5 @@ class ilSystemStyleException extends ilException
 				$this->message = "Unknonw Exception " . $this->add_info;
 				break;
 		}
-	}
-
-    /**
-     * @return string
-     */
-	public function __toString()
-	{
-		return get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n"
-		. "{$this->getTraceAsString()}";
 	}
 }
