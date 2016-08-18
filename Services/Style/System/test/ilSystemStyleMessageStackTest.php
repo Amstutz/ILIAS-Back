@@ -11,13 +11,6 @@ include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleMessage
  */
 class ilSystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
 
-    /*
-     *
-    const TYPE_INFO = 0;
-    const TYPE_SUCCESS = 1;
-    const TYPE_ERROR = 2;
-     */
-
     /**
      * @var ilSystemStyleMessage
      */
@@ -49,8 +42,7 @@ class ilSystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
     protected $ilSystemStyleMessageStack;
 
     public function testPrependMessage() {
-        $this->ilSystemStyleMessage = new ilSystemStyleMessage($this->messageStringOne, ilSystemStyleMessage::TYPE_INFO);
-        $this->ilSystemStyleMessageStack = new ilSystemStyleMessageStack();
+        $this->createTestEnvironment();
 
         $this->ilSystemStyleMessageStack->prependMessage($this->ilSystemStyleMessage);
 
@@ -72,8 +64,7 @@ class ilSystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testAddMessage() {
-        $this->ilSystemStyleMessage = new ilSystemStyleMessage($this->messageStringOne, ilSystemStyleMessage::TYPE_INFO);
-        $this->ilSystemStyleMessageStack = new ilSystemStyleMessageStack();
+        $this->createTestEnvironment();
 
         $this->ilSystemStyleMessageStack->addMessage($this->ilSystemStyleMessage);
 
@@ -97,26 +88,6 @@ class ilSystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
     public function testJoinedMessages() {
         $this->createTestEnvironment();
 
-        $this->assertTrue(count($this->ilSystemStyleMessageStack->getJoinedMessages()) === 3);
-        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[0] === $this->messageStringOne . "</br>");
-        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[1] === $this->messageStringTwo .
-            "</br>" . "Another SUCCESS message" . "</br>");
-        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[2] === $this->messageStringThree .
-            "</br>" . "Another ERROR message" . "</br>" . "YET another ERROR message" . "</br>");
-    }
-
-    public function testGetAndSetMessages() {
-        $this->createTestEnvironment();
-
-        $this->assertTrue($this->ilSystemStyleMessageStack->getMessages()[1]->getMessage() === $this->messageStringTwo);
-        $this->ilSystemStyleMessageStack->getMessages()[1]->setMessage("Godzilla has NOT taken over the world.");
-        $this->assertTrue($this->ilSystemStyleMessageStack->getMessages()[1]->getMessage() === "Godzilla has NOT taken over the world.");
-    }
-
-    protected function createTestEnvironment() {
-        $this->ilSystemStyleMessage = new ilSystemStyleMessage($this->messageStringOne, ilSystemStyleMessage::TYPE_INFO);
-        $this->ilSystemStyleMessageStack = new ilSystemStyleMessageStack();
-
         $this->ilSystemStyleMessageStack->addMessage($this->ilSystemStyleMessage);
 
         $this->ilSystemStyleMessage = new ilSystemStyleMessage($this->messageStringTwo, ilSystemStyleMessage::TYPE_SUCCESS);
@@ -133,12 +104,40 @@ class ilSystemStyleMessageStackTest extends PHPUnit_Framework_TestCase {
 
         $this->ilSystemStyleMessage = new ilSystemStyleMessage("YET another ERROR message", ilSystemStyleMessage::TYPE_ERROR);
         $this->ilSystemStyleMessageStack->addMessage($this->ilSystemStyleMessage);
+
+        $this->assertTrue(count($this->ilSystemStyleMessageStack->getJoinedMessages()) === 3);
+        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[0] === $this->messageStringOne . "</br>");
+        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[1] === $this->messageStringTwo .
+            "</br>" . "Another SUCCESS message" . "</br>");
+        $this->assertTrue($this->ilSystemStyleMessageStack->getJoinedMessages()[2] === $this->messageStringThree .
+            "</br>" . "Another ERROR message" . "</br>" . "YET another ERROR message" . "</br>");
+    }
+
+    public function testGetAndSetMessages() {
+        $this->createTestEnvironment();
+
+        $this->ilSystemStyleMessageStack->addMessage($this->ilSystemStyleMessage);
+
+        $this->ilSystemStyleMessage = new ilSystemStyleMessage($this->messageStringTwo, ilSystemStyleMessage::TYPE_SUCCESS);
+        $this->ilSystemStyleMessageStack->addMessage($this->ilSystemStyleMessage);
+
+        $this->assertTrue($this->ilSystemStyleMessageStack->getMessages()[1]->getMessage() === $this->messageStringTwo);
+        $this->ilSystemStyleMessageStack->getMessages()[1]->setMessage("Godzilla has NOT taken over the world.");
+        $this->assertTrue($this->ilSystemStyleMessageStack->getMessages()[1]->getMessage() === "Godzilla has NOT taken over the world.");
     }
 
     public function testHasMessages() {
         $this->createTestEnvironment();
 
+        $this->assertFalse($this->ilSystemStyleMessageStack->hasMessages());
 
-        //$this->assertTrue();
+        $this->ilSystemStyleMessageStack->addMessage($this->ilSystemStyleMessage);
+
+        $this->assertTrue($this->ilSystemStyleMessageStack->hasMessages());
+    }
+
+    protected function createTestEnvironment() {
+        $this->ilSystemStyleMessage = new ilSystemStyleMessage($this->messageStringOne, ilSystemStyleMessage::TYPE_INFO);
+        $this->ilSystemStyleMessageStack = new ilSystemStyleMessageStack();
     }
 }
