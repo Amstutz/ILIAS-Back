@@ -39,6 +39,7 @@ class LoggingRegistry implements ResourceRegistry {
 
 class DefaultRendererTesting extends \ILIAS\UI\Implementation\DefaultRenderer {
 	public function getResourceRegistry() {
+		var_dump($this->resource_registry);
 		return $this->resource_registry;
 	}
 }

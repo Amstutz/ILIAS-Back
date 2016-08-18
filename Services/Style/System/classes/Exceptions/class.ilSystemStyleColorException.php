@@ -10,17 +10,17 @@ require_once 'class.ilSystemStyleExceptionBase.php';
  * @version $Id$
  *
  */
-class ilSystemStyleMessageStackException extends ilSystemStyleExceptionBase
+class ilSystemStyleColorException extends ilSystemStyleExceptionBase
 {
-    const MESSAGE_STACK_TYPE_ID_DOES_NOT_EXIST = 1001;
+    const INVALID_COLOR_EXCEPTION = 1001;
 
 
     protected function assignMessageToCode()
     {
         switch ($this->code)
         {
-            case self::MESSAGE_STACK_TYPE_ID_DOES_NOT_EXIST:
-                $this->message = "Type id does not exist in message stack";
+            case self::INVALID_COLOR_EXCEPTION:
+                $this->message = "Invalid Color value";
                 break;
             default:
                 $this->message = "Unknown Exception " . $this->add_info;

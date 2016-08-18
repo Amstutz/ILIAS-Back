@@ -68,10 +68,25 @@ class ilSystemStyleIconTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($icon->getType(),$this->icon_type);
 	}
 
-	public function testGetColorSetSorted(){
+	public function testGetColorSet(){
 		$path = $this->container->getImagesSkinPath($this->style->getId())."/".$this->icon_name;
 		$icon = new ilSystemStyleIcon($this->icon_name,$path,$this->icon_type);
 
-		var_dump($icon->getColorSet()->getColorsSorted());
+		$expected_color_set = new ilSystemStyleIconColorSet();
+		$color1 = new ilSystemStyleIconColor("505050","505050","505050","505050");
+		$color2 = new ilSystemStyleIconColor("6B6B6B","6B6B6B","6B6B6B","6B6B6B");
+		$color3 = new ilSystemStyleIconColor("838383","838383","838383","838383");
+		$color4 = new ilSystemStyleIconColor("8C8C8C","8C8C8C","8C8C8C","8C8C8C");
+		$expected_color_set->addColor($color1);
+		$expected_color_set->addColor($color2);
+		$expected_color_set->addColor($color3);
+		$expected_color_set->addColor($color4);
+
+		$this->assertEquals($expected_color_set,$icon->getColorSet());
+	}
+
+	public function testChangeColor(){
+
 	}
 }
+
