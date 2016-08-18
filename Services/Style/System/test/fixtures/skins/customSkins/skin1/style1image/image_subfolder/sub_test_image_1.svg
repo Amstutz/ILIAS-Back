@@ -12,7 +12,7 @@
 	</clipPath>
 	
 		<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="-133.6" y1="166.5333" x2="-132.6" y2="166.5333" gradientTransform="matrix(0 15 15 0 -2485 2018.0001)">
-		<stop  offset="0" style="stop-color:#505050"/>
+		<stop  offset="0" style="stop-color:#404040"/>
 		<stop  offset="7.292820e-03" style="stop-color:#505050"/>
 		<stop  offset="0.3563" style="stop-color:#6B6B6B"/>
 		<stop  offset="0.7492" style="stop-color:#838383"/>

@@ -7,21 +7,29 @@ require_once("./Services/Style/System/classes/Icons/class.ilSystemStyleIcon.php"
  */
 
 /**
+ * Abstracts a folder containing a set of icons.
+ *
  * Class ilSystemStyleIconFolder
  */
 class ilSystemStyleIconFolder
 {
     /**
+     * Icons a folder contains
+     *
      * @var ilSystemStyleIcon[]
      */
     protected $icons = [];
 
     /**
+     * Path to the root of the folder
+     *
      * @var string
      */
     protected $path = "";
 
     /**
+     * Complete color set of all icons contained in this folder
+     *
      * @var ilSystemStyleIconColorSet
      */
     protected $color_set = null;
@@ -36,15 +44,20 @@ class ilSystemStyleIconFolder
         $this->read();
     }
 
+    /**
+     * Reads the folder recursively and sorts the icons by name and type
+     *
+     * @throws ilSystemStyleException
+     */
     public function read(){
         $this->xRead($this->getPath(),"");
         $this->sortIcons();
     }
 
     /**
-     *
+     * Sorts the Icons by name and type
      */
-    public function sortIcons(){
+    protected function sortIcons(){
         usort($this->icons, function(ilSystemStyleIcon $a, ilSystemStyleIcon $b){
             if($a->getType() == $b->getType()){
                 return strcmp($a->getName(),$b->getName());
@@ -62,6 +75,8 @@ class ilSystemStyleIconFolder
     }
 
     /**
+     * Reads the folder recursively for gif, svg and png icons.
+     *
      * @param string $src
      * @param string $rel_path
      * @throws ilSystemStyleException
@@ -88,6 +103,8 @@ class ilSystemStyleIconFolder
 
 
     /**
+     * Changes a set of colors in all icons contained in the folder
+     *
      * @param array $color_changes
      */
     public function changeIconColors(array $color_changes){
@@ -97,6 +114,8 @@ class ilSystemStyleIconFolder
     }
 
     /**
+     * Adds an icon to the folders abstraction
+     *
      * @param ilSystemStyleIcon $icon
      */
     public function addIcon(ilSystemStyleIcon $icon){
@@ -104,6 +123,8 @@ class ilSystemStyleIconFolder
     }
 
     /**
+     * Gets an Icon from the folders abstraction
+     *
      * @return ilSystemStyleIcon[]
      */
     public function getIcons()
@@ -112,7 +133,9 @@ class ilSystemStyleIconFolder
     }
 
     /**
+     * Sorts all icons by their occurrence in folders
      *
+     * @return array array(folder_path_name => [$icons])
      */
     public function getIconsSortedByFolder(){
         $folders = [];
@@ -164,6 +187,9 @@ class ilSystemStyleIconFolder
         return $this->color_set;
     }
 
+    /**
+     * Gets the color sets of all icons an merges them into one
+     */
     protected function extractColorSet(){
         $this->color_set = new ilSystemStyleIconColorSet();
         foreach($this->getIcons() as $icon){
@@ -172,6 +198,8 @@ class ilSystemStyleIconFolder
     }
 
     /**
+     * Gets the usages of a certain color
+     *
      * @param $color_id
      * @return ilSystemStyleIcon[]
      */
@@ -186,6 +214,8 @@ class ilSystemStyleIconFolder
     }
 
     /**
+     * Gets the usages of a color as string
+     *
      * @param $color_id
      * @return string
      */
