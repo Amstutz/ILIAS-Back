@@ -55,6 +55,7 @@ class ilSystemStyleIcon
             }
             file_put_contents ($this->getPath(),$icon);
         }
+        $this->extractColorSet();
     }
 
     /**
@@ -153,6 +154,6 @@ class ilSystemStyleIcon
      * @return bool
      */
     public function usesColor($color_id){
-        return $this->getColorSet()->getColorById($color_id) != null;
+        return $this->getColorSet()->doesColorExist($color_id);
     }
 }
