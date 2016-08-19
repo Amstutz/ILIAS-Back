@@ -484,7 +484,7 @@ class ilSystemStyleSkinContainer {
         if(file_exists($path)){
             unlink($path);
             $this->getMessageStack()->addMessage(
-                new ilSystemStyleMessage($this->lng->txt("file_deleted").$path,
+                new ilSystemStyleMessage($this->lng->txt("file_deleted") . " " . $path,
                     ilSystemStyleMessage::TYPE_SUCCESS
                 ));
         }
