@@ -6,6 +6,9 @@ require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessVariab
 
 
 /***
+ * This data abstracts a complete less file. A less file is composed of categories, variables and random comments
+ * (unclassified information)
+ *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$
  *
@@ -13,26 +16,36 @@ require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessVariab
 class ilSystemStyleLessFile
 {
     /**
+     * List of items (variabe, category or comment) this file contains
+     *
      * @var ilSystemStyleLessVariable[]
      */
     protected $items = array();
 
     /**
+     * Separated array with all comments ids (performance reasons)
+     *
      * @var array
      */
     protected $comments_ids = array();
 
     /**
+     * Separated array with all variable ids (performance reasons)
+     *
      * @var array
      */
     protected $variables_ids= array();
 
     /**
+     * Separated array with all category ids (performance reasons)
+     *
      * @var array
      */
     protected $categories_ids = array();
 
     /**
+     * Complete path the the variables file on the file system
+     *
      * @var string
      */
     protected $less_variables_file_path = "";
@@ -48,6 +61,8 @@ class ilSystemStyleLessFile
     }
 
     /**
+     * Reads the file from the file system
+     *
      * @throws ilSystemStyleException
      */
     public function read(){
@@ -55,6 +70,13 @@ class ilSystemStyleLessFile
         $last_category_id = null;
         $last_category_name = null;
 
+        $regex_category = '/\/\/==\s(.*)/';
+        $regex_category_comment = '/\/\/##\s(.*)/';
+        $regex_variable = '/^@(.*)/';
+        $regex_variable_comment = '/\/\/\*\*\s(.*)/';
+        $regex_variable_name = '/(?:@)(.*)(?:\:)/';
+        $regex_variable_value = '/(?::)(.*)(?:;)/';
+        $regex_variable_references = '/(?:@)([a-zA-Z0-9_-]*)/';
         try{
             $handle = fopen($this->getLessVariablesFile(), "r");
         }catch(Exception $e){
@@ -64,27 +86,34 @@ class ilSystemStyleLessFile
 
         if ($handle) {
             $line_number = 1;
+            //Reads file line by line
             while (($line = fgets($handle)) !== false) {
 
-                if(preg_match('/\/\/==\s(.*)/', $line, $out)){
+
+                if(preg_match($regex_category, $line, $out)){
                     //Check Category
                     $last_category_id = $this->addItem(new ilSystemStyleLessCategory($out[1]));
                     $last_category_name = $out[1];
-                } else if(preg_match('/\/\/##\s(.*)/', $line, $out)){
+                } else if(preg_match($regex_category_comment, $line, $out)){
                     //Check Comment Category
                     $last_category = $this->getItemById($last_category_id);
                     $last_category->setComment($out[1]);
-                } else if(preg_match('/\/\/\*\*\s(.*)/', $line, $out)){
+                } else if(preg_match($regex_variable_comment, $line, $out)){
                     //Check Variables Comment
                     $last_variable_comment = $out[1];
-                } else if(preg_match('/^@(.*)/', $line, $out)){
+                } else if(preg_match($regex_variable, $line, $out)){
                     //Check Variables
-                    preg_match('/(?:@)(.*)(?:\:)/', $out[0], $variable);
-                    preg_match('/(?::)(.*)(?:;)/', $line, $value);
+
+                    //Name
+                    preg_match($regex_variable_name, $out[0], $variable);
+
+                    //Value
+                    preg_match($regex_variable_value, $line, $value);
+
+                    //References
                     $temp_value = $value[0];
                     $references = array();
-
-                    while(preg_match('/(?:@)([a-zA-Z0-9_-]*)/',$temp_value,$reference)){
+                    while(preg_match($regex_variable_references,$temp_value,$reference)){
                         $references[] = $reference[1];
                         $temp_value = str_replace($reference,"",$temp_value);
                     }
@@ -96,6 +125,7 @@ class ilSystemStyleLessFile
                         $last_category_name,
                         $references));
                     $last_variable_comment = 0;
+
                 }else{
                     $this->addItem(new ilSystemStyleLessComment($line));
                 }
@@ -194,6 +224,34 @@ class ilSystemStyleLessFile
         }
         return null;
 
+    }
+
+    /**
+     * @param $variable_name
+     * @return array
+     */
+    public function getReferencesToVariable($variable_name){
+        $references = [];
+
+        foreach($this->variables_ids as $id){
+            foreach($this->items[$id]->getReferences() as $reference){
+                if($variable_name == $reference)
+                $references[] = $this->items[$id]->getName();
+            }
+        }
+        return $references;
+    }
+
+    /**
+     * @param $variable_name
+     * @return string
+     */
+    public function getReferencesToVariableAsString($variable_name){
+        $references_string = "";
+        foreach($this->getReferencesToVariable($variable_name) as $reference){
+            $references_string .= "$reference; ";
+        }
+        return $references_string;
     }
 
     /**

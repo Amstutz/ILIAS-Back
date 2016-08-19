@@ -1,6 +1,13 @@
 <?php
+require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessItem.php");
 
 /***
+ * Capsules data of a less variable in the variables to less file. A less variable has the following structure:
+ *
+ * //** Comment to describe the variable
+ * @variable:   value;
+ *
+ *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$
  *
@@ -9,26 +16,35 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
 {
 
     /**
+     * Name of the variable
+     *
      * @var string
      */
     protected $name = "";
 
     /**
+     * Value of the variable as set in the less file
+     *
      * @var string
      */
     protected $value = "";
 
     /**
+     * Comment to the variable as in the less file
+     *
      * @var string
      */
     protected $comment = "";
 
     /**
+     * Less Category which encloses this variable
      * @var string
      */
     protected $category_name = "";
 
     /**
+     * Set references to other variables that are used by this exact variable
+     *
      * @var array
      */
     protected $references = array();
@@ -107,22 +123,6 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
     }
 
     /**
-     * This function will be needed to write the variable back to the less file and restore it's initial structure
-     * in less.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        $content = "";
-        if($this->getComment()){
-            $content .= "//** ".$this->getComment()."\n";
-        }
-        $content .= "@".$this->getName().":\t\t". $this->getValue().";\n";
-       return $content;
-    }
-
-    /**
      * @return string
      */
     public function getCategoryName()
@@ -152,5 +152,22 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
     public function setReferences($references)
     {
         $this->references = $references;
+    }
+
+
+    /**
+     * This function will be needed to write the variable back to the less file and restore it's initial structure
+     * in less.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $content = "";
+        if($this->getComment()){
+            $content .= "//** ".$this->getComment()."\n";
+        }
+        $content .= "@".$this->getName().":\t\t". $this->getValue().";\n";
+        return $content;
     }
 }

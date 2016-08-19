@@ -2,7 +2,7 @@
 require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessItem.php");
 
 /**
- * Capsules data of a less category in the variables to less file. A less catecory has the following structure:
+ * Capsules data of a less category in the variables to less file. A less category has the following structure:
  *
  * //== NameOfCategory
  * //
