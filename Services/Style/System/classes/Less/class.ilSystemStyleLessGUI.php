@@ -44,7 +44,9 @@ class ilSystemStyleLessGUI
 
 
 	/**
-	 * Constructor
+	 * ilSystemStyleLessGUI constructor.
+	 * @param string $skin_id
+	 * @param string $style_id
 	 */
 	function __construct($skin_id = "",$style_id = "")
 	{
@@ -173,10 +175,9 @@ class ilSystemStyleLessGUI
 
 	protected function edit(){
 
-		$message_stack = new ilSystemStyleMessageStack();
 		$modify = true;
 
-		if(!$this->checkRequirements($message_stack)){
+		if(!$this->checkRequirements()){
 			$this->getMessageStack()->prependMessage(
 				new ilSystemStyleMessage($this->lng->txt("less_can_not_be_modified"), ilSystemStyleMessage::TYPE_ERROR));
 			$modify = false;
@@ -212,13 +213,26 @@ class ilSystemStyleLessGUI
 			$section = new ilFormSectionHeaderGUI();
 			$section->setTitle($category->getName());
 			$section->setInfo($category->getComment());
-			$section->setSectionAnchor($category->getName());
+			//$section->setSectionAnchor($category->getName());
 			$form->addItem($section);
 			foreach($this->getLessFile()->getVariablesPerCategory($category->getName()) as $variable){
 				$input = new ilTextInputGUI($variable->getName(), $variable->getName());
 				$input->setRequired(true);
 				$input->setDisabled(!$modify);
-				$input->setInfo($variable->getComment());
+
+				$references = $this->getLessFile()->getReferencesToVariableAsString($variable->getName());
+
+				if($references != ""){
+					if($variable->getComment()){
+						$info = $variable->getComment()."</br>".$this->lng->txt("usages")." ".$references;
+					}else{
+						$info = $this->lng->txt("usages")." ".$references;
+					}
+				}else{
+					$info = $variable->getComment();
+				}
+				$input->setInfo($info);
+
 				$form->addItem($input);
 
 			}

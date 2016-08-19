@@ -7,27 +7,24 @@ include_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessCommen
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$*
  */
-class ilSystemStyleLessCategoryTest extends PHPUnit_Framework_TestCase {
+class ilSystemStyleLessCommentTest extends PHPUnit_Framework_TestCase {
 
     public function testConstruct() {
-        $comment = new ilSystemStyleLessCategory("comment");
+        $comment = new ilSystemStyleLessComment("comment");
         $this->assertEquals("comment", $comment->getComment());
     }
 
     public function testSetters() {
-        $category = new ilSystemStyleLessCategory("name", "comment");
+        $comment = new ilSystemStyleLessComment("name", "comment");
 
-        $category->setName("newName");
-        $category->setComment("newComment");
-
-        $this->assertEquals("newName", $category->getName());
-        $this->assertEquals("newComment", $category->getComment());
+        $comment->setComment("newComment");
+        $this->assertEquals("newComment", $comment->getComment());
     }
 
     public function testToString(){
-        $category = new ilSystemStyleLessCategory("name", "comment");
+        $comment = new ilSystemStyleLessComment("comment");
 
-        $this->assertEquals("//== name\n//\n//## comment\n",(string)$category);
+        $this->assertEquals("comment",(string)$comment);
     }
 
 }
