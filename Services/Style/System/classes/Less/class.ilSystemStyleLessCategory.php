@@ -2,7 +2,12 @@
 require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessItem.php");
 
 /**
- * Class to display Kitchen Sink Entries
+ * Capsules data of a less category in the variables to less file. A less catecory has the following structure:
+ *
+ * //== NameOfCategory
+ * //
+ * //## Comment
+ *
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$
@@ -11,11 +16,15 @@ require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessItem.p
 class ilSystemStyleLessCategory extends ilSystemStyleLessItem
 {
     /**
+     * Name of the category
+     *
      * @var string
      */
     protected $name = "";
 
     /**
+     * Comment to describe what this category is about
+     *
      * @var string
      */
     protected $comment = "";
@@ -64,6 +73,9 @@ class ilSystemStyleLessCategory extends ilSystemStyleLessItem
     }
 
     /**
+     * This function will be needed to write the category back to the less file and restore it's initial structure
+     * in less.
+     *
      * @return string
      */
     public function __toString()

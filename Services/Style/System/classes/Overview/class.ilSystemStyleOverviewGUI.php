@@ -533,7 +533,9 @@ class ilSystemStyleOverviewGUI
             $imploded_skin_style_id = explode(":", $skin_style_id);
             $skin_id = $imploded_skin_style_id[0];
             $style_id = $imploded_skin_style_id[1];
-            $all_deletable = $this->checkDeletable($skin_id,$style_id,$message_stack);
+            if(!$this->checkDeletable($skin_id,$style_id,$message_stack)){
+                $all_deletable = false;
+            }
         }
         if($all_deletable){
             foreach($_POST['id'] as $skin_style_id){

@@ -1,6 +1,12 @@
 <?php
 require_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessItem.php");
 /**
+ * Capsules all data which is neither part of a variable or category structure in the less file. This is needed
+ * to write the less file back to it's initial form
+ *
+ * //== NameOfCategory
+ * //
+ * //## Comment
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$
@@ -10,6 +16,8 @@ class ilSystemStyleLessComment extends ilSystemStyleLessItem
 {
 
     /**
+     * Random content of the less file beeing neither part of a variable or category
+     *
      * @var string
      */
     protected $comment = "";
@@ -40,6 +48,9 @@ class ilSystemStyleLessComment extends ilSystemStyleLessItem
     }
 
     /**
+     * This function will be needed to write the comment back to the less file and restore it's initial structure
+     * in less.
+     *
      * @return string
      */
     public function __toString()
