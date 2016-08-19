@@ -1,5 +1,6 @@
 <?php
 require_once("./Services/Style/System/classes/Icons/class.ilSystemStyleIcon.php");
+require_once("./Services/Style/System/classes/Exceptions/class.ilSystemStyleIconException.php");
 
 /**
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
@@ -75,13 +76,15 @@ class ilSystemStyleIconFolder
     }
 
     /**
-     * Reads the folder recursively for gif, svg and png icons.
-     *
      * @param string $src
      * @param string $rel_path
      * @throws ilSystemStyleException
+     * @throws ilSystemStyleIconException
      */
     protected function xRead($src = "",$rel_path=""){
+        if(!is_dir($src)){
+            throw new ilSystemStyleIconException(ilSystemStyleIconException::IMAGES_FOLDER_DOES_NOT_EXIST,$src);
+        }
         foreach (scandir($src) as $file) {
             $src_file = rtrim($src, '/') . '/' . $file;
             if (!is_readable($src_file)) {
@@ -109,7 +112,7 @@ class ilSystemStyleIconFolder
      */
     public function changeIconColors(array $color_changes){
         foreach($this->getIcons() as $icon){
-            $icon->changeColor($color_changes);
+            $icon->changeColors($color_changes);
         }
     }
 
@@ -130,6 +133,18 @@ class ilSystemStyleIconFolder
     public function getIcons()
     {
         return $this->icons;
+    }
+
+    /**
+     *
+     */
+    public function getIconByName($name){
+        foreach($this->icons as $icon){
+            if($icon->getName() == $name){
+                return $icon;
+            }
+        }
+        throw new ilSystemStyleIconException(ilSystemStyleIconException::ICON_DOES_NOT_EXIST,$name);
     }
 
     /**

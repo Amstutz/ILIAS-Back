@@ -51,10 +51,10 @@ class ilSystemStyleIcon
 
 
     /**
-     * Changes a color in the svg file of the icon and updates the icon abstraction by extracting the colors again.
+     * Changes colors in the svg file of the icon and updates the icon abstraction by extracting the colors again.
      * @param array $color_changes
      */
-    public function changeColor(array $color_changes){
+    public function changeColors(array $color_changes){
         if($this->getType() == "svg"){
             $icon = file_get_contents($this->getPath());
             foreach($color_changes as $old_color => $new_color){
