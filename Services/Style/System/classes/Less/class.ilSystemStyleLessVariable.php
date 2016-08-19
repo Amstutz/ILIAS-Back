@@ -7,9 +7,6 @@
  */
 class ilSystemStyleLessVariable extends ilSystemStyleLessItem
 {
-    const TYPE_STRING = 1;
-    const TYPE_NUMERIC = 2;
-    const TYPE_COLOR = 3;
 
     /**
      * @var string
@@ -20,11 +17,6 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
      * @var string
      */
     protected $value = "";
-
-    /**
-     * @var int
-     */
-    protected $type = self::TYPE_STRING;
 
     /**
      * @var string
@@ -99,22 +91,6 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
     }
 
     /**
-     * @return int
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param int $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
      * @return string
      */
     public function getComment()
@@ -131,6 +107,9 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
     }
 
     /**
+     * This function will be needed to write the variable back to the less file and restore it's initial structure
+     * in less.
+     *
      * @return string
      */
     public function __toString()

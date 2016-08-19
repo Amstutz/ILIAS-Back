@@ -1,6 +1,6 @@
 <?php
 /**
- * Class to display Kitchen Sink Entries
+ * Abstracts content of a less file. Currently we have Variable, Category and Comment (random content) as instances.
  *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$

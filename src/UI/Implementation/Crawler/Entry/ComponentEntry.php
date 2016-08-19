@@ -115,8 +115,8 @@ class ComponentEntry extends AbstractEntryPart implements \JsonSerializable
 		$this->setTitle($entry_data['title']);
 		$this->assert()->isIndex('abstract',$entry_data);
 		$this->setIsAbstract($entry_data['abstract']);
-		$this->setStatusEntry("Proposed");
-		$this->setStatusImplementation("Partly implemented");
+		$this->setStatusEntry("Accepted");
+		$this->setStatusImplementation("Implemented");
 		if(array_key_exists('description',$entry_data)) {
 			$this->setDescription(new ComponentEntryDescription($entry_data['description']));
 		}
