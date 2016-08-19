@@ -16004,5 +16004,15 @@ style#:#style_copied#:#Style has been successfully copied.
 style#:#directory_created#:#Directory created:
 style#:#color_changed_from#:#Color changed from:
 style#:#color_changed_to#:#to:
+style#:#edit_by_color#:#Edit by Color
+style#:#edit_by_icon#:#Edit by Icon
+style#:#update_icon#:#Update Icon
+style#:#select_icon#:#Select Icon
+style#:#change_icon#:#Change Icon
+style#:#color#:#Color
+style#:#adapt_icon#:#Adapt Icon
+style#:#adapt_icon_description#:#Adapt icon colors or change the icon itself.
+style#:#preview#:#Preview
+style#:#icons_gallery#:#Icons Gallery
 style#:#cant_delete_style_with_substyles#:#Styles with sub styles cannot be deleted.
 style#:#style_assignments_deleted#:#Style assignments of the following Sub Style have been deleted:

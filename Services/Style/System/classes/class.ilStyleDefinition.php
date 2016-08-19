@@ -2,6 +2,7 @@
 include_once("Services/Style/System/classes/Utilities/class.ilSkinXML.php");
 include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleSkinContainer.php");
 include_once("Services/Style/System/classes/class.ilSystemStyleSettings.php");
+include_once("Services/Style/System/classes/Utilities/class.ilSystemStyleConfig.php");
 
 
 /* Copyright (c) 1998-2012 ILIAS open source, Extended GPL, see docs/LICENSE */
@@ -305,6 +306,7 @@ class ilStyleDefinition
 				if (count($assignments) > 0) {
 					$ref_ass = [];
 					foreach ($assignments as $a) {
+						if($styleDefinition->getSkin()->hasStyle($a["substyle"]))
 						$ref_ass[$a["ref_id"]] = $a["substyle"];
 					}
 

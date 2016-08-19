@@ -95,7 +95,7 @@ class ilSystemStyleIconTest extends PHPUnit_Framework_TestCase
 		$path = $this->container->getImagesSkinPath($this->style->getId()) . "/" . $this->icon_name;
 		$icon = new ilSystemStyleIcon($this->icon_name, $path, $this->icon_type);
 
-		$icon->changeColor(['505050' => '555555']);
+		$icon->changeColors(['505050' => '555555']);
 
 		$expected_color_set = new ilSystemStyleIconColorSet();
 		$color1 = new ilSystemStyleIconColor("555555", "555555", "555555", "555555");
@@ -115,7 +115,7 @@ class ilSystemStyleIconTest extends PHPUnit_Framework_TestCase
 		$path = $this->container->getImagesSkinPath($this->style->getId()) . "/" . $this->icon_name;
 		$icon = new ilSystemStyleIcon($this->icon_name, $path, $this->icon_type);
 
-		$icon->changeColor(['505050' => '555555']);
+		$icon->changeColors(['505050' => '555555']);
 
 		$expected_color_set = new ilSystemStyleIconColorSet();
 		$color1 = new ilSystemStyleIconColor("555555", "555555", "555555", "555555");

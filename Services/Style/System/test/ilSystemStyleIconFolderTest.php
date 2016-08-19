@@ -85,6 +85,39 @@ class ilSystemStyleIconFolderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(4,count($folder->getIcons()));
 	}
 
+	public function testFolderDoesNotExist()
+	{
+		try{
+			new ilSystemStyleIconFolder("Does not exist");
+			$this->assertTrue(false);
+		}catch(ilSystemStyleIconException $e){
+			$this->assertEquals(ilSystemStyleIconException::IMAGES_FOLDER_DOES_NOT_EXIST,$e->getCode());
+		}
+	}
+
+	public function testFolderGetIcon()
+	{
+		$style_path = $this->container->getImagesSkinPath($this->style->getId());
+
+		$path1 = $style_path . "/test_image_1.svg";
+		$icon1 = new ilSystemStyleIcon("test_image_1.svg", $path1, "svg");
+		$folder = new ilSystemStyleIconFolder($this->container->getImagesSkinPath($this->style->getId()));
+		$this->assertEquals($icon1,$folder->getIconByName("test_image_1.svg"));
+
+	}
+
+	public function testIconDoesNotExist()
+	{
+		$folder = new ilSystemStyleIconFolder($this->container->getImagesSkinPath($this->style->getId()));
+
+		try{
+			$folder->getIconByName("doesNotExist.svg");
+			$this->assertTrue(false);
+		}catch(ilSystemStyleIconException $e){
+			$this->assertEquals(ilSystemStyleIconException::ICON_DOES_NOT_EXIST,$e->getCode());
+		}
+	}
+
 	public function testReadRecursiveAndSortByName()
 	{
 		$style_path = $this->container->getImagesSkinPath($this->style->getId());
