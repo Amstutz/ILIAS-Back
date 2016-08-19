@@ -65,7 +65,7 @@ class ilSystemStyleException extends ilSystemStyleExceptionBase
 				$this->message = "There are multiple root entry. Duplicate: " . $this->add_info;
 				break;
 			case self::INVALID_ID:
-				$this->message = "No such ID in tree: " . $this->add_info;
+				$this->message = "No such ID found in list or tree: " . $this->add_info;
 				break;
 			case self::INVALID_CHARACTERS_IN_ID:
 				$this->message = "The ID given contains invalid characters: " . $this->add_info;
@@ -125,7 +125,7 @@ class ilSystemStyleException extends ilSystemStyleExceptionBase
 				$this->message = "No less compiler is installed";
 				break;
 			default:
-				$this->message = "Unknonw Exception " . $this->add_info;
+				$this->message = "Unknown Exception " . $this->add_info;
 				break;
 		}
 	}

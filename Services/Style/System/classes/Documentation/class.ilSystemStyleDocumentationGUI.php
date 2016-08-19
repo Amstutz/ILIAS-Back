@@ -32,7 +32,9 @@ class ilSystemStyleDocumentationGUI
     public static $DATA_PATH;
 
     /**
-     * Constructor
+     * ilSystemStyleDocumentationGUI constructor.
+     * @param string $skin_id
+     * @param string $style_id
      */
     function __construct($skin_id = "",$style_id = "")
     {
@@ -81,6 +83,10 @@ class ilSystemStyleDocumentationGUI
         $this->tpl->setContent($toolbar->getHTML().$entry_gui->renderEntry());
     }
 
+    /**
+     * @return Crawler\Entry\ComponentEntries
+     * @throws Crawler\Exception\CrawlerException
+     */
     protected function parseEntries(){
         $crawler = new Crawler\FactoriesCrawler();
         $entries = $crawler->crawlFactory(self::ROOT_FACTORY_PATH);
@@ -89,6 +95,9 @@ class ilSystemStyleDocumentationGUI
         return $entries;
     }
 
+    /**
+     * @return Crawler\Entry\ComponentEntries
+     */
     protected function readEntries(){
         $entries_array = json_decode(file_get_contents(self::$DATA_PATH),true);
 

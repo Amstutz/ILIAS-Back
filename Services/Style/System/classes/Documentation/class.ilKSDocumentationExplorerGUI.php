@@ -62,6 +62,10 @@ class ilKSDocumentationExplorerGUI extends ilExplorerBaseGUI
         $this->openNodesRecursively($this->getCurrentOpenedNodeId());
     }
 
+    /**
+     * @param $id
+     * @throws \ILIAS\UI\Implementation\Crawler\Exception\CrawlerException
+     */
     protected function openNodesRecursively($id){
         $this->setNodeOpen($id);
         $parent_id = $this->getEntries()->getEntryById($id)->getParent();

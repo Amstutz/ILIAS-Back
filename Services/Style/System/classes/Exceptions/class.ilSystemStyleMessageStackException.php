@@ -23,7 +23,7 @@ class ilSystemStyleMessageStackException extends ilSystemStyleExceptionBase
                 $this->message = "Type id does not exist in message stack";
                 break;
             default:
-                $this->message = "Unknonw Exception " . $this->add_info;
+                $this->message = "Unknown Exception " . $this->add_info;
                 break;
         }
     }

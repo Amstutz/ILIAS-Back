@@ -1194,6 +1194,7 @@ class ilInitialisation
 							, $c["ui.template_factory"]
 							, $c["ui.resource_registry"]
 							, $c["lng"]
+							, $c["ui.javascript_binding"]
 							);
 		};
 		$c["ui.template_factory"] = function($c) {
@@ -1203,6 +1204,9 @@ class ilInitialisation
 		};
 		$c["ui.resource_registry"] = function($c) {
 			return new ILIAS\UI\Implementation\Render\ilResourceRegistry($c["tpl"]);
+		};
+		$c["ui.javascript_binding"] = function($c) {
+			return new ILIAS\UI\Implementation\Render\ilJavaScriptBinding($c["tpl"]);
 		};
 	}
 	

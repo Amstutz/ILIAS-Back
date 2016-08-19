@@ -69,10 +69,9 @@ class ilKSDocumentationEntryGUI
 
         $sub_panels = array();
 
-        $start =  microtime (true);
         $feature_wiki_links = array();
         foreach($this->entry->getFeatureWikiReferences()as $href){
-            $feature_wiki_links[] = $this->f->link($href);
+            $feature_wiki_links[] = $href;
         }
 
         $sub_panels[] = $this->f->panel()->sub("Description",
@@ -115,23 +114,14 @@ class ilKSDocumentationEntryGUI
             $this->f->listing()->descriptive($rule_listings)
         );
 
-
-        $start_example = 0;
-        $end_example = 0;
-        $example_tot_time = 0;
-
         if($this->entry->getExamples()){
             $nr = 1;
             foreach($this->entry->getExamples() as $name => $path){
                 include_once($path);
                 $title = "Example ".$nr.": ".ucfirst(str_replace("_"," ",$name));
                 $nr++;
-                //$start_example =  microtime (true);
                 $example = "<div class='well'>".$name()."</div>"; //Executes function loaded in file indicated by 'path'
-                //$end_example =  microtime (true);
                 $content_part_1 = $this->f->legacy($example);
-                //$example_tot_time = ($end_example-$start_example);
-                //$examples_snippets[] = $this->f->text()->standard("Time to generate and render example: ".$example_tot_time);
                 $code = str_replace("<?php\n","",file_get_contents ($path));
                 $geshi = new GeSHi($code, "php");
                 $content_part_2 = $this->f->legacy($geshi->parse_code());
@@ -153,15 +143,9 @@ class ilKSDocumentationEntryGUI
             )
         );
 
-        $bulletin = $this->f->panel()->report($this->entry->getTitle(),$sub_panels);
+        $report = $this->f->panel()->report($this->entry->getTitle(),$sub_panels);
 
-        $mid =  microtime (true);
-        $html = $this->r->render($bulletin);
-        $end =  microtime (true);
-
-        return /**"Constructing Time: ".($mid-$start)." (without example rendering: ".(($mid-$start)-($end_example-$start_example)).")".
-            "</br>Rendering Time: ".($end-$mid)."</br>".
-            "</br>Total Time: ".($end-$start)."</br>".**/$html;
+        return $this->r->render($report);
     }
 
 
@@ -213,4 +197,3 @@ class ilKSDocumentationEntryGUI
         $this->parent = $parent;
     }
 }
-?>
