@@ -10,7 +10,6 @@ include_once("Services/Style/System/classes/Settings/class.ilSubStyleAssignmentG
 
 
 /**
- *
  * @author            Timon Amstutz <timon.amstutz@ilub.unibe.ch>
  * @version           $Id$*
  */
@@ -99,6 +98,9 @@ class ilSystemStyleSettingsGUI
         }
     }
 
+    /**
+     * @param string $active
+     */
     protected function setSubStyleSubTabs($active = "") {
 
         $this->tabs->addSubTab('edit', $this->lng->txt('settings'), $this->ctrl->getLinkTargetByClass('ilsystemstylesettingsgui'));
@@ -186,6 +188,10 @@ class ilSystemStyleSettingsGUI
     }
 
 
+    /**
+     * @param ilSystemStyleMessageStack $message_stack
+     * @throws ilSystemStyleException
+     */
     protected function saveStyle(ilSystemStyleMessageStack $message_stack){
         global $DIC;
 
@@ -255,7 +261,11 @@ class ilSystemStyleSettingsGUI
         $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$new_style->getId());
     }
 
-    protected function saveSubStyle($message_stack){
+    /**
+     * @param $message_stack
+     * @throws ilSystemStyleException
+     */
+    protected function saveSubStyle(ilSystemStyleMessageStack $message_stack){
         $container = ilSystemStyleSkinContainer::generateFromId($_GET['skin_id'],$message_stack);
         $skin = $container->getSkin();
         $old_substyle = clone $skin->getStyle($_GET["style_id"]);
@@ -276,6 +286,10 @@ class ilSystemStyleSettingsGUI
         $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$new_substyle->getId());
     }
 
+    /**
+     * @return ilPropertyFormGUI
+     * @throws ilSystemStyleException
+     */
     protected function editSystemStyleForm(){
         $form = new ilPropertyFormGUI();
         $system_style_conf = new ilSystemStyleConfig();
@@ -309,9 +323,6 @@ class ilSystemStyleSettingsGUI
         }else{
             $form->setTitle($this->lng->txt("sub_style"));
         }
-
-
-
 
         $ti = new ilTextInputGUI($this->lng->txt("style_id"), "style_id");
         $ti->setMaxLength(128);

@@ -109,6 +109,9 @@ class  ilSystemStyleIconsGUI
         $this->tpl->setContent($form->getHTML());
     }
 
+    /**
+     * @param string $active
+     */
     protected function setSubStyleSubTabs($active = "") {
         $this->tabs->addSubTab('edit', $this->lng->txt('edit_by_color'), $this->ctrl->getLinkTarget($this,'edit'));
         $this->tabs->addSubTab('editIcon', $this->lng->txt('edit_by_icon'), $this->ctrl->getLinkTarget($this,'editIcon'));
@@ -156,6 +159,7 @@ class  ilSystemStyleIconsGUI
 
         foreach($color_set as $type => $colors){
             $section = new ilFormSectionHeaderGUI();
+            $title = "";
 
             if($type == ilSystemStyleIconColor::GREY){
                 $title = $this->lng->txt("grey_color");
@@ -184,6 +188,9 @@ class  ilSystemStyleIconsGUI
             $form->addItem($section);
 
             foreach($colors as $id => $color){
+                /**
+                 * @var ilSystemStyleIconColor $color
+                 */
                 $input = new ilColorPickerInputGUI($title." ".($id+1),$color->getId());
                 $input->setRequired(true);
                 $input->setInfo("Usages: ".$this->getIconFolder()->getUsagesOfColorAsString($color->getId()));
@@ -285,6 +292,9 @@ class  ilSystemStyleIconsGUI
         }
     }
 
+    /**
+     * @param $icon_name
+     */
     protected function addSelectIconToolbar($icon_name){
         global $DIC;
 
@@ -337,6 +347,9 @@ class  ilSystemStyleIconsGUI
             $title = $this->lng->txt("color");
 
             foreach($colors as $id => $color){
+                /**
+                 * @var ilSystemStyleIconColor $color
+                 */
                 $input = new ilColorPickerInputGUI($title." ".($id+1),$color->getId());
                 $input->setRequired(true);
                 $form->addItem($input);
@@ -364,6 +377,7 @@ class  ilSystemStyleIconsGUI
 
     /**
      * @param ilPropertyFormGUI $form
+     * @param ilSystemStyleIcon $icon
      */
     function getByIconValues(ilPropertyFormGUI $form, ilSystemStyleIcon $icon)
     {
@@ -462,6 +476,9 @@ class  ilSystemStyleIconsGUI
             $cards = [];
 
             foreach($icons as $icon){
+                /**
+                 * @var ilSystemStyleIcon $icon
+                 */
                 $icon_image = $f->image()->standard($icon->getPath(),$icon->getName());
                 $card = $f->card(
                     $icon->getName(),

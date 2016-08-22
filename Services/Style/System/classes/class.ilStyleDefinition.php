@@ -369,6 +369,7 @@ class ilStyleDefinition
 				{
 					$num_users = ilObjUser::_getNumberOfUsersForStyle($skin->getId(), $style->getId());
 
+					$parent_name = "";
 					if($style->getSubstyleOf()){
 						$parent_name = $skin->getStyle($style->getSubstyleOf())->getName();
 					}
@@ -516,14 +517,14 @@ class ilStyleDefinition
 	 */
 	public function getSystemStylesConf()
 	{
-		return $this->system_styles_conf;
+		return $this->system_style_config;
 	}
 
 	/**
-	 * @param ilSystemStyleConfig $system_styles_conf
+	 * @param $system_style_config
 	 */
-	public function setSystemStylesConf($system_styles_conf)
+	public function setSystemStylesConf($system_style_config)
 	{
-		$this->system_styles_conf = $system_styles_conf;
+		$this->$system_style_config = $system_style_config;
 	}
 }

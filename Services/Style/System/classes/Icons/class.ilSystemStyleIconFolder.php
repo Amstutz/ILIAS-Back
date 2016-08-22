@@ -136,7 +136,9 @@ class ilSystemStyleIconFolder
     }
 
     /**
-     *
+     * @param $name
+     * @return ilSystemStyleIcon
+     * @throws ilSystemStyleIconException
      */
     public function getIconByName($name){
         foreach($this->icons as $icon){

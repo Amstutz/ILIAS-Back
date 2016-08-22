@@ -159,7 +159,7 @@ class ilFormSectionHeaderGUI
 	/**
 	 * set section label;
 	 *
-	 * @param unknown_type $value
+	 * @param $value
 	 */
 	function setSectionAnchor($value) {
 	    $this->section_anchor = $value;

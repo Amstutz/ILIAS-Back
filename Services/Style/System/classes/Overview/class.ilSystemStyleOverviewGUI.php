@@ -110,7 +110,6 @@ class ilSystemStyleOverviewGUI
                 return;
             case "cancel":
             case "edit":
-            case "copyStyle":
             case "export":
             case "moveUserStyles":
             case "saveStyleSettings":
@@ -255,6 +254,10 @@ class ilSystemStyleOverviewGUI
         $this->ctrl->redirect($this , "edit");
     }
 
+    /**
+     * @param ilSystemStyleMessageStack $message_stack
+     * @return bool
+     */
     protected function checkStyleSettings(ilSystemStyleMessageStack $message_stack){
 
         $passed = true;
@@ -324,7 +327,7 @@ class ilSystemStyleOverviewGUI
                     }
                     $this->ctrl->redirectByClass("ilSystemStyleSettingsGUI");
                 }catch(ilSystemStyleException $e){
-                    $message_stack->addMessage(new ilSystemStyleMessage($e->getMessage()),ilSystemStyleMessage::TYPE_ERROR);
+                    $message_stack->addMessage(new ilSystemStyleMessage($e->getMessage(),ilSystemStyleMessage::TYPE_ERROR));
                 }
             }
             $message_stack->sendMessages();
@@ -340,6 +343,9 @@ class ilSystemStyleOverviewGUI
      */
     protected function addSystemStyleForms()
     {
+        /**
+         * @var ilHelpGUI $ilHelp
+         */
         global $ilHelp, $DIC;
 
         $DIC->tabs()->clearTargets();
@@ -356,6 +362,9 @@ class ilSystemStyleOverviewGUI
         $this->tpl->setContent($this->getCreationFormsHTML($forms));
     }
 
+    /**
+     * @return ilPropertyFormGUI
+     */
     protected function createSystemStyleForm(){
         $form = new ilPropertyFormGUI();
         $form->setFormAction($this->ctrl->getFormAction($this));
@@ -457,6 +466,9 @@ class ilSystemStyleOverviewGUI
         $cnt = 1;
         foreach ($a_forms as $form_type => $cf)
         {
+            /**
+             * @var ilPropertyFormGUI $cf
+             */
             $htpl = new ilTemplate("tpl.creation_acc_head.html", true, true, "Services/Object");
 
             // using custom form titles (used for repository plugins)
@@ -496,12 +508,13 @@ class ilSystemStyleOverviewGUI
             $container = ilSystemStyleSkinContainer::generateFromId($skin_id,$message_stack);
             $new_container = $container->copy();
             $message_stack->prependMessage(new ilSystemStyleMessage($this->lng->txt("style_copied"),ilSystemStyleMessage::TYPE_SUCCESS));
+            $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$new_container->getSkin()->getId());
+            $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$new_container->getSkin()->getStyle($style_id)->getId());
         }catch(Exception $e){
             $message_stack->addMessage(new ilSystemStyleMessage($e->getMessage(),ilSystemStyleMessage::TYPE_ERROR));
         }
 
-        $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','skin_id',$new_container->getSkin()->getId());
-        $this->ctrl->setParameterByClass('ilSystemStyleSettingsGUI','style_id',$new_container->getSkin()->getStyle($style_id)->getId());
+
         $message_stack->sendMessages(true);
         $this->ctrl->redirectByClass("ilSystemStyleSettingsGUI");
     }
@@ -651,7 +664,7 @@ class ilSystemStyleOverviewGUI
     protected function addSubStyle()
     {
         /**
-         * @var ilHelp $ilHelp
+         * @var ilHelpGUI $ilHelp
          */
         global $ilHelp, $DIC;
 

@@ -44,7 +44,6 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 	 */
 	function __construct($a_parent_obj, $a_parent_cmd)
 	{
-		global $lng, $rbacsystem;
 
 		global $DIC;
 
@@ -68,6 +67,9 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 
 	}
 
+	/**
+	 * @param $management_enabled
+	 */
 	public function addActions($management_enabled){
 		$this->setWithActions(true);
 		$this->setManagementEnabled($management_enabled);
@@ -120,10 +122,10 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 
 		$this->setData($all_styles);
 	}
-	
-	
+
+
 	/**
-	 * Fill table row
+	 * @param array $a_set
 	 */
 	protected function fillRow($a_set)
 	{
@@ -261,4 +263,3 @@ class ilSystemStylesTableGUI extends ilTable2GUI
 
 
 }
-?>

@@ -64,4 +64,3 @@ class ilSysStyleCatAssignmentTableGUI extends ilTable2GUI
 	}
 
 }
-?>

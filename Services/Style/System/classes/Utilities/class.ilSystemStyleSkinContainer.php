@@ -561,13 +561,14 @@ class ilSystemStyleSkinContainer {
         return rtrim($this->getSkinDirectory(),"/").".zip";
     }
 
-
     /**
      * Imports a skin from zip
      *
      * @param $import_zip_path
      * @param $name
      * @param ilSystemStyleMessageStack|null $message_stack
+     * @param null $system_styles_conf
+     * @param bool|true $uploaded
      * @return ilSystemStyleSkinContainer
      * @throws ilSystemStyleException
      */
