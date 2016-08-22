@@ -101,7 +101,7 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
         if($value == "\"../../Services/UICore/lib/bootstrap-3.2.0/fonts/\""){
             $this->value = "\"../../../../Services/UICore/lib/bootstrap-3.2.0/fonts/\"";
         }else{
-            $this->value = $value;
+            $this->value =  str_replace(PHP_EOL, '', $value);;
 
         }
     }
@@ -119,7 +119,7 @@ class ilSystemStyleLessVariable extends ilSystemStyleLessItem
      */
     public function setComment($comment)
     {
-        $this->comment = $comment;
+        $this->comment =  str_replace(PHP_EOL, '', $comment);
     }
 
     /**

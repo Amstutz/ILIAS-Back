@@ -36,8 +36,8 @@ class ilSystemStyleLessCategory extends ilSystemStyleLessItem
      */
     public function __construct($name, $comment = "")
     {
-        $this->name = $name;
-        $this->comment = $comment;
+        $this->setName($name);
+        $this->setComment($comment);
     }
 
     /**
@@ -53,7 +53,7 @@ class ilSystemStyleLessCategory extends ilSystemStyleLessItem
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->name = str_replace(PHP_EOL, '', $name);
     }
 
     /**
@@ -69,7 +69,7 @@ class ilSystemStyleLessCategory extends ilSystemStyleLessItem
      */
     public function setComment($comment)
     {
-        $this->comment = $comment;
+        $this->comment = str_replace(PHP_EOL, '', $comment);
     }
 
     /**
@@ -80,6 +80,12 @@ class ilSystemStyleLessCategory extends ilSystemStyleLessItem
      */
     public function __toString()
     {
-        return "//== ".$this->getName()."\n//\n//## ".$this->getComment()."\n";
+        if($this->getComment()){
+            return "//== ".$this->getName()."\n//\n//## ".$this->getComment()."\n";
+        }else{
+            return "//== ".$this->getName()."\n//\n//##\n";
+
+        }
+
     }
 }

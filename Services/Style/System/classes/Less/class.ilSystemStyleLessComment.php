@@ -16,7 +16,7 @@ class ilSystemStyleLessComment extends ilSystemStyleLessItem
 {
 
     /**
-     * Random content of the less file beeing neither part of a variable or category
+     * Random content of the less file being neither part of a variable or category
      *
      * @var string
      */
@@ -28,7 +28,7 @@ class ilSystemStyleLessComment extends ilSystemStyleLessItem
      */
     public function __construct($comment)
     {
-        $this->comment = $comment;
+        $this->setComment($comment);
     }
 
     /**
@@ -44,7 +44,7 @@ class ilSystemStyleLessComment extends ilSystemStyleLessItem
      */
     public function setComment($comment)
     {
-        $this->comment = $comment;
+        $this->comment = str_replace(PHP_EOL, '', $comment);
     }
 
     /**
@@ -55,7 +55,7 @@ class ilSystemStyleLessComment extends ilSystemStyleLessItem
      */
     public function __toString()
     {
-        return $this->getComment();
+        return $this->getComment()."\n";
     }
 
 }

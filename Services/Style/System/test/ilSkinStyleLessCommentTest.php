@@ -24,7 +24,7 @@ class ilSystemStyleLessCommentTest extends PHPUnit_Framework_TestCase {
     public function testToString(){
         $comment = new ilSystemStyleLessComment("comment");
 
-        $this->assertEquals("comment",(string)$comment);
+        $this->assertEquals("comment\n",(string)$comment);
     }
 
 }

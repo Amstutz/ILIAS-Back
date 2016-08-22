@@ -94,6 +94,8 @@ class ilSystemStyleLessFile
                     //Check Category
                     $last_category_id = $this->addItem(new ilSystemStyleLessCategory($out[1]));
                     $last_category_name = $out[1];
+                    //Line bellow Category name belongs to Category
+                    fgets($handle);
                 } else if(preg_match($regex_category_comment, $line, $out)){
                     //Check Comment Category
                     $last_category = $this->getItemById($last_category_id);
