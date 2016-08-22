@@ -106,12 +106,12 @@ class ilSystemStyleException extends ilSystemStyleExceptionBase
 			case self::NO_SKIN_ID:
 				$this->message = "No Skin ID is given.";
 				break;
-            case self::NOT_EXISTING_SKIN:
-                $this->message = "Skin does not exist: " . $this->add_info;
-                break;
-            case self::NOT_EXISTING_STYLE:
-                $this->message = "Style does not exist: " . $this->add_info;
-                break;
+			case self::NOT_EXISTING_SKIN:
+				$this->message = "Skin does not exist: " . $this->add_info;
+				break;
+			case self::NOT_EXISTING_STYLE:
+				$this->message = "Style does not exist: " . $this->add_info;
+				break;
 			case self::SKIN_ALREADY_EXISTS:
 				$this->message = "Skin already exists: ".$this->add_info;
 				break;

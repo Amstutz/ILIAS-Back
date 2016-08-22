@@ -47,9 +47,9 @@ abstract class ilSystemStyleExceptionBase extends ilException
 
 	abstract protected function assignMessageToCode();
 
-    /**
-     * @return string
-     */
+	/**
+	 * @return string
+	 */
 	public function __toString()
 	{
 		return get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n"

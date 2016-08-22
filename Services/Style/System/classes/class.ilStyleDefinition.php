@@ -43,13 +43,13 @@ class ilStyleDefinition
 {
 	/**
 	 * currently selected style, used for caching
-     *
+	 *
 	 * @var bool
 	 */
 	static $current_style = false;
 
 	/**
-     * Skins available, used for caching
+	 * Skins available, used for caching
 	 * @var ilSkinXML[]
 	 */
 	static $skins = [];
@@ -116,7 +116,7 @@ class ilStyleDefinition
 		 */
 		global $DIC,$ilias;
 
-        $system_style_conf = new ilSystemStyleConfig();
+		$system_style_conf = new ilSystemStyleConfig();
 
 		if (is_object($ilias)) {
 			$skin_id = $ilias->account->skin;

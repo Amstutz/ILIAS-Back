@@ -9,22 +9,22 @@ include_once("./Services/Style/System/classes/Less/class.ilSystemStyleLessCommen
  */
 class ilSystemStyleLessCommentTest extends PHPUnit_Framework_TestCase {
 
-    public function testConstruct() {
-        $comment = new ilSystemStyleLessComment("comment");
-        $this->assertEquals("comment", $comment->getComment());
-    }
+	public function testConstruct() {
+		$comment = new ilSystemStyleLessComment("comment");
+		$this->assertEquals("comment", $comment->getComment());
+	}
 
-    public function testSetters() {
-        $comment = new ilSystemStyleLessComment("name", "comment");
+	public function testSetters() {
+		$comment = new ilSystemStyleLessComment("name", "comment");
 
-        $comment->setComment("newComment");
-        $this->assertEquals("newComment", $comment->getComment());
-    }
+		$comment->setComment("newComment");
+		$this->assertEquals("newComment", $comment->getComment());
+	}
 
-    public function testToString(){
-        $comment = new ilSystemStyleLessComment("comment");
+	public function testToString(){
+		$comment = new ilSystemStyleLessComment("comment");
 
-        $this->assertEquals("comment\n",(string)$comment);
-    }
+		$this->assertEquals("comment\n",(string)$comment);
+	}
 
 }
