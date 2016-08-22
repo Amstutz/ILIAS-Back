@@ -13,9 +13,67 @@ include_once("./Services/Export/classes/class.ilXmlImporter.php");
 class ilTestImporter extends ilXmlImporter
 {
 	/**
+	 * @var string
+	 */
+	private $tstXmlFile;
+	
+	/**
+	 * @var ilImportMapping
+	 */
+	private $mappingRegistry;
+	
+	/**
 	 * @var ilObjTest
 	 */
 	protected $testOBJ;
+	
+	/**
+	 * @return string
+	 */
+	public function getTstXmlFile()
+	{
+		return $this->tstXmlFile;
+	}
+	
+	/**
+	 * @param string $tstXmlFile
+	 */
+	public function setTstXmlFile($tstXmlFile)
+	{
+		$this->tstXmlFile = $tstXmlFile;
+	}
+	
+	/**
+	 * @return ilImportMapping
+	 */
+	public function getMappingRegistry()
+	{
+		return $this->mappingRegistry;
+	}
+	
+	/**
+	 * @param ilImportMapping $mappingRegistry
+	 */
+	public function setMappingRegistry($mappingRegistry)
+	{
+		$this->mappingRegistry = $mappingRegistry;
+	}
+	
+	/**
+	 * @return ilObjTest
+	 */
+	public function getTestOBJ()
+	{
+		return $this->testOBJ;
+	}
+	
+	/**
+	 * @param ilObjTest $testOBJ
+	 */
+	public function setTestOBJ($testOBJ)
+	{
+		$this->testOBJ = $testOBJ;
+	}
 	
 	/**
 	 * Import XML
@@ -25,8 +83,6 @@ class ilTestImporter extends ilXmlImporter
 	 */
 	function importXmlRepresentation($a_entity, $a_id, $a_xml, $a_mapping)
 	{
-		/* @var ilObjTest $newObj */
-		
 		// Container import => test object already created
 		include_once "./Modules/Test/classes/class.ilObjTest.php";
 		ilObjTest::_setImportDirectory($this->getImportDirectoryContainer());
@@ -37,6 +93,8 @@ class ilTestImporter extends ilXmlImporter
 			$newObj = ilObjectFactory::getInstanceByObjId($new_id,false);
 			$_SESSION['tst_import_subdir'] = $this->getImportPackageName();
 			$newObj->saveToDb(); // this generates test id first time
+			$questionParentObjId = $newObj->getId();
+			$newObj->setOnline(true);
 			$questionParentObjId = $newObj->getId();
 		}
 		else
@@ -69,7 +127,12 @@ class ilTestImporter extends ilXmlImporter
 			$GLOBALS['ilLog']->write(__METHOD__.': Cannot find xml definition: '. $qti_file);
 			return false;
 		}
-
+		
+		/* @var ilObjTest $newObj */
+		$this->setTestOBJ($newObj);
+		$this->setTstXmlFile($xml_file);
+		$this->setMappingRegistry($a_mapping);
+		
 		// FIXME: Copied from ilObjTestGUI::importVerifiedFileObject
 		// TODO: move all logic to ilObjTest::importVerifiedFile and call 
 		// this method from ilObjTestGUI and ilTestImporter 
@@ -87,7 +150,7 @@ class ilTestImporter extends ilXmlImporter
 
 		// start parsing of QTI files
 		include_once "./Services/QTI/classes/class.ilQTIParser.php";
-		$qtiParser = new ilQTIParser($qti_file, IL_MO_PARSE_QTI, $questionParentObjId , $idents);
+		$qtiParser = new ilQTIParser($qti_file, IL_MO_PARSE_QTI, $questionParentObjId, $idents);
 		$qtiParser->setTestObject($newObj);
 		$result = $qtiParser->startParsing();
 
@@ -131,13 +194,15 @@ class ilTestImporter extends ilXmlImporter
 			$results->startParsing();
 		}
 		
+		$newObj->saveToDb(); // this creates test_fi
+		
+		// import skill assignments
+		$importedAssignmentList = $this->importQuestionSkillAssignments();
+		$this->importSkillLevelThresholds($importedAssignmentList);
+			
 		$a_mapping->addMapping("Modules/Test", "tst", $a_id, $newObj->getId());
 
-		$newObj->saveToDb();
-
 		ilObjTest::_setImportDirectory();
-		
-		$this->testOBJ = $newObj;
 	}
 
 	/**
@@ -260,6 +325,66 @@ class ilTestImporter extends ilXmlImporter
 		$parser->setTestOBJ($testOBJ);
 		$parser->setImportMapping($a_mapping);
 		$parser->startParsing();
+	}
+	
+	/**
+	 * @param $xmlFile
+	 * @param ilImportMapping $mappingRegistry
+	 * @param $targetParentObjId
+	 * @return ilAssQuestionSkillAssignmentList
+	 */
+	protected function importQuestionSkillAssignments()
+	{
+		require_once 'Modules/TestQuestionPool/classes/questions/class.ilAssQuestionSkillAssignmentXmlParser.php';
+		$parser = new ilAssQuestionSkillAssignmentXmlParser($this->getTstXmlFile());
+		$parser->startParsing();
+		
+		require_once 'Modules/TestQuestionPool/classes/questions/class.ilAssQuestionSkillAssignmentImporter.php';
+		$importer = new ilAssQuestionSkillAssignmentImporter();
+		$importer->setTargetParentObjId($this->getTestOBJ()->getId());
+		$importer->setImportInstallationId($this->getInstallId());
+		$importer->setImportMappingRegistry($this->getMappingRegistry());
+		$importer->setImportMappingComponent('Modules/Test');
+		$importer->setImportAssignmentList($parser->getAssignmentList());
+		
+		$importer->import();
+		
+		if( $importer->getFailedImportAssignmentList()->assignmentsExist() )
+		{
+			require_once 'Modules/TestQuestionPool/classes/questions/class.ilAssQuestionSkillAssignmentImportFails.php';
+			$qsaImportFails = new ilAssQuestionSkillAssignmentImportFails($this->getTestOBJ()->getId());
+			$qsaImportFails->registerFailedImports($importer->getFailedImportAssignmentList());
+			
+			$this->getTestOBJ()->setOnline(false);
+		}
+		
+		return $importer->getSuccessImportAssignmentList();
+	}
+	
+	
+	protected function importSkillLevelThresholds(ilAssQuestionSkillAssignmentList $assignmentList)
+	{
+		require_once 'Modules/Test/classes/class.ilTestSkillLevelThresholdXmlParser.php';
+		$parser = new ilTestSkillLevelThresholdXmlParser($this->getTstXmlFile());
+		$parser->startParsing();
+		
+		require_once 'Modules/Test/classes/class.ilTestSkillLevelThresholdImporter.php';
+		$importer = new ilTestSkillLevelThresholdImporter();
+		$importer->setTargetTestId($this->getTestOBJ()->getTestId());
+		$importer->setImportInstallationId($this->getInstallId());
+		$importer->setImportMappingRegistry($this->getMappingRegistry());
+		$importer->setImportedQuestionSkillAssignmentList($assignmentList);
+		$importer->setImportThresholdList($parser->getSkillLevelThresholdImportList());
+		$importer->import();
+		
+		if( $importer->getFailedThresholdImportSkillList()->skillsExist() )
+		{
+			require_once 'Modules/Test/classes/class.ilTestSkillLevelThresholdImportFails.php';
+			$sltImportFails = new ilTestSkillLevelThresholdImportFails($this->getTestOBJ()->getId());
+			$sltImportFails->registerFailedImports($importer->getFailedThresholdImportSkillList());
+			
+			$this->getTestOBJ()->setOnline(false);
+		}
 	}
 }
 
