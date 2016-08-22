@@ -139,6 +139,9 @@ class ilSystemStyleLessFile
         }
     }
 
+    /**
+     * Write the complete file back to the file system (including comments and random content)
+     */
     public function write(){
         file_put_contents($this->getLessVariablesFile(),$this->getContent());
     }
@@ -268,5 +271,37 @@ class ilSystemStyleLessFile
     public function setLessVariablesFile($less_variables_file)
     {
         $this->less_variables_file = $less_variables_file;
+    }
+
+    /**
+     * @return ilSystemStyleLessVariable[]
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCommentsIds()
+    {
+        return $this->comments_ids;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVariablesIds()
+    {
+        return $this->variables_ids;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCategoriesIds()
+    {
+        return $this->categories_ids;
     }
 }
