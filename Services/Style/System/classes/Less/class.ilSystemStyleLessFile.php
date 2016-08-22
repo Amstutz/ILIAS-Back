@@ -126,7 +126,7 @@ class ilSystemStyleLessFile
                         $last_variable_comment,
                         $last_category_name,
                         $references));
-                    $last_variable_comment = 0;
+                    $last_variable_comment = "";
 
                 }else{
                     $this->addItem(new ilSystemStyleLessComment($line));

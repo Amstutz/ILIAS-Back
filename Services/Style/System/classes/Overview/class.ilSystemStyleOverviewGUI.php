@@ -646,10 +646,13 @@ class ilSystemStyleOverviewGUI
 
 
     /**
-     * create
+     *
      */
     protected function addSubStyle()
     {
+        /**
+         * @var ilHelp $ilHelp
+         */
         global $ilHelp, $DIC;
 
         $DIC->tabs()->clearTargets();
@@ -770,6 +773,4 @@ class ilSystemStyleOverviewGUI
     {
         $this->management_enabled = $management_enabled;
     }
-
-
 }
