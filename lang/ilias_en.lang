@@ -15948,7 +15948,7 @@ style#:#default_style_set_to#:#The default system style has been set to:
 style#:#personal_style_set_to#:#Your personal style has been set to:
 style#:#refresh_entries#:#Refresh Entries
 style#:#entries_reloaded#:#All entries have been reloaded
-style#:#msg_sub_style_created#:#The sub style has been created
+style#:#msg_sub_style_created#:#The sub style has been created.
 style#:#style#:#Style
 style#:#sub_style_settings#:#Sub Style Assignment
 style#:#parent#:#Parent Style
@@ -15960,15 +15960,15 @@ style#:#update_variables#:#Update Variables
 style#:#less_file_updated#:#The less variables have been updated.
 style#:#settings_of_substyle#:#Manage sub style
 style#:#settings_of_style#:#Manage style
-style#:#of_parent#:#of parent
+style#:#of_parent#:#of parent:
 style#:#from_skin#:#of skin:
 style#:#dir_copied_from#:#The directory has been copied to from:
 style#:#to#:#to:
 style#:#dir_deleted#:#The following directory has been deleted:
-style#:#sty_create_new_system_style#:#Create a new system style
-style#:#sty_create_new_system_sub_style#:#Create a new system sub style
-style#:#sty_import_system_style#:#Import an existing system style as zip
-style#:#sty_copy_other_system_style#:#Clone an existing system style
+style#:#sty_create_new_system_style#:#Create a new system style.
+style#:#sty_create_new_system_sub_style#:#Create a new system sub style.
+style#:#sty_import_system_style#:#Import an existing system style as zip.
+style#:#sty_copy_other_system_style#:#Clone an existing system style.
 style#:#sub_style_id#:#Sub Style ID
 style#:#sub_style_name#:#Sub Style Name
 style#:#less_variables_file_not_included#:#The less variables file:
@@ -15977,8 +15977,8 @@ style#:#can_not_read_less_file#:#Cannot read less file. Path:
 style#:#msg_sys_style_created#:#The new system style has successfully been created.
 style#:#skin_id_description#:#Skins are container for styles and sub styles. The skin ID sets the name of the folder that holds all style and sub style information. Only letters, numbers as well as hyphens or underline characters are to be used in skin ID's.
 style#:#skin_name_description#:#The skin name can be used to describe the area of application of the skin in human readable form. It will appear in all UI elements allowing the selection of skins.
-style#:#style_id_description#:#The style id is used as name for style specific files such as css and less placed inside the skins folder. Only letters, numbers as well as hyphens or underline characters are to be used in skin ID's.
-style#:#style_name_description#:#The style name can be used to describe the area of application of the style in human readable form. It will appear in all UI elements allowing the selection of skins.
+style#:#style_id_description#:#The style id is used as name for style specific files such as css and less placed inside the skins folder. Only letters, numbers as well as hyphens or underline characters are to be used in style ID's.
+style#:#style_name_description#:#The style name can be used to describe the area of application of the style in human readable form. It will appear in all UI elements allowing the selection of styles.
 style#:#sub_style#:#Sub Style
 style#:#image_dir_description#:#Folder to store images (mostly icons) of the skin into. This directory can be shared with other styles and sub styles of this skin.
 style#:#font_dir_description#:#Folder to store fonts of the skin into. This directory can be shared with other styles and sub styles of this skin.
@@ -16016,4 +16016,5 @@ style#:#preview#:#Preview
 style#:#icons_gallery#:#Icons Gallery
 style#:#cant_delete_style_with_substyles#:#Styles with sub styles cannot be deleted.
 style#:#style_assignments_deleted#:#Style assignments of the following Sub Style have been deleted:
+style#:#skin_id_exists#:#There exists already a skin with this ID.
 style#:#usages#:#Usages:
