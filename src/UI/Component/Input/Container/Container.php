@@ -1,14 +1,22 @@
 <?php
 
-/* Copyright (c) 2016 Fabian Schmid <fs@studer-raimann.ch> Extended GPL, see docs/LICENSE */
-/* Copyright (c) 2016 Richard Klees <richard.klees@concepts-and-training.de> Extended GPL, see docs/LICENSE */
-
-namespace ILIAS\UI\Component\Filter;
+namespace ILIAS\UI\Component\Input\Container;
 
 /**
  * Bundles some filter items together to form a complete filter. This interface represents the state of the filter after an input has applied to.
  */
-interface FilterWithInput extends Component {
+interface Container extends \ILIAS\UI\Component\Component {
+
+	/**
+	 * @return \ILIAS\UI\Component\Input\Item[]
+	 */
+	public function getItems();
+
+	/**
+	 * @param array|null $input defaults to $_POST
+	 * @return FilterWithInput
+	 */
+	public function withInput(array $input = null);
 
 	/**
 	 * Convenience method for count($this->validationErrors()) == 0.

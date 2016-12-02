@@ -29,7 +29,11 @@ class NoUIFactory implements Factory {
 	public function image() {}
 	public function legacy($content) {}
 	public function panel() {}
+<<<<<<< HEAD
 	public function filter() {}
+=======
+	public function input() {}
+>>>>>>> UI_Repository_Selector
 }
 
 class LoggingRegistry implements ResourceRegistry {

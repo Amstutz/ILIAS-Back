@@ -82,8 +82,8 @@ class Factory implements \ILIAS\UI\Factory
 	/**
 	 * @inheritdoc
 	 */
-	public function filter()
+	public function input()
 	{
-		return new Component\Filter\Factory();
+		return new Component\Input\Factory();
 	}
 }

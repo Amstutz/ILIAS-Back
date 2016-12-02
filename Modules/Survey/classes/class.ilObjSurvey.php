@@ -547,7 +547,7 @@ class ilObjSurvey extends ilObject
 			return $question_id;
 		}
 
-		$duplicate_id = $question_gui->object->duplicate(true);
+		$duplicate_id = $question_gui->object->duplicate(true, "", "", "", $this->getId());
 		return $duplicate_id;
 	}
 
@@ -5857,8 +5857,8 @@ class ilObjSurvey extends ilObject
 			}			
 		}
 	}
-	
-	protected function getNotificationTargetUserIds($a_use_invited)
+
+	public function getNotificationTargetUserIds($a_use_invited)
 	{
 		global $tree;
 		

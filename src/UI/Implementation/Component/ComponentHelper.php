@@ -39,6 +39,31 @@ trait ComponentHelper {
 	}
 
 	/**
+	 * Throw an InvalidArgumentException if $value is no boolean.
+	 *
+	 * @param	string	$which
+	 * @param	mixed	$value
+	 * @throws 	\InvalidArgumentException	if $check = false
+	 * @return null
+	 */
+	protected function checkBoolArg($which, $value) {
+		$this->checkArg($which, is_bool($value), $this->wrongTypeMessage("boolean", $value));
+	}
+
+
+	/**
+	 * Throw an InvalidArgumentException if $value is no Callable.
+	 *
+	 * @param	string	$which
+	 * @param	mixed	$value
+	 * @throws 	\InvalidArgumentException	if $check = false
+	 * @return null
+	 */
+	protected function checkCallableArg($which, $value) {
+		$this->checkArg($which, is_callable($value), $this->wrongTypeMessage("callable", $value));
+	}
+
+	/**
 	 * Throw an InvalidArgumentException if $value is no string.
 	 *
 	 * @param	string	$which
