@@ -9,33 +9,37 @@ function base() {
 	$f = $DIC->ui()->factory();
 	$renderer = $DIC->ui()->renderer();
 
+    $validator = new \ILIAS\UI\Implementation\Component\Input\Validation(function ($res) {
+        return "Hello World"==$res;
+    },"Hello World Validation 1");
+
 	$text_input1 = $f->input()->item()->field()->text("Example Field")
-			->withValidator(function ($res) {
-				return "Hello World"==$res;
-			})
+			->withValidator($validator)
 			->withTitle("TODO")
 			->required(true);
 
 	$text_input2 = $f->input()->item()->field()->text("Example Field 2")
-			->withValidator(function ($res) {
-				return "Hello World"==$res;
-			})
+			->withValidator($validator)
 			->withTitle("TODO2")
 			->required(true);
 	$html = "";
 
+    $form = $f->input()->container()->form()
+        ->standard("#",[$text_input1,$text_input2]);
+
 	if($_POST){
+        $form = $form->withPostInput();
+        if($form->hasValidContent()){
+            foreach($form->content() as $content_item){
+                $html .= "Valid content: ".$content_item."</br>";
+            }
 
-		$text_input = $text_input1->withContent($_POST['TODO']);
-		if($text_input1->validate()){
-			$html .= $text_input1->content();
-		}else{
-			$html .= "Error: ".$_POST['TODO'];
-		}
+        }else{
+            foreach($form->validationErrors() as $error){
+                $html .= "Validation Error from ".$error->getItem()->title().": ".$error->getMessage()."</br>";
+            }
+        }
 	}
-
-	$form = $f->input()->container()->form()
-			->standard("#",[$text_input1,$text_input2]);
 
 	$html .= $renderer->render($form);
 

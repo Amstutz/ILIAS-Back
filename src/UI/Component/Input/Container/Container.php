@@ -35,7 +35,7 @@ interface Container extends \ILIAS\UI\Component\Component {
 
 	/**
 	 * @throws \LogicException if filter has not been validated
-	 * @return string[]
+	 * @return ValidationMessageCollector
 	 */
 	public function validationErrors();
 }

@@ -3,6 +3,7 @@
 namespace ILIAS\UI\Implementation\Component\Input\Item;
 
 use ILIAS\UI\Implementation\Component\ComponentHelper;
+use ILIAS\UI\Implementation\Component\Input\ValidationMessageCollector;
 
 /**
  * One item in the filter, might be composed from different input elements,
@@ -82,21 +83,30 @@ class Item  {
 	}
 
 	public function content(){
-		if($this->validate()){
+        $collector = new ValidationMessageCollector();
+		if($this->validate($collector)){
 			return $this->content;
 		}else{
+            //TODO do something with the collector here?
 			throw new \Exception("Invalid Content");
 		}
-
 	}
 
 
-	public function validate(){
+	public function validate(ValidationMessageCollector $collector){
 		if($this->validator){
-			return call_user_func($this->validator,$this->content);
+			return $this->validator->validate($this->content, $collector, $this);
 		}
-		return false;
+		return true;
 	}
+
+    /**
+     * TODO: Cache this shorthand
+     * @return bool
+     */
+    public function validates(){
+        return $this->validate(new ValidationMessageCollector());
+    }
 
 	/**
 	 * @inheritdocs
@@ -121,11 +131,11 @@ class Item  {
 	/**
 	 * @inheritdocs
 	 */
-	public function withValidator(callable $validator){
-		$this->checkCallableArg("required", $validator);
+	public function withValidator(\ILIAS\UI\Implementation\Component\Input\Validation $validator){
 		$clone = clone $this;
 		$clone->validator = $validator;
-		return $clone;
+
+        return $clone;
 	}
 
 

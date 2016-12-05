@@ -28,7 +28,7 @@ class Renderer extends AbstractComponentRenderer {
 		//$tpl->setVariable("ID","TODO");
 		$tpl->setVariable("FOR",$component->title());
 		$tpl->setVariable("TITLE",$component->title());
-		if($component->validate()){
+		if($component->validates()){
 			$tpl->setVariable("VALUE",$component->content());
 		}else{
 			$tpl->setVariable("VALUE",$component->defaultsTo());
