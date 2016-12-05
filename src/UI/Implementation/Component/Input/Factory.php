@@ -28,4 +28,10 @@ class Factory implements I\Factory {
 	public function item() {
 		return new Item\Factory();
 	}
+	/**
+	 * @inheritdoc
+	 */
+	public function validation() {
+		return new Validation\Factory();
+	}
 }

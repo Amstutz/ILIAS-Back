@@ -86,4 +86,19 @@ interface Factory {
 	 */
 	public function item();
 
+	/**
+	 * ---
+	 * description:
+	 *   purpose: >
+	 *     Validation components are used to validate various kinds of inputs.
+	 *   composition: >
+	 *     Validation components are usually placed inside of other inputs components. They can not work on their own.
+	 *   effect: >
+	 *     Validations show wheter an input is (or will be) accepted by the system or is (or was) rejected.
+	 *
+	 * ----
+	 * @return  \ILIAS\UI\Component\Input\Validation\Factory
+	 */
+	public function validation();
+
 }

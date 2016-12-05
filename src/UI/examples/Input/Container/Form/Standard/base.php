@@ -9,7 +9,7 @@ function base() {
 	$f = $DIC->ui()->factory();
 	$renderer = $DIC->ui()->renderer();
 
-    $validator = new \ILIAS\UI\Implementation\Component\Input\Validation(function ($res) {
+    $validator = $f->input()->validation()->custom(function ($res) {
         return "Hello World"==$res;
     },"Hello World Validation 1");
 

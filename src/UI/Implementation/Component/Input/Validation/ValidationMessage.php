@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ILIAS\UI\Implementation\Component\Input;
+namespace ILIAS\UI\Implementation\Component\Input\Validation;
 
 /**
  * Todo

@@ -72,7 +72,7 @@ interface Item extends \ILIAS\UI\Component\Component {
 	 * @param   callable $validator
 	 * @return  Item
 	 */
-	public function withValidator(\ILIAS\UI\Implementation\Component\Input\Validation $validator);
+	public function withValidator(\ILIAS\UI\Component\Input\Validation\Validation $validator);
 
 
 	/**

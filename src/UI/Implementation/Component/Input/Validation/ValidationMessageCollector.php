@@ -1,6 +1,6 @@
 <?php
 
-namespace ILIAS\UI\Implementation\Component\Input;
+namespace ILIAS\UI\Implementation\Component\Input\Validation;
 
 
 /**
@@ -8,7 +8,7 @@ namespace ILIAS\UI\Implementation\Component\Input;
  *
  * @package ILIAS\UI\Implementation\Component\Filter
  */
-class ValidationMessageCollector implements \Iterator{
+class ValidationMessageCollector implements \ILIAS\UI\Component\Input\Validation\ValidationMessageCollector {
 
     /**
      * @var ValidationMessage[]

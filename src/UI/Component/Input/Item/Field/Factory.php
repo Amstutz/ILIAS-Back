@@ -5,7 +5,7 @@ namespace ILIAS\UI\Component\Input\Item\Field;
 /**
  * Factory for Filters.
  */
-interface Factory extends \ILIAS\UI\Component\Component {
+interface Factory {
 	/**
 	 * ---
 	 * description:

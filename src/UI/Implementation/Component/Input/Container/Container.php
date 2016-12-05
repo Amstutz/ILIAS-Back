@@ -32,7 +32,7 @@ class Container  implements \ILIAS\UI\Component\Input\Container\Container{
 		$types = [I\Item::class];
 		$this->checkArgListElements("items", $items, $types);
 
-        $this->collector = new ValidationMessageCollector();
+        $this->collector = new \ILIAS\UI\Implementation\Component\Input\Validation\ValidationMessageCollector();
 
 		/**
 		 * TODO: Is this a good construct, do items need keys. Do they need to know about their key? If yes, who

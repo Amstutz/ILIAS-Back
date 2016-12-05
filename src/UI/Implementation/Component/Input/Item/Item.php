@@ -9,7 +9,7 @@ use ILIAS\UI\Implementation\Component\Input\ValidationMessageCollector;
  * One item in the filter, might be composed from different input elements,
  * which all act as one filter input.
  */
-class Item  {
+class Item  implements \ILIAS\UI\Component\Input\Item\Item{
 	use ComponentHelper;
 
 	/**
@@ -105,7 +105,7 @@ class Item  {
      * @return bool
      */
     public function validates(){
-        return $this->validate(new ValidationMessageCollector());
+        return $this->validate(new \ILIAS\UI\Implementation\Component\Input\Validation\ValidationMessageCollector());
     }
 
 	/**
@@ -131,7 +131,7 @@ class Item  {
 	/**
 	 * @inheritdocs
 	 */
-	public function withValidator(\ILIAS\UI\Implementation\Component\Input\Validation $validator){
+	public function withValidator(\ILIAS\UI\Component\Input\Validation\Validation $validator){
 		$clone = clone $this;
 		$clone->validator = $validator;
 
