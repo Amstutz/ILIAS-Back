@@ -194,7 +194,7 @@ class FilterItemTest extends ILIAS_UI_TestBase {
 			$f->text("label", "")->withValidator(function ($res, ValidationMessageCollector $collector) use ($some_string, $some_error_message1) {
 				$this->assertEquals($some_string, $res);
 				$collector->error($some_error_message1);
-			})->withValidator(function ($res, ValidationMessageCollector $collector) use ($some_string, $some_error_message2) {
+			})->addValidator(function ($res, ValidationMessageCollector $collector) use ($some_string, $some_error_message2) {
 				$this->assertEquals($some_string, $res);
 				$collector->error($some_error_message2);
 			}),

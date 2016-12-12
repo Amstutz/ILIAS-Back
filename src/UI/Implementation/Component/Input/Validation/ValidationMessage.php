@@ -6,7 +6,7 @@ namespace ILIAS\UI\Implementation\Component\Input\Validation;
 /**
  * Todo
  */
-class ValidationMessage {
+class ValidationMessage implements \ILIAS\UI\Component\Input\Validation\ValidationMessage{
 
     /**
      * @var \ILIAS\UI\Component\Input\Item\Item

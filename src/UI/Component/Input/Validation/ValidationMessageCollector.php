@@ -8,7 +8,7 @@ namespace ILIAS\UI\Component\Input\Validation;
  */
 interface ValidationMessageCollector extends \Iterator{
 
-	public function withMessage(ValidationMessage $message);
+	public function withMessage(\ILIAS\UI\Component\Input\Validation\ValidationMessage $message);
     public function getMessages();
-    public function join(ILIAS\UI\Component\Input\Validation\ValidationMessageCollector $collector);
+    public function join(\ILIAS\UI\Component\Input\Validation\ValidationMessageCollector $collector);
 }

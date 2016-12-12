@@ -82,18 +82,19 @@ class Item  implements \ILIAS\UI\Component\Input\Item\Item{
 		return $clone;
 	}
 
-	public function content(){
-        $collector = new ValidationMessageCollector();
-		if($this->validate($collector)){
-			return $this->content;
-		}else{
-            //TODO do something with the collector here?
+	//Todo: how to output invalid content for form to output after failed validation
+	public function content($validate = true){
+        $collector = new \ILIAS\UI\Implementation\Component\Input\Validation\ValidationMessageCollector();
+		if($validate && !$this->validate($collector)){
+			//TODO do something with the collector here?
 			throw new \Exception("Invalid Content");
+		}else{
+			return $this->content;
 		}
 	}
 
 
-	public function validate(ValidationMessageCollector $collector){
+	public function validate(\ILIAS\UI\Component\Input\Validation\ValidationMessageCollector $collector){
 		if($this->validator){
 			return $this->validator->validate($this->content, $collector, $this);
 		}

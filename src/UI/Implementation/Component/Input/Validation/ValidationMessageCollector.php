@@ -15,7 +15,7 @@ class ValidationMessageCollector implements \ILIAS\UI\Component\Input\Validation
      */
     protected $messages = [];
 
-    public function withMessage(ValidationMessage $message){
+    public function withMessage(\ILIAS\UI\Component\Input\Validation\ValidationMessage $message){
         $this->messages[] = $message;
     }
 
@@ -23,7 +23,7 @@ class ValidationMessageCollector implements \ILIAS\UI\Component\Input\Validation
         return $this->message;
     }
 
-    public function join(ValidationMessageCollector $collector){
+    public function join(\ILIAS\UI\Component\Input\Validation\ValidationMessageCollector $collector){
         $this->messages = array_merge($this->message,$collector->getMessages());
     }
 

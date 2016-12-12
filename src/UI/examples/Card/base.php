@@ -8,11 +8,7 @@ function base() {
 	$f = $DIC->ui()->factory();
 	$renderer = $DIC->ui()->renderer();
 
-	$content = $f->listing()->descriptive(
-		array(
-			"Entry 1" => "Some text",
-			"Entry 2" => "Some more text",
-		)
+	$content = $f->legacy("hello"
 	);
 
 	$image = $f->image()->responsive(

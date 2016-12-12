@@ -28,11 +28,19 @@ class Renderer extends AbstractComponentRenderer {
 		//$tpl->setVariable("ID","TODO");
 		$tpl->setVariable("FOR",$component->title());
 		$tpl->setVariable("TITLE",$component->title());
-		if($component->validates()){
-			$tpl->setVariable("VALUE",$component->content());
-		}else{
-			$tpl->setVariable("VALUE",$component->defaultsTo());
+		$tpl->setVariable("VALUE",$component->content(false));
+
+
+		if($component instanceof withInput){
+			if($component->validates()){
+				$tpl->touchBlock("success");
+			}else{
+				$tpl->touchBlock("error");
+			}
 		}
+
+
+
 		$tpl->setVariable("LABEL",$component->label());
 		if($component->isRequired()){
 			$tpl->touchBlock("required");

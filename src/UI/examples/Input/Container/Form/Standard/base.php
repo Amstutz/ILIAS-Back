@@ -9,17 +9,21 @@ function base() {
 	$f = $DIC->ui()->factory();
 	$renderer = $DIC->ui()->renderer();
 
-    $validator = $f->input()->validation()->custom(function ($res) {
+    $validator1 = $f->input()->validation()->custom(function ($res) {
         return "Hello World"==$res;
-    },"Hello World Validation 1");
+    },"Must be Hello World");
+
+	$validator2 = $f->input()->validation()->custom(function ($res) {
+		return "Hello World"!=$res;
+	},"Must not be Hello world");
 
 	$text_input1 = $f->input()->item()->field()->text("Example Field")
-			->withValidator($validator)
-			->withTitle("TODO")
+			->withValidator($validator1)
+			->withTitle("TODO 1")
 			->required(true);
 
 	$text_input2 = $f->input()->item()->field()->text("Example Field 2")
-			->withValidator($validator)
+			->withValidator($validator2)
 			->withTitle("TODO2")
 			->required(true);
 	$html = "";

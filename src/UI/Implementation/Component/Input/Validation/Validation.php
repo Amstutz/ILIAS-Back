@@ -6,7 +6,7 @@ namespace ILIAS\UI\Implementation\Component\Input\Validation;
 /**
  * Todo
  */
-class Validation implements \ILIAS\UI\Component\Input\Validation\Validation{
+abstract class Validation implements \ILIAS\UI\Component\Input\Validation\Validation{
     /**
      * @var callable
      */
@@ -37,10 +37,14 @@ class Validation implements \ILIAS\UI\Component\Input\Validation\Validation{
         return $this->method;
     }
 
-    public function invert(){
+    public function invert($inverted = true){
         $clone = clone $this;
-        $this->invert = true;
+        $this->invert = $inverted;
         return $clone;
+    }
+
+    public function isInverted(){
+        return $this->invert;
     }
 
     /**
@@ -49,9 +53,10 @@ class Validation implements \ILIAS\UI\Component\Input\Validation\Validation{
     public function validate($content_to_validate,
                              \ILIAS\UI\Component\Input\Validation\ValidationMessageCollector $collector,
                              \ILIAS\UI\Component\Input\Item\Item $item){
+
         $result = call_user_func($this->validation,$content_to_validate);
 
-        if($this->invert()) {
+        if($this->isInverted()) {
             $result = !$result;
 
         }
@@ -59,7 +64,7 @@ class Validation implements \ILIAS\UI\Component\Input\Validation\Validation{
         if($result){
             return true;
         }
-        $collector->withMessage(new ValidationMessage($this->getMessageText(),$item));
+        $collector->withMessage(new \ILIAS\UI\Implementation\Component\Input\Validation\ValidationMessage($this->getMessageText(),$item));
         return false;
     }
 
