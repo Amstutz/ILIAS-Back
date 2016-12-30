@@ -78,4 +78,12 @@ class Factory implements \ILIAS\UI\Factory
 	{
 		return new Component\Panel\Factory();
 	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function input()
+	{
+		return new Component\Input\Factory();
+	}
 }
