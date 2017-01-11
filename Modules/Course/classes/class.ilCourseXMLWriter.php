@@ -52,22 +52,22 @@ class ilCourseXMLWriter extends ilXmlWriter
 	
 
 	/**
-	* constructor
-	* @param	string	xml version
-	* @param	string	output encoding
-	* @param	string	input encoding
-	* @access	public
-	*/
-	function ilCourseXMLWriter(&$course_obj)
+	 * constructor
+	 * 
+	 * @param ilObject $course_obj
+	 * 
+	 * @access	public
+	 */
+	public function __construct($course_obj)
 	{
 		global $ilias;
 
-		parent::ilXmlWriter();
+		parent::__construct();
 
 		$this->EXPORT_VERSION = "2";
 
-		$this->ilias =& $ilias;
-		$this->course_obj =& $course_obj;
+		$this->ilias = $ilias;
+		$this->course_obj = $course_obj;
 	}
 	
 	public function setMode($a_mode)
@@ -359,7 +359,9 @@ class ilCourseXMLWriter extends ilXmlWriter
 		$this->xmlEndTag('Period');		
 		$this->xmlElement('WaitingListAutoFill',null,(int)$this->course_obj->hasWaitingListAutoFill());
 		$this->xmlElement('CancellationEnd',null,($this->course_obj->getCancellationEnd() && !$this->course_obj->getCancellationEnd()->isNull()) ? $this->course_obj->getCancellationEnd()->get(IL_CAL_UNIX) : null);
-		$this->xmlElement('MinMembers',null,(int)$this->course_obj->getSubscriptionMinMembers());		
+		$this->xmlElement('MinMembers',null,(int)$this->course_obj->getSubscriptionMinMembers());	
+		
+		$this->xmlElement('ViewMode', null, $this->course_obj->getViewMode());
 
 		$this->xmlEndTag('Settings');
 

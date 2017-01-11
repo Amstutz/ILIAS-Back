@@ -319,10 +319,7 @@ class assFileUpload extends assQuestion implements ilObjQuestionScoringAdjustabl
 	{
 		$this->lng->loadLanguageModule("form");
 		// remove trailing '/'
-		while (substr($_FILES["upload"]["name"],-1) == '/')
-		{
-			$_FILES["upload"]["name"] = substr($_FILES["upload"]["name"],0,-1);
-		}
+		$_FILES["upload"]["name"] = rtrim($_FILES["upload"]["name"], '/');
 
 		$filename = $_FILES["upload"]["name"];
 		$filename_arr = pathinfo($_FILES["upload"]["name"]);
@@ -651,49 +648,50 @@ class assFileUpload extends assQuestion implements ilObjQuestionScoringAdjustabl
 			$test_id = $row["test_fi"];
 		}
 
-		$this->getProcessLocker()->requestUserSolutionUpdateLock();
-
-		$this->updateCurrentSolutionsAuthorization($active_id, $pass, $authorized);
-
 		$entered_values = false;
-		if( $_POST['cmd'][$this->questionActionCmd] == $this->lng->txt('delete') )
-		{
-			if (is_array($_POST['deletefiles']) && count($_POST['deletefiles']) > 0)
+
+		$this->getProcessLocker()->executeUserSolutionUpdateLockOperation(function() use (&$entered_values, $checkUploadResult, $test_id, $active_id, $pass, $authorized) {
+
+			$this->updateCurrentSolutionsAuthorization($active_id, $pass, $authorized);
+
+			if( $_POST['cmd'][$this->questionActionCmd] == $this->lng->txt('delete') )
 			{
-				$this->deleteUploadedFiles($_POST['deletefiles'], $test_id, $active_id, $authorized);
+				if (is_array($_POST['deletefiles']) && count($_POST['deletefiles']) > 0)
+				{
+					$this->deleteUploadedFiles($_POST['deletefiles'], $test_id, $active_id, $authorized);
+				}
+				else
+				{
+					ilUtil::sendInfo($this->lng->txt('no_checkbox'), true);
+				}
 			}
-			else
+			elseif( $checkUploadResult )
 			{
-				ilUtil::sendInfo($this->lng->txt('no_checkbox'), true);
+				if(!@file_exists($this->getFileUploadPath($test_id, $active_id)))
+				{
+					ilUtil::makeDirParents($this->getFileUploadPath($test_id, $active_id));
+				}
+
+				$version = time();
+				$filename_arr = pathinfo($_FILES["upload"]["name"]);
+				$extension = $filename_arr["extension"];
+				$newfile = "file_" . $active_id . "_" . $pass . "_" . $version . "." . $extension;
+
+				ilUtil::moveUploadedFile($_FILES["upload"]["tmp_name"], $_FILES["upload"]["name"], $this->getFileUploadPath($test_id, $active_id) . $newfile);
+
+				$this->saveCurrentSolution($active_id, $pass, $newfile, $_FILES['upload']['name'], $authorized);
+
+				$entered_values = true;
 			}
-		}
-		elseif( $checkUploadResult )
-		{
-			if(!@file_exists($this->getFileUploadPath($test_id, $active_id)))
-			{
-				ilUtil::makeDirParents($this->getFileUploadPath($test_id, $active_id));
-			}
-			
-			$version = time();
-			$filename_arr = pathinfo($_FILES["upload"]["name"]);
-			$extension = $filename_arr["extension"];
-			$newfile = "file_" . $active_id . "_" . $pass . "_" . $version . "." . $extension;
-			
-			ilUtil::moveUploadedFile($_FILES["upload"]["tmp_name"], $_FILES["upload"]["name"], $this->getFileUploadPath($test_id, $active_id) . $newfile);
-			
-			$this->saveCurrentSolution($active_id, $pass, $newfile, $_FILES['upload']['name'], $authorized);
-			
-			$entered_values = true;
-		}
-		
-		$this->getProcessLocker()->releaseUserSolutionUpdateLock();
+
+		});
 
 		if ($entered_values)
 		{
 			include_once ("./Modules/Test/classes/class.ilObjAssessmentFolder.php");
 			if (ilObjAssessmentFolder::_enabledAssessmentLogging())
 			{
-				$this->logAction($this->lng->txtlng("assessment", "log_user_entered_values", ilObjAssessmentFolder::_getLogLanguage()), $active_id, $this->getId());
+				assQuestion::logAction($this->lng->txtlng("assessment", "log_user_entered_values", ilObjAssessmentFolder::_getLogLanguage()), $active_id, $this->getId());
 			}
 		}
 		else
@@ -701,7 +699,7 @@ class assFileUpload extends assQuestion implements ilObjQuestionScoringAdjustabl
 			include_once ("./Modules/Test/classes/class.ilObjAssessmentFolder.php");
 			if (ilObjAssessmentFolder::_enabledAssessmentLogging())
 			{
-				$this->logAction($this->lng->txtlng("assessment", "log_user_not_entered_values", ilObjAssessmentFolder::_getLogLanguage()), $active_id, $this->getId());
+				assQuestion::logAction($this->lng->txtlng("assessment", "log_user_not_entered_values", ilObjAssessmentFolder::_getLogLanguage()), $active_id, $this->getId());
 			}
 		}
 		
@@ -760,12 +758,7 @@ class assFileUpload extends assQuestion implements ilObjQuestionScoringAdjustabl
 	}
 
 	/**
-	 * Reworks the allready saved working data if neccessary
-	 *
-	 * @access protected
-	 * @param integer $active_id
-	 * @param integer $pass
-	 * @param boolean $obligationsAnswered
+	 * {@inheritdoc}
 	 */
 	protected function reworkWorkingData($active_id, $pass, $obligationsAnswered, $authorized)
 	{
@@ -861,35 +854,28 @@ class assFileUpload extends assQuestion implements ilObjQuestionScoringAdjustabl
 		$text = parent::getRTETextWithMediaObjects();
 		return $text;
 	}
-
+	
 	/**
-	* Creates an Excel worksheet for the detailed cumulated results of this question
-	*
-	* @param object $worksheet Reference to the parent excel worksheet
-	* @param object $startrow Startrow of the output in the excel worksheet
-	* @param object $active_id Active id of the participant
-	* @param object $pass Test pass
-	* @param object $format_title Excel title format
-	* @param object $format_bold Excel bold format
-	* @param array $eval_data Cumulated evaluation data
-	*/
-	public function setExportDetailsXLS(&$worksheet, $startrow, $active_id, $pass, &$format_title, &$format_bold)
+	 * {@inheritdoc}
+	 */
+	public function setExportDetailsXLS($worksheet, $startrow, $active_id, $pass)
 	{
-		include_once ("./Services/Excel/classes/class.ilExcelUtils.php");
-		$worksheet->writeString($startrow, 0, ilExcelUtils::_convert_text($this->lng->txt($this->getQuestionType())), $format_title);
-		$worksheet->writeString($startrow, 1, ilExcelUtils::_convert_text($this->getTitle()), $format_title);
+		parent::setExportDetailsXLS($worksheet, $startrow, $active_id, $pass);
+
 		$i = 1;
 		$solutions = $this->getSolutionValues($active_id, $pass);
 		foreach ($solutions as $solution)
 		{
-			$worksheet->writeString($startrow + $i, 0, ilExcelUtils::_convert_text($this->lng->txt("result")), $format_bold);
+			$worksheet->setCell($startrow + $i, 0, $this->lng->txt("result"));
+			$worksheet->setBold($worksheet->getColumnCoord(0) . ($startrow + $i));
 			if (strlen($solution["value1"]))
 			{
-				$worksheet->write($startrow + $i, 1, ilExcelUtils::_convert_text($solution["value1"]));
-				$worksheet->write($startrow + $i, 2, ilExcelUtils::_convert_text($solution["value2"]));
+				$worksheet->setCell($startrow + $i, 1, $solution["value1"]);
+				$worksheet->setCell($startrow + $i, 2, $solution["value2"]);
 			}
 			$i++;
 		}
+
 		return $startrow + $i + 1;
 	}
 	
@@ -1122,7 +1108,7 @@ class assFileUpload extends assQuestion implements ilObjQuestionScoringAdjustabl
 	 * 
 	 * (overwrites method in class assQuestion)
 	 * 
-	 * @global ilDB $ilDB
+	 * @global ilDBInterface $ilDB
 	 * @param integer $active_id
 	 * @param integer $pass
 	 * @return boolean $answered

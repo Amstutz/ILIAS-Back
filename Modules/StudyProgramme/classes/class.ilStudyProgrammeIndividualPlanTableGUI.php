@@ -20,7 +20,10 @@ class ilStudyProgrammeIndividualPlanTableGUI extends ilTable2GUI {
 	public function __construct($a_parent_obj, ilStudyProgrammeUserAssignment $a_ass) {
 		parent::__construct($a_parent_obj);
 
-		global $ilCtrl, $lng, $ilDB;
+		global $DIC;
+		$ilCtrl = $DIC['ilCtrl'];
+		$lng = $DIC['lng'];
+		$ilDB = $DIC['ilDB'];
 		$this->ctrl = $ilCtrl;
 		$this->lng = $lng;
 		$this->db = $ilDB;
@@ -96,8 +99,15 @@ class ilStudyProgrammeIndividualPlanTableGUI extends ilTable2GUI {
 			if ($completion_by_id) {
 				$completion_by = ilObjUser::_lookupLogin($completion_by_id);
 				if (!$completion_by) {
-					$completion_by = ilObject::_lookupTitle($completion_by_id);
-				}	
+					$type = ilObject::_lookupType($completion_by_id);
+					if($type == "crsr") {
+						$completion_by = ilContainerReference::_lookupTitle($completion_by_id);
+					} else {
+						$completion_by = ilObject::_lookupTitle($completion_by_id);
+					}
+				}
+			} else {
+				$completion_by = implode(", ", $progress->getNamesOfCompletedOrAccreditedChildren());
 			}
 			$plan[] = array( "status" => $progress->getStatus()
 						   , "title" => $node->getTitle()

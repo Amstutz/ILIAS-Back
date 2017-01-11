@@ -52,7 +52,7 @@ class ilLOUserResults
 			'tries' => 0,
 			'is_final' => 0
 		);
-		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		while($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT))
 		{
 			$ur['status'] = $row->status;
 			$ur['result_perc'] = $row->result_perc;
@@ -156,31 +156,42 @@ class ilLOUserResults
 	 * @param array $a_user_ids
 	 * @param bool $a_remove_initial
 	 * @param bool $a_remove_qualified
+	 * @param array $a_objective_ids
 	 * @return bool
 	 */
-	public static function deleteResultsFromLP($a_course_id, array $a_user_ids, $a_remove_initial, $a_remove_qualified)
+	public static function deleteResultsFromLP($a_course_id, array $a_user_ids, $a_remove_initial, $a_remove_qualified, array $a_objective_ids)
 	{
 		global $ilDB;
 		
-		if(!(int)$a_course_id || !sizeof($a_user_ids))
+		if(!(int)$a_course_id || 
+			!sizeof($a_user_ids))
 		{
 			return false;
 		}
 		
-		$sql = "DELETE FROM loc_user_results".
+		$base_sql = "DELETE FROM loc_user_results".
 			" WHERE course_id = ".$ilDB->quote($a_course_id, "integer").
 			" AND ".$ilDB->in("user_id", $a_user_ids, "", "integer");
 		
-		if(!(bool)$a_remove_initial || !(bool)$a_remove_qualified)
+		if((bool)$a_remove_initial)
 		{
-			if((bool)$a_remove_initial)
-			{
-				$sql .= " AND type = ".$ilDB->quote(self::TYPE_INITIAL, "integer");
-			}
-			else
-			{
-				$sql .= " AND type = ".$ilDB->quote(self::TYPE_QUALIFIED, "integer");
-			}
+			$sql = $base_sql.
+				" AND type = ".$ilDB->quote(self::TYPE_INITIAL, "integer");
+			$ilDB->manipulate($sql);		
+		}
+		
+		if((bool)$a_remove_qualified)
+		{
+			$sql = $base_sql.
+				" AND type = ".$ilDB->quote(self::TYPE_QUALIFIED, "integer");
+			$ilDB->manipulate($sql);		
+		}
+		
+		if(is_array($a_objective_ids))
+		{
+			$sql = $base_sql.
+				" AND ".$ilDB->in("objective_id", $a_objective_ids, "", "integer");
+			$ilDB->manipulate($sql);	
 		}
 				
 		$ilDB->manipulate($sql);
@@ -335,12 +346,23 @@ class ilLOUserResults
 		
 		$res = array();
 		
+		$settings = ilLOSettings::getInstanceByObjId($this->course_obj_id);
+
 		$set = $ilDB->query("SELECT *".
 			" FROM loc_user_results".
 			" WHERE course_id = ".$ilDB->quote($this->course_obj_id, "integer").
 			" AND user_id = ".$ilDB->quote($this->user_id, "integer"));
 		while($row = $ilDB->fetchAssoc($set))
 		{
+			// do not read initial test results, if disabled.
+			if(
+				$row['type'] == self::TYPE_INITIAL &&
+				!$settings->worksWithInitialTest()
+			)
+			{
+				continue;
+			}
+			
 			$objective_id = $row["objective_id"];
 			$type = $row["type"];
 			unset($row["objective_id"]);
@@ -504,7 +526,7 @@ class ilLOUserResults
 				'AND user_id = '.$ilDB->quote($a_user_id,'integer');
 		
 		$res = $ilDB->query($query);
-		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		while($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT))
 		{
 			return true;
 		}

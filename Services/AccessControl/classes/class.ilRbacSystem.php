@@ -175,7 +175,7 @@ class ilRbacSystem
 
 			$ops = array();
 
-			while ($row = $r->fetchRow(DB_FETCHMODE_OBJECT))
+			while ($row = $r->fetchRow(ilDBConstants::FETCHMODE_OBJECT))
 			{
 				if (in_array($row->rol_id, $roles))
 				{
@@ -264,7 +264,7 @@ class ilRbacSystem
 
 			$r = $this->ilDB->query($q);
 
-			while ($row = $r->fetchRow(DB_FETCHMODE_OBJECT))
+			while ($row = $r->fetchRow(ilDBConstants::FETCHMODE_OBJECT))
 			{
 				if (in_array($row->rol_id, $roles[$row->ref_id]))
 				{
@@ -397,9 +397,25 @@ class ilRbacSystem
 	{
 		include_once './Services/Container/classes/class.ilMemberViewSettings.php';
 		$settings = ilMemberViewSettings::getInstance();
-		if($settings->isEnabled() and isset($_GET['mv']))
+		
+		if(!isset($_GET['mv']))
 		{
-			$settings->toggleActivation((int) $_GET['ref_id'], (int) $_GET['mv']);
+			// nothing to do
+			return true;
+		}
+		
+		// disable member view
+		if(!$_GET['mv'])
+		{
+			// force deactivation
+			$settings->toggleActivation((int) $_GET['ref_id'], false);
+		}
+		else
+		{
+			if($this->checkAccess('write', (int) $_GET['ref_id']))
+			{
+				$settings->toggleActivation((int) $_GET['ref_id'], true);
+			}
 		}
 		
 		if(!$settings->isActive())

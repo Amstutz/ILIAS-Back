@@ -45,7 +45,7 @@ class ilConditionHandlerGUI
 
 		include_once "./Services/AccessControl/classes/class.ilConditionHandler.php";
 
-		$this->ch_obj =& new ilConditionHandler();
+		$this->ch_obj = new ilConditionHandler();
 
 		$this->ctrl =& $ilCtrl;
 		$this->gui_obj =& $gui_obj;
@@ -225,7 +225,7 @@ class ilConditionHandlerGUI
 		
 		include_once "./Services/AccessControl/classes/class.ilConditionHandler.php";
 
-		$this->ch_obj =& new ilConditionHandler();
+		$this->ch_obj = new ilConditionHandler();
 
 		if($a_ref_id)
 		{
@@ -289,8 +289,9 @@ class ilConditionHandlerGUI
 			)
 		);
 
-		$this->tpl->setVariable('TABLE_CONDITIONS',$table->getHTML());
-		$this->tpl->setContent($table->getHTML());
+		$h = $table->getHTML();
+		$this->tpl->setVariable('TABLE_CONDITIONS',$h);
+		//$this->tpl->setContent($h);
 	}
 
 	/**

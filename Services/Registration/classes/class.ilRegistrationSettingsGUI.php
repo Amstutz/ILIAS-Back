@@ -42,14 +42,14 @@ class ilRegistrationSettingsGUI
 	var $tpl;
 	var $ref_id;
 
-	function ilRegistrationSettingsGUI()
+	function __construct()
 	{
 		global $ilCtrl,$tpl,$lng;
 
-		$this->tpl =& $tpl;
-		$this->ctrl =& $ilCtrl;
+		$this->tpl = $tpl;
+		$this->ctrl = $ilCtrl;
 		
-		$this->lng =& $lng;
+		$this->lng = $lng;
 		$this->lng->loadLanguageModule('administration');
 		$this->lng->loadLanguageModule('registration');
 		$this->lng->loadLanguageModule('user');
@@ -1019,10 +1019,10 @@ class ilRegistrationSettingsGUI
 			switch($limit)
 			{
 				case "absolute":
-					$date = $this->form_gui->getInput("abs_date");			
-					$date = $date["date"];
-					if($date < date("Y-m-d"))
-					{
+					$date_input = $this->form_gui->getItemByPostVar("abs_date");	
+					if($date_input->getDate()->get(IL_CAL_DATE) < date("Y-m-d"))
+					{						
+						$date_input->setAlert($this->lng->txt("form_msg_wrong_date"));
 						$valid = false;
 					}				
 					break;
@@ -1030,7 +1030,7 @@ class ilRegistrationSettingsGUI
 				case "relative":
 					$date = $this->form_gui->getInput("rel_date");						
 					if(!array_sum($date))
-					{
+					{						
 						$valid = false;
 					}
 					else

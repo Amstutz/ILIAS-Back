@@ -184,7 +184,7 @@ class ilExSubmissionTeamGUI
 		// #13414
 		$read_only = !$this->canEditTeam();
 				
-		if ($this->submission->getAssignment()->afterDeadlineStrict())
+		if ($this->submission->getAssignment()->afterDeadlineStrict(false))
 		{
 			ilUtil::sendInfo($this->lng->txt("exercise_time_over"));
 		}
@@ -209,8 +209,14 @@ class ilExSubmissionTeamGUI
 		}
 		
 		include_once "Modules/Exercise/classes/class.ilExAssignmentTeamTableGUI.php";
-		$tbl = new ilExAssignmentTeamTableGUI($this, "submissionScreenTeam",
-			ilExAssignmentTeamTableGUI::MODE_EDIT, $this->team, $read_only);
+		$tbl = new ilExAssignmentTeamTableGUI(
+			$this, 
+			"submissionScreenTeam",
+			ilExAssignmentTeamTableGUI::MODE_EDIT, 
+			$this->exercise->getRefId(),
+			$this->team, 
+			$read_only			
+		);
 		
 		$this->tpl->setContent($tbl->getHTML());				
 	}
@@ -362,18 +368,21 @@ class ilExSubmissionTeamGUI
 			$this->ctrl->redirect($this, $cancel_cmd);
 		}
 				
-		$team_deleted = false;
-		$members = $this->team->getMembers();
-		if(sizeof($members) <= sizeof($ids))
+		$team_deleted = (bool)$a_full_delete;		
+		if(!$team_deleted)
 		{
-			if(sizeof($members) == 1 && $members[0] == $ilUser->getId())
+			$members = $this->team->getMembers();
+			if(sizeof($members) <= sizeof($ids))
 			{
-				$team_deleted = true;
-			}						
-			else
-			{
-				ilUtil::sendFailure($this->lng->txt("exc_team_at_least_one"), true);
-				$this->ctrl->redirect($this, $cancel_cmd);
+				if(sizeof($members) == 1 && $members[0] == $ilUser->getId())
+				{
+					$team_deleted = true;
+				}						
+				else
+				{
+					ilUtil::sendFailure($this->lng->txt("exc_team_at_least_one"), true);
+					$this->ctrl->redirect($this, $cancel_cmd);
+				}
 			}
 		}
 		
