@@ -35,14 +35,31 @@ abstract class Modal implements Component\Modal\Modal {
 	protected $close_signal;
 
 	/**
+	 * @var Signal
+	 */
+	protected $replace_signal;
+
+	/**
 	 * @var string
 	 */
 	protected $async_render_url = '';
 
 	/**
+	 * @var string
+	 */
+	protected $async_render_url_params_code_body = '';
+
+	/**
+	 * @var string
+	 */
+	protected $async_render_url_params_code_params = [];
+
+	/**
 	 * @var bool
 	 */
 	protected $close_with_keyboard = true;
+
+	protected $replacement = null;
 
 	/**
 	 * @param SignalGeneratorInterface $signal_generator
@@ -66,6 +83,23 @@ abstract class Modal implements Component\Modal\Modal {
 		$this->checkStringArg('url', $url);
 		$clone = clone $this;
 		$clone->async_render_url = $url;
+		return $clone;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getAsyncUrlParamsCode() {
+		return $this->async_render_url_params_code;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function withAsyncUrlParamsCode($body) {
+		$this->checkStringArg('code', $body);
+		$clone = clone $this;
+		$clone->async_render_url_params_code = $body;
 		return $clone;
 	}
 
@@ -103,6 +137,13 @@ abstract class Modal implements Component\Modal\Modal {
 	/**
 	 * @inheritdoc
 	 */
+	public function getReplaceSignal() {
+		return $this->replace_signal;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function withResetSignals() {
 		$clone = clone $this;
 		$clone->initSignals();
@@ -130,6 +171,27 @@ abstract class Modal implements Component\Modal\Modal {
 	protected function initSignals() {
 		$this->show_signal = $this->signal_generator->create();
 		$this->close_signal = $this->signal_generator->create();
+		$this->replace_signal = $this->signal_generator->create();
+	}
+
+	/**
+	 * Todo
+	 *
+	 * @return Signal
+	 */
+	public function withReplacement(Component\Modal\Modal $replacement){
+		$clone = clone $this;
+		$clone->replacement = $replacement;
+		return $clone;
+	}
+
+	/**
+	 * Todo
+	 *
+	 * @return Signal
+	 */
+	public function getReplacement(){
+		return $this->replacement;
 	}
 
 }

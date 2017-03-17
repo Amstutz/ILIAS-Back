@@ -24,4 +24,10 @@ interface JavaScriptBinding {
 	 * @return	null
 	 */
 	public function addOnLoadCode($code);
+
+	/**
+	 * Todo
+	 *
+	 */
+	public function getOnLoadCodeForAsynch();
 }

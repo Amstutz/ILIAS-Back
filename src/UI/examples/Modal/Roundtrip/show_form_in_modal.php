@@ -20,7 +20,7 @@ function show_form_in_modal() {
 	$form->addItem(new ilCountrySelectInputGUI('Country', 'country'));
 	$form->setFormAction($DIC->ctrl()->getFormActionByClass('ilsystemstyledocumentationgui'));
 	$item = new ilHiddenInputGUI('cmd');
-	$item->setValue('submit');
+	$item->setValue('submit1');
 	$form->addItem($item);
 
 	// Build a submit button (action button) for the modal footer
@@ -33,7 +33,7 @@ function show_form_in_modal() {
 	// Check if the form was submitted, if validation fails, show it again in a modal
 	$out = '';
 	$valid = true;
-	if (isset($_POST['cmd']) && $_POST['cmd'] == 'submit') {
+	if (isset($_POST['cmd']) && $_POST['cmd'] == 'submit1') {
 		if ($form->checkInput()) {
 			$panel = $factory->panel()->standard('Form validation successful', $factory->legacy(print_r($_POST, true)));
 			$out = $renderer->render($panel);

@@ -32,6 +32,21 @@ interface Modal extends Component, JavaScriptBindable, Triggerable, Onloadable {
 	 */
 	public function withAsyncRenderUrl($url);
 
+	/**
+	 * Todo
+	 *
+	 * @return string
+	 */
+	public function getAsyncUrlParamsCode();
+
+
+	/**
+	 * Todo
+	 *
+	 * @param string $url
+	 * @return $this
+	 */
+	public function withAsyncUrlParamsCode($body);
 
 	/**
 	 * Get a modal like this which can or cannot be closed by keyboard (ESC), depending on the given $state
@@ -64,5 +79,26 @@ interface Modal extends Component, JavaScriptBindable, Triggerable, Onloadable {
 	 * @return Signal
 	 */
 	public function getCloseSignal();
+
+	/**
+	 * Todo
+	 *
+	 * @return Signal
+	 */
+	public function getReplaceSignal();
+
+	/**
+	 * Todo
+	 *
+	 * @return Signal
+	 */
+	public function withReplacement(Modal $replacement);
+
+	/**
+	 * Todo
+	 *
+	 * @return Signal
+	 */
+	public function getReplacement();
 
 }

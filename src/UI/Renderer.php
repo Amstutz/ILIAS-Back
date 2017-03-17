@@ -20,4 +20,12 @@ interface Renderer {
 	 * @return string
 	 */
 	public function render($component);
+
+	/**
+	 * Todo
+	 * @param Component\Component|Component\Component[] $component
+	 *
+	 * @return string
+	 */
+	public function renderAsync($component);
 }

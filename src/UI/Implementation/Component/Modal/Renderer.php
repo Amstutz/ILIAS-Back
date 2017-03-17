@@ -50,14 +50,26 @@ class Renderer extends AbstractComponentRenderer {
 	protected function registerSignals(Component\Modal\Modal $modal, $id) {
 		$show = $modal->getShowSignal();
 		$close = $modal->getCloseSignal();
+		$replace = $modal->getCloseSignal();
+		$replacement = $modal->getReplacement();
+		$replacement_signal = "";
+		if($replacement){
+			$replacement_signal = $replacement->getShowAsReplacementSignal();
+		}
 		$js = $this->getJavascriptBinding();
 		$options = json_encode(array(
 			'ajaxRenderUrl' => $modal->getAsyncRenderUrl(),
+			'ajaxRenderUrlParamsCode' => $modal->getAsyncUrlParamsCode(),
 			'keyboard' => $modal->getCloseWithKeyboard(),
 		));
 		$js->addOnLoadCode("
-			$(document).on('{$show}', function() { il.UI.modal.showModal('{$id}', {$options}); return false; });
-			$(document).on('{$close}', function() { il.UI.modal.closeModal('{$id}'); return false; });"
+			$(document).on('{$show}', function() { il.UI.modal.showModal('{$id}', $show->getOptions);
+			 return false; });
+			$(document).on('{$close}', function() {il.UI.modal.closeModal('{$id}'); return false; });
+			$(document).on('{$replace}', function() {
+				il.UI.modal.replaceModal('{$id}', '{$replacement_signal}');
+				return false;
+			});"
 		);
 	}
 
